@@ -1,0 +1,355 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans "Dashboard" %} - {% trans "HealthKart 360" %}{% endblock %}
+
+{% block extra_js %}
+<script>
+// Load upcoming reminders
+function loadUpcomingReminders() {
+    fetch('{% url "reminders:due_reminders" %}')
+        .then(response => response.json())
+        .then(data => {
+            if (data.success && data.due_reminders.length > 0) {
+                const container = document.getElementById('upcoming-reminders');
+                container.innerHTML = '';
+                
+                data.due_reminders.forEach(reminder => {
+                    const reminderCard = document.createElement('div');
+                    reminderCard.className = 'reminder-card mb-2 p-2 border rounded';
+                    reminderCard.innerHTML = `
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-1 fw-bold">${reminder.medicine_name}</h6>
+                                <small class="text-muted">${reminder.time_slot} - ${reminder.notes || 'No notes'}</small>
+                            </div>
+                            <button class="btn btn-sm btn-success" onclick="markTaken(${reminder.id})">
+                                <i class="fas fa-check"></i> Taken
+                            </button>
+                        </div>
+                    `;
+                    container.appendChild(reminderCard);
+                });
+            } else {
+                document.getElementById('upcoming-reminders').innerHTML = 
+                    '<p class="text-muted">No upcoming reminders for now</p>';
+            }
+        })
+        .catch(error => {
+            console.error('Error loading reminders:', error);
+        });
+}
+
+// Mark reminder as taken
+function markTaken(reminderId) {
+    fetch(`{% url "reminders:mark_taken" 0 %}`.replace('0', reminderId), {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showToast('Medicine marked as taken!', 'success');
+            loadUpcomingReminders();
+        }
+    });
+}
+
+// Show toast notification
+function showToast(message, type = 'info') {
+    const toast = document.createElement('div');
+    toast.className = `toast align-items-center text-white bg-${type} border-0`;
+    toast.setAttribute('role', 'alert');
+    toast.innerHTML = `
+        <div class="d-flex">
+            <div class="toast-body">${message}</div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+        </div>
+    `;
+    
+    const container = document.getElementById('toast-container') || document.body;
+    container.appendChild(toast);
+    
+    const bsToast = new bootstrap.Toast(toast);
+    bsToast.show();
+    
+    setTimeout(() => {
+        toast.remove();
+    }, 3000);
+}
+
+// Initialize dashboard
+document.addEventListener('DOMContentLoaded', function() {
+    loadUpcomingReminders();
+    
+    // Auto-refresh reminders every 5 minutes
+    setInterval(loadUpcomingReminders, 300000);
+    
+    // Handle notification settings
+    const notificationCheckboxes = document.querySelectorAll('.reminder-settings input[type="checkbox"]');
+    notificationCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            // Save notification preferences
+            const settings = {
+                email: document.getElementById('email-notifications').checked,
+                sms: document.getElementById('sms-notifications').checked,
+                app: document.getElementById('app-notifications').checked
+            };
+            
+            localStorage.setItem('notification-settings', JSON.stringify(settings));
+            showToast('Notification settings updated!', 'success');
+        });
+    });
+    
+    // Load saved notification settings
+    const savedSettings = localStorage.getItem('notification-settings');
+    if (savedSettings) {
+        const settings = JSON.parse(savedSettings);
+        document.getElementById('email-notifications').checked = settings.email;
+        document.getElementById('sms-notifications').checked = settings.sms;
+        document.getElementById('app-notifications').checked = settings.app;
+    }
+});
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Welcome Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card bg-gradient text-lightgreen" style="background: linear-gradient(135deg, #093f90, #28a745);">
+                <div class="card-body py-4">
+                    <h2 class="fw-bold mb-2">
+                        <i class="fas fa-user-circle me-2"></i>
+                        {% trans "Welcome back" %}, {{ user.first_name }}!
+                    </h2>
+                    <p class="mb-0 opacity-75">{% trans "Manage your health, medicines, and orders from your dashboard." %}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="row mb-4">
+        <div class="col-md-4 mb-3">
+            <div class="stat-card">
+                <div class="stat-number">{{ active_reminders }}</div>
+                <div class="stat-label">
+                    <i class="fas fa-bell me-1"></i>Active Reminders
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="stat-card">
+                <div class="stat-number">{{ pending_orders }}</div>
+                <div class="stat-label">
+                    <i class="fas fa-clock me-1"></i>Pending Orders
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="stat-card">
+                <div class="stat-number">{{ recent_orders|length }}</div>
+                <div class="stat-label">
+                    <i class="fas fa-shopping-bag me-1"></i>Recent Orders
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h4 class="fw-bold text-primary mb-3">
+                <i class="fas fa-bolt me-2"></i>Quick Actions
+            </h4>
+        </div>
+        
+        <div class="col-md-6 col-lg-3 mb-3">
+            <a href="{% url 'core:search' %}" class="text-decoration-none">
+                <div class="card dashboard-card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center py-4">
+                        <div class="feature-icon bg-primary text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                            <i class="fas fa-search fa-lg"></i>
+                        </div>
+                        <h6 class="card-title fw-bold">🔍 Search Medicine</h6>
+                        <p class="card-text small text-muted">Find medicines at nearby pharmacies</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        
+        <div class="col-md-6 col-lg-3 mb-3">
+            <a href="{% url 'orders:upload_prescription' %}" class="text-decoration-none">
+                <div class="card dashboard-card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center py-4">
+                        <div class="feature-icon bg-success text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                            <i class="fas fa-camera fa-lg"></i>
+                        </div>
+                        <h6 class="card-title fw-bold">🧾 Upload Prescription</h6>
+                        <p class="card-text small text-muted">Upload and order from prescription</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        
+        <div class="col-md-6 col-lg-3 mb-3">
+            <a href="{% url 'reminders:add' %}" class="text-decoration-none">
+                <div class="card dashboard-card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center py-4">
+                        <div class="feature-icon bg-warning text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                            <i class="fas fa-bell fa-lg"></i>
+                        </div>
+                        <h6 class="card-title fw-bold">🔔 Set Reminder</h6>
+                        <p class="card-text small text-muted">Add medicine reminders</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        
+        <div class="col-md-6 col-lg-3 mb-3">
+            <a href="{% url 'core:emergency' %}" class="text-decoration-none">
+                <div class="card dashboard-card h-100 border-0 shadow-sm border-danger">
+                    <div class="card-body text-center py-4">
+                        <div class="feature-icon bg-danger text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                            <i class="fas fa-exclamation-triangle fa-lg"></i>
+                        </div>
+                        <h6 class="card-title fw-bold text-danger">🆘 Emergency</h6>
+                        <p class="card-text small text-muted">24x7 pharmacy access</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <!-- Recent Orders -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-shopping-bag me-2"></i>Recent Orders
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if recent_orders %}
+                        {% for order in recent_orders %}
+                        <div class="order-card">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <div>
+                                    <h6 class="fw-bold mb-1">Order #{{ order.id }}</h6>
+                                    <p class="text-muted small mb-1">
+                                        <i class="fas fa-store me-1"></i>{{ order.pharmacy.name }}
+                                    </p>
+                                    <p class="text-muted small mb-0">
+                                        <i class="fas fa-calendar me-1"></i>{{ order.created_at|date:"M d, Y" }}
+                                    </p>
+                                </div>
+                                <div class="text-end">
+                                    <span class="order-status status-{{ order.status }}">
+                                        {{ order.get_status_display }}
+                                    </span>
+                                    <div class="fw-bold text-primary mt-1">₹{{ order.total_amount }}</div>
+                                </div>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <a href="{% url 'orders:detail' order.id %}" class="btn btn-sm btn-outline-primary">
+                                    <i class="fas fa-eye me-1"></i>View Details
+                                </a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        
+                        <div class="text-center mt-3">
+                            <a href="{% url 'orders:my_orders' %}" class="btn btn-primary">
+                                <i class="fas fa-list me-2"></i>View All Orders
+                            </a>
+                        </div>
+                    {% else %}
+                        <div class="text-center py-4">
+                            <i class="fas fa-shopping-bag fa-3x text-muted mb-3"></i>
+                            <h6 class="text-muted">No orders yet</h6>
+                            <p class="text-muted small">Start by searching for medicines or uploading a prescription</p>
+                            <a href="{% url 'core:search' %}" class="btn btn-primary">
+                                <i class="fas fa-search me-2"></i>Search Medicines
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Active Reminders Preview -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0">
+                        <i class="fas fa-bell me-2"></i>Today's Medicine Reminders
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if active_reminders > 0 %}
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6 class="fw-bold text-primary mb-3">
+                                    <i class="fas fa-clock me-2"></i>Upcoming Reminders
+                                </h6>
+                                <div id="upcoming-reminders">
+                                    <!-- Dynamic content will be loaded here -->
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="fw-bold text-success mb-3">
+                                    <i class="fas fa-check-circle me-2"></i>Reminder Settings
+                                </h6>
+                                <div class="reminder-settings">
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" id="email-notifications" checked>
+                                        <label class="form-check-label" for="email-notifications">
+                                            📧 Email Notifications
+                                        </label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" id="sms-notifications" checked>
+                                        <label class="form-check-label" for="sms-notifications">
+                                            📱 SMS Notifications
+                                        </label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" id="app-notifications" checked>
+                                        <label class="form-check-label" for="app-notifications">
+                                            🔔 App Notifications
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-center mt-3">
+                            <a href="{% url 'reminders:list' %}" class="btn btn-warning me-2">
+                                <i class="fas fa-cog me-2"></i>Manage Reminders
+                            </a>
+                            <a href="{% url 'reminders:add' %}" class="btn btn-primary">
+                                <i class="fas fa-plus me-2"></i>Add New Reminder
+                            </a>
+                        </div>
+                    {% else %}
+                        <div class="text-center py-3">
+                            <i class="fas fa-bell fa-2x text-warning mb-2"></i>
+                            <p class="text-muted">No active reminders. Set up medicine reminders to stay on track!</p>
+                            <a href="{% url 'reminders:add' %}" class="btn btn-primary">
+                                <i class="fas fa-plus me-2"></i>Add Your First Reminder
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

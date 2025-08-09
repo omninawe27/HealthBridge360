@@ -1,0 +1,283 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Pharmacy Registration - HealthKart 360{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-lg">
+                <div class="card-header text-center bg-success text-white">
+                    <h3 class="mb-0">
+                        <i class="fas fa-clinic-medical me-2"></i>Pharmacy Registration
+                    </h3>
+                    <p class="mb-0">Join HealthKart 360 as a Healthcare Partner</p>
+                </div>
+                <div class="card-body p-4">
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        {% if form.errors %}
+                        <div class="alert alert-danger">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            Please correct the errors below.
+                        </div>
+                        {% endif %}
+                        
+                        <!-- Pharmacy Information -->
+                        <h5 class="text-primary mb-3">
+                            <i class="fas fa-clinic-medical me-2"></i>Pharmacy Information
+                        </h5>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">
+                                    <i class="fas fa-store me-2"></i>Pharmacy Name *
+                                </label>
+                                {{ form.name }}
+                                {% if form.name.errors %}
+                                <div class="text-danger small mt-1">{{ form.name.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">
+                                    <i class="fas fa-certificate me-2"></i>License Number *
+                                </label>
+                                {{ form.license_number }}
+                                {% if form.license_number.errors %}
+                                <div class="text-danger small mt-1">{{ form.license_number.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">
+                                <i class="fas fa-map-marker-alt me-2"></i>Address *
+                            </label>
+                            {{ form.address }}
+                            {% if form.address.errors %}
+                            <div class="text-danger small mt-1">{{ form.address.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">
+                                    <i class="fas fa-phone me-2"></i>Phone Number *
+                                </label>
+                                {{ form.phone_number }}
+                                {% if form.phone_number.errors %}
+                                <div class="text-danger small mt-1">{{ form.phone_number.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">
+                                    <i class="fas fa-clock me-2"></i>Operating Hours
+                                </label>
+                                <div class="form-check">
+                                    {{ form.is_24x7 }}
+                                    <label class="form-check-label" for="{{ form.is_24x7.id_for_label }}">
+                                        24x7 Service Available
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <hr class="my-4">
+                        
+                        <!-- Owner Information -->
+                        <h5 class="text-primary mb-3">
+                            <i class="fas fa-user me-2"></i>Owner Information
+                        </h5>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">
+                                    <i class="fas fa-user me-2"></i>First Name *
+                                </label>
+                                {{ form.owner_first_name }}
+                                {% if form.owner_first_name.errors %}
+                                <div class="text-danger small mt-1">{{ form.owner_first_name.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">
+                                    <i class="fas fa-user me-2"></i>Last Name *
+                                </label>
+                                {{ form.owner_last_name }}
+                                {% if form.owner_last_name.errors %}
+                                <div class="text-danger small mt-1">{{ form.owner_last_name.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">
+                                    <i class="fas fa-envelope me-2"></i>Email *
+                                </label>
+                                {{ form.owner_email }}
+                                {% if form.owner_email.errors %}
+                                <div class="text-danger small mt-1">{{ form.owner_email.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">
+                                    <i class="fas fa-phone me-2"></i>Phone Number *
+                                </label>
+                                {{ form.owner_phone }}
+                                {% if form.owner_phone.errors %}
+                                <div class="text-danger small mt-1">{{ form.owner_phone.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">
+                                    <i class="fas fa-user me-2"></i>Username *
+                                </label>
+                                {{ form.owner_username }}
+                                {% if form.owner_username.errors %}
+                                <div class="text-danger small mt-1">{{ form.owner_username.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">
+                                    <i class="fas fa-lock me-2"></i>Password *
+                                </label>
+                                {{ form.owner_password }}
+                                {% if form.owner_password.errors %}
+                                <div class="text-danger small mt-1">{{ form.owner_password.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">
+                                <i class="fas fa-lock me-2"></i>Confirm Password *
+                            </label>
+                            {{ form.owner_password_confirm }}
+                            {% if form.owner_password_confirm.errors %}
+                            <div class="text-danger small mt-1">{{ form.owner_password_confirm.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Terms and Conditions -->
+                        <div class="mb-4">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="terms" required>
+                                <label class="form-check-label" for="terms">
+                                    I agree to the <a href="#" class="text-primary">Terms and Conditions</a> and 
+                                    <a href="#" class="text-primary">Privacy Policy</a> *
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="fas fa-clinic-medical me-2"></i>Register Pharmacy
+                            </button>
+                        </div>
+                    </form>
+                    
+                    <hr class="my-4">
+                    
+                    <div class="text-center">
+                        <p class="mb-2">Already have an account?</p>
+                        <a href="{% url 'users:login' %}" class="btn btn-outline-primary">
+                            <i class="fas fa-sign-in-alt me-2"></i>Login
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Benefits Card -->
+            <div class="card mt-4">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-star me-2"></i>Benefits of Joining HealthKart 360
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="d-flex align-items-start">
+                                <i class="fas fa-users text-primary fa-2x me-3 mt-1"></i>
+                                <div>
+                                    <h6>Wider Customer Base</h6>
+                                    <p class="text-muted small">Reach more customers in your area</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="d-flex align-items-start">
+                                <i class="fas fa-chart-line text-success fa-2x me-3 mt-1"></i>
+                                <div>
+                                    <h6>Increased Sales</h6>
+                                    <p class="text-muted small">Boost your pharmacy revenue</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="d-flex align-items-start">
+                                <i class="fas fa-tools text-warning fa-2x me-3 mt-1"></i>
+                                <div>
+                                    <h6>Easy Management</h6>
+                                    <p class="text-muted small">Simple inventory and order management</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="d-flex align-items-start">
+                                <i class="fas fa-headset text-info fa-2x me-3 mt-1"></i>
+                                <div>
+                                    <h6>24/7 Support</h6>
+                                    <p class="text-muted small">Get help whenever you need it</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Add form styling
+    const inputs = document.querySelectorAll('input[type="text"], input[type="email"], input[type="password"], input[type="tel"], textarea, select');
+    inputs.forEach(input => {
+        input.classList.add('form-control', 'form-control-lg');
+    });
+    
+    // Password confirmation validation
+    const passwordField = document.querySelector('input[name="owner_password"]');
+    const confirmField = document.querySelector('input[name="owner_password_confirm"]');
+    
+    function validatePassword() {
+        if (passwordField.value !== confirmField.value) {
+            confirmField.setCustomValidity('Passwords do not match');
+        } else {
+            confirmField.setCustomValidity('');
+        }
+    }
+    
+    passwordField.addEventListener('change', validatePassword);
+    confirmField.addEventListener('keyup', validatePassword);
+    
+    // Form submission loading state
+    const form = document.querySelector('form');
+    const submitBtn = form.querySelector('button[type="submit"]');
+    
+    form.addEventListener('submit', function() {
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Registering...';
+        submitBtn.disabled = true;
+    });
+});
+</script>
+{% endblock %} 

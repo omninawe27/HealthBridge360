@@ -1,0 +1,157 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Add Reminder - HealthKart 360{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0"><i class="fas fa-plus me-2"></i>Add Medicine Reminder</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            <label for="{{ form.medicine_name.id_for_label }}" class="form-label">
+                                <i class="fas fa-pills me-2"></i>Medicine Name
+                            </label>
+                            {{ form.medicine_name }}
+                            {% if form.medicine_name.errors %}
+                                <div class="text-danger small">{{ form.medicine_name.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.time_slot.id_for_label }}" class="form-label">
+                                <i class="fas fa-clock me-2"></i>Time Slot
+                            </label>
+                            {{ form.time_slot }}
+                            {% if form.time_slot.errors %}
+                                <div class="text-danger small">{{ form.time_slot.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.specific_time.id_for_label }}" class="form-label">
+                                <i class="fas fa-clock me-2"></i>Specific Time (Optional)
+                            </label>
+                            {{ form.specific_time }}
+                            <small class="text-muted">Leave empty to use default time for the selected slot</small>
+                            {% if form.specific_time.errors %}
+                                <div class="text-danger small">{{ form.specific_time.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.notes.id_for_label }}" class="form-label">
+                                <i class="fas fa-sticky-note me-2"></i>Notes (Optional)
+                            </label>
+                            {{ form.notes }}
+                            {% if form.notes.errors %}
+                                <div class="text-danger small">{{ form.notes.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.alert_type.id_for_label }}" class="form-label">
+                                <i class="fas fa-bell me-2"></i>Alert Type
+                            </label>
+                            {{ form.alert_type }}
+                            {% if form.alert_type.errors %}
+                                <div class="text-danger small">{{ form.alert_type.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">
+                                <i class="fas fa-envelope me-2"></i>Notification Settings
+                            </label>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-check">
+                                        {{ form.send_email }}
+                                        <label class="form-check-label" for="{{ form.send_email.id_for_label }}">
+                                            <i class="fas fa-envelope me-1"></i>Email Notifications
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-check">
+                                        {{ form.send_sms }}
+                                        <label class="form-check-label" for="{{ form.send_sms.id_for_label }}">
+                                            <i class="fas fa-sms me-1"></i>SMS Notifications
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-2"></i>Save Reminder
+                            </button>
+                            <a href="{% url 'reminders:list' %}" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>Back to Reminders
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Add time picker functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const specificTimeInput = document.getElementById('{{ form.specific_time.id_for_label }}');
+    
+    if (specificTimeInput) {
+        specificTimeInput.type = 'time';
+    }
+    
+    // Add interactive features
+    const timeSlotSelect = document.getElementById('{{ form.time_slot.id_for_label }}');
+    const specificTimeField = document.getElementById('{{ form.specific_time.id_for_label }}');
+    
+    if (timeSlotSelect && specificTimeField) {
+        timeSlotSelect.addEventListener('change', function() {
+            const selectedSlot = this.value;
+            const defaultTimes = {
+                'morning': '07:00',
+                'afternoon': '14:00',
+                'evening': '18:00',
+                'night': '21:00'
+            };
+            
+            if (defaultTimes[selectedSlot] && !specificTimeField.value) {
+                specificTimeField.value = defaultTimes[selectedSlot];
+            }
+        });
+    }
+    
+    // Add form validation
+    const form = document.querySelector('form');
+    form.addEventListener('submit', function(e) {
+        const medicineName = document.getElementById('{{ form.medicine_name.id_for_label }}').value;
+        const timeSlot = document.getElementById('{{ form.time_slot.id_for_label }}').value;
+        
+        if (!medicineName.trim()) {
+            e.preventDefault();
+            HealthKart360.showToast('Please enter a medicine name', 'danger');
+            return;
+        }
+        
+        if (!timeSlot) {
+            e.preventDefault();
+            HealthKart360.showToast('Please select a time slot', 'danger');
+            return;
+        }
+    });
+});
+</script>
+{% endblock %} 

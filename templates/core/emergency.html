@@ -1,0 +1,362 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Emergency Mode - HealthKart 360{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- Emergency Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="emergency-mode">
+                <h1 class="mb-3">
+                    <i class="fas fa-exclamation-triangle me-3"></i>EMERGENCY MODE
+                </h1>
+                <p class="mb-3 fs-5">24x7 Emergency Healthcare Services</p>
+                <div class="row">
+                    <div class="col-md-4 mb-2">
+                        <a href="tel:108" class="btn btn-danger btn-lg w-100">
+                            <i class="fas fa-phone me-2"></i>Call 108 (Ambulance)
+                        </a>
+                    </div>
+                    <div class="col-md-4 mb-2">
+                        <a href="tel:102" class="btn btn-warning btn-lg w-100">
+                            <i class="fas fa-phone me-2"></i>Call 102 (Medical Help)
+                        </a>
+                    </div>
+                    <div class="col-md-4 mb-2">
+                        <a href="tel:100" class="btn btn-info btn-lg w-100">
+                            <i class="fas fa-phone me-2"></i>Call 100 (Police)
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 24x7 Pharmacies -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-danger text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-clock me-2"></i>24x7 Open Pharmacies
+                    </h4>
+                </div>
+                <div class="card-body">
+                    {% if emergency_pharmacies %}
+                        <div class="row">
+                            {% for pharmacy in emergency_pharmacies %}
+                            <div class="col-lg-6 col-md-12 mb-3">
+                                <div class="emergency-pharmacy">
+                                    <div class="row align-items-center">
+                                        <div class="col-md-8">
+                                            <h5 class="text-danger mb-2">
+                                                <i class="fas fa-clinic-medical me-2"></i>{{ pharmacy.name }}
+                                            </h5>
+                                            <p class="mb-1">
+                                                <i class="fas fa-map-marker-alt me-2"></i>
+                                                {{ pharmacy.address }}
+                                            </p>
+                                            <p class="mb-2">
+                                                <i class="fas fa-phone me-2"></i>
+                                                <strong>{{ pharmacy.phone_number }}</strong>
+                                            </p>
+                                            <div class="mb-2">
+                                                <span class="badge bg-success">
+                                                    <i class="fas fa-clock me-1"></i>24x7 Open
+                                                </span>
+                                                {% if pharmacy.license_number %}
+                                                <span class="badge bg-info ms-2">
+                                                    <i class="fas fa-certificate me-1"></i>Licensed
+                                                </span>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 text-md-end">
+                                            <div class="d-grid gap-2">
+                                                <a href="tel:{{ pharmacy.phone_number }}" class="btn btn-success">
+                                                    <i class="fas fa-phone me-1"></i>Call Now
+                                                </a>
+                                                {% if pharmacy.latitude and pharmacy.longitude %}
+                                                <button class="btn btn-primary" 
+                                                        onclick="getDirections({{ pharmacy.latitude }}, {{ pharmacy.longitude }})">
+                                                    <i class="fas fa-directions me-1"></i>Navigate
+                                                </button>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="text-center py-4">
+                            <i class="fas fa-exclamation-circle fa-3x text-warning mb-3"></i>
+                            <h5 class="text-warning mb-2">No 24x7 Pharmacies Found</h5>
+                            <p class="text-muted">Please contact the nearest hospital or call emergency services.</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Essential Medicines -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-warning text-dark">
+                    <h4 class="mb-0">
+                        <i class="fas fa-pills me-2"></i>Essential Medicines Available
+                    </h4>
+                </div>
+                <div class="card-body">
+                    {% if essential_medicines %}
+                        <div class="row">
+                            {% for medicine in essential_medicines %}
+                            <div class="col-lg-4 col-md-6 mb-3">
+                                <div class="card medicine-card h-100">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-start mb-2">
+                                            <h6 class="card-title mb-0">{{ medicine.name }}</h6>
+                                            <span class="badge bg-danger">
+                                                <i class="fas fa-exclamation-triangle me-1"></i>Essential
+                                            </span>
+                                        </div>
+                                        <p class="text-muted mb-2">
+                                            <strong>Brand:</strong> {{ medicine.brand }}<br>
+                                            <strong>Type:</strong> {{ medicine.get_medicine_type_display }}<br>
+                                            <strong>Strength:</strong> {{ medicine.strength }}
+                                        </p>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <span class="status-badge status-{{ medicine.stock_status }}">
+                                                    {{ medicine.status_display }}
+                                                </span>
+                                                <p class="mb-0 mt-1">
+                                                    <strong>Price:</strong> ₹{{ medicine.price }}
+                                                </p>
+                                            </div>
+                                            <div class="text-end">
+                                                <small class="text-muted d-block">
+                                                    <i class="fas fa-map-marker-alt me-1"></i>
+                                                    {{ medicine.pharmacy.name }}
+                                                </small>
+                                                {% if medicine.quantity > 0 %}
+                                                <button class="btn btn-primary btn-sm mt-1" 
+                                                        onclick="addToCart({{ medicine.id }})">
+                                                    <i class="fas fa-cart-plus me-1"></i>Add to Cart
+                                                </button>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="text-center py-4">
+                            <i class="fas fa-pills fa-3x text-muted mb-3"></i>
+                            <h5 class="text-muted mb-2">No Essential Medicines Found</h5>
+                            <p class="text-muted">Please contact pharmacies directly for essential medicines.</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Emergency Information -->
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-info-circle me-2"></i>Emergency Information
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <h6 class="text-danger">🚨 Emergency Numbers:</h6>
+                        <ul class="list-unstyled">
+                            <li><strong>108:</strong> Ambulance & Emergency Services</li>
+                            <li><strong>102:</strong> Medical Help & Information</li>
+                            <li><strong>100:</strong> Police Emergency</li>
+                            <li><strong>101:</strong> Fire Emergency</li>
+                        </ul>
+                    </div>
+                    <div class="mb-3">
+                        <h6 class="text-warning">⚠️ Important Notes:</h6>
+                        <ul class="list-unstyled">
+                            <li>• Always carry your prescription</li>
+                            <li>• Keep emergency contacts handy</li>
+                            <li>• Know your blood group</li>
+                            <li>• Have allergy information ready</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-heartbeat me-2"></i>Quick Actions
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-3">
+                        <a href="{% url 'core:search' %}?q=insulin" class="btn btn-outline-primary">
+                            <i class="fas fa-search me-2"></i>Search for Insulin
+                        </a>
+                        <a href="{% url 'core:search' %}?q=inhaler" class="btn btn-outline-primary">
+                            <i class="fas fa-search me-2"></i>Search for Inhalers
+                        </a>
+                        <a href="{% url 'core:search' %}?q=first aid" class="btn btn-outline-primary">
+                            <i class="fas fa-search me-2"></i>Search for First Aid
+                        </a>
+                        <a href="{% url 'reminders:list' %}" class="btn btn-outline-warning">
+                            <i class="fas fa-bell me-2"></i>Check Medicine Reminders
+                        </a>
+                        <button class="btn btn-outline-info" onclick="shareLocation()">
+                            <i class="fas fa-share me-2"></i>Share My Location
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Emergency Alert Modal -->
+<div class="modal fade" id="emergencyModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title">
+                    <i class="fas fa-exclamation-triangle me-2"></i>Emergency Alert
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to call emergency services?</p>
+                <div class="d-grid gap-2">
+                    <a href="tel:108" class="btn btn-danger">
+                        <i class="fas fa-phone me-2"></i>Call Ambulance (108)
+                    </a>
+                    <a href="tel:102" class="btn btn-warning">
+                        <i class="fas fa-phone me-2"></i>Call Medical Help (102)
+                    </a>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function getDirections(lat, lng) {
+    if (lat && lng) {
+        window.open(`https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`, '_blank');
+    } else {
+        showToast('Location not available', 'warning');
+    }
+}
+
+function addToCart(medicineId) {
+    fetch(`/orders/add-to-cart/${medicineId}/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+            'Content-Type': 'application/json',
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showToast('Medicine added to cart!', 'success');
+        } else {
+            showToast('Failed to add medicine to cart', 'error');
+        }
+    });
+}
+
+function shareLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            const lat = position.coords.latitude;
+            const lng = position.coords.longitude;
+            const url = `https://www.google.com/maps?q=${lat},${lng}`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: 'My Emergency Location',
+                    text: 'I need emergency help at this location',
+                    url: url
+                });
+            } else {
+                // Fallback: copy to clipboard
+                navigator.clipboard.writeText(url).then(() => {
+                    showToast('Location copied to clipboard!', 'success');
+                });
+            }
+        }, function(error) {
+            showToast('Unable to get location', 'error');
+        });
+    } else {
+        showToast('Geolocation not supported', 'error');
+    }
+}
+
+function showToast(message, type) {
+    const toast = document.createElement('div');
+    toast.className = `alert alert-${type === 'success' ? 'success' : type === 'error' ? 'danger' : 'warning'} alert-dismissible fade show position-fixed`;
+    toast.style.cssText = 'top: 20px; right: 20px; z-index: 9999;';
+    toast.innerHTML = `
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+        toast.remove();
+    }, 3000);
+}
+
+// Add emergency mode visual effects
+document.addEventListener('DOMContentLoaded', function() {
+    // Add pulsing effect to emergency elements
+    const emergencyElements = document.querySelectorAll('.emergency-mode, .emergency-pharmacy');
+    emergencyElements.forEach(element => {
+        element.style.animation = 'pulse 2s infinite';
+    });
+    
+    // Add CSRF token
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]');
+    if (!csrfToken) {
+        const token = document.createElement('input');
+        token.type = 'hidden';
+        token.name = 'csrfmiddlewaretoken';
+        token.value = '{{ csrf_token }}';
+        document.body.appendChild(token);
+    }
+});
+
+// Add CSS animation for pulse effect
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.02); }
+        100% { transform: scale(1); }
+    }
+`;
+document.head.appendChild(style);
+</script>
+{% endblock %} 

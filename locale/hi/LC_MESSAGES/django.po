@@ -1,0 +1,256 @@
+# Hindi translations for HealthKart 360
+# Copyright (C) 2024 HealthKart 360
+# This file is distributed under the same license as the HealthKart 360 project.
+msgid ""
+msgstr ""
+"Project-Id-Version: HealthKart 360 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-01-01 00:00+0000\n"
+"PO-Revision-Date: 2024-01-01 00:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: Hindi\n"
+"Language: hi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: templates/base.html:15
+msgid "HealthKart 360"
+msgstr "हेल्थकार्ट 360"
+
+#: templates/base.html:25
+msgid "Dashboard"
+msgstr "डैशबोर्ड"
+
+#: templates/base.html:29
+msgid "Search"
+msgstr "खोजें"
+
+#: templates/base.html:33
+msgid "Reminders"
+msgstr "रिमाइंडर"
+
+#: templates/base.html:37
+msgid "My Orders"
+msgstr "मेरे ऑर्डर"
+
+#: templates/base.html:41
+msgid "Emergency"
+msgstr "आपातकाल"
+
+#: templates/base.html:47
+msgid "Profile"
+msgstr "प्रोफाइल"
+
+#: templates/base.html:49
+msgid "Logout"
+msgstr "लॉगआउट"
+
+#: templates/base.html:55
+msgid "Login"
+msgstr "लॉगिन"
+
+#: templates/base.html:58
+msgid "Register"
+msgstr "रजिस्टर"
+
+#: templates/base.html:61
+msgid "Pharmacy Register"
+msgstr "फार्मेसी रजिस्टर"
+
+#: templates/core/home.html:8
+msgid "Healthcare for Rural India"
+msgstr "ग्रामीण भारत के लिए स्वास्थ्य सेवा"
+
+#: templates/core/home.html:15
+msgid "Get Started"
+msgstr "शुरू करें"
+
+#: templates/core/home.html:18
+msgid "Register Pharmacy"
+msgstr "फार्मेसी रजिस्टर करें"
+
+#: templates/core/home.html:25
+msgid "Key Features"
+msgstr "मुख्य विशेषताएं"
+
+#: templates/core/home.html:26
+msgid "Everything you need for healthcare management"
+msgstr "स्वास्थ्य सेवा प्रबंधन के लिए आपको जो कुछ चाहिए"
+
+#: templates/core/home.html:35
+msgid "Medicine Search"
+msgstr "दवा खोज"
+
+#: templates/core/home.html:36
+msgid "Find medicines at nearby pharmacies with real-time availability and pricing."
+msgstr "वास्तविक समय की उपलब्धता और मूल्य के साथ पास के फार्मेसी में दवाएं खोजें।"
+
+#: templates/core/home.html:45
+msgid "Prescription Upload"
+msgstr "प्रिस्क्रिप्शन अपलोड"
+
+#: templates/core/home.html:46
+msgid "Upload prescription images and get medicine suggestions with alternatives."
+msgstr "प्रिस्क्रिप्शन छवियां अपलोड करें और विकल्पों के साथ दवा सुझाव प्राप्त करें।"
+
+#: templates/core/home.html:55
+msgid "Medicine Reminders"
+msgstr "दवा रिमाइंडर"
+
+#: templates/core/home.html:56
+msgid "Set personalized reminders for your medications with custom alerts."
+msgstr "कस्टम अलर्ट के साथ अपनी दवाओं के लिए व्यक्तिगत रिमाइंडर सेट करें।"
+
+#: templates/core/home.html:65
+msgid "Emergency Mode"
+msgstr "आपातकाल मोड"
+
+#: templates/core/home.html:66
+msgid "Quick access to 24x7 pharmacies and essential medicines during emergencies."
+msgstr "आपातकाल के दौरान 24x7 फार्मेसी और आवश्यक दवाओं तक त्वरित पहुंच।"
+
+#: templates/core/home.html:75
+msgid "Multi-Language Support"
+msgstr "बहुभाषा समर्थन"
+
+#: templates/core/home.html:85
+msgid "How It Works"
+msgstr "यह कैसे काम करता है"
+
+#: templates/core/home.html:86
+msgid "Simple steps to get started"
+msgstr "शुरू करने के लिए सरल कदम"
+
+#: templates/core/home.html:95
+msgid "Register Account"
+msgstr "खाता रजिस्टर करें"
+
+#: templates/core/home.html:96
+msgid "Create your account with basic details and choose your preferred language."
+msgstr "बुनियादी विवरण के साथ अपना खाता बनाएं और अपनी पसंदीदा भाषा चुनें।"
+
+#: templates/core/home.html:105
+msgid "Search & Order"
+msgstr "खोजें और ऑर्डर करें"
+
+#: templates/core/home.html:106
+msgid "Search for medicines, upload prescriptions, and place orders from nearby pharmacies."
+msgstr "दवाएं खोजें, प्रिस्क्रिप्शन अपलोड करें, और पास के फार्मेसी से ऑर्डर करें।"
+
+#: templates/core/home.html:115
+msgid "Stay Healthy"
+msgstr "स्वस्थ रहें"
+
+#: templates/core/home.html:116
+msgid "Set reminders, track orders, and access emergency help when needed."
+msgstr "रिमाइंडर सेट करें, ऑर्डर ट्रैक करें, और जरूरत पड़ने पर आपातकाल सहायता प्राप्त करें।"
+
+#: templates/core/home.html:125
+msgid "Ready to Get Started?"
+msgstr "शुरू करने के लिए तैयार हैं?"
+
+#: templates/core/home.html:126
+msgid "Join thousands of users who trust HealthKart 360 for their healthcare needs."
+msgstr "हजारों उपयोगकर्ताओं में शामिल हों जो अपनी स्वास्थ्य सेवा जरूरतों के लिए हेल्थकार्ट 360 पर भरोसा करते हैं।"
+
+#: templates/core/home.html:130
+msgid "Register Now"
+msgstr "अभी रजिस्टर करें"
+
+#: templates/core/user_dashboard.html:8
+msgid "Welcome back"
+msgstr "वापसी पर स्वागत है"
+
+#: templates/core/user_dashboard.html:9
+msgid "Manage your health, medicines, and orders from your dashboard."
+msgstr "अपने डैशबोर्ड से अपने स्वास्थ्य, दवाओं और ऑर्डर का प्रबंधन करें।"
+
+#: templates/core/user_dashboard.html:20
+msgid "Active Reminders"
+msgstr "सक्रिय रिमाइंडर"
+
+#: templates/core/user_dashboard.html:26
+msgid "Pending Orders"
+msgstr "लंबित ऑर्डर"
+
+#: templates/core/user_dashboard.html:32
+msgid "Recent Orders"
+msgstr "हाल के ऑर्डर"
+
+#: templates/core/user_dashboard.html:39
+msgid "Quick Actions"
+msgstr "त्वरित कार्य"
+
+#: templates/core/user_dashboard.html:48
+msgid "Search Medicine"
+msgstr "दवा खोजें"
+
+#: templates/core/user_dashboard.html:49
+msgid "Find medicines at nearby pharmacies"
+msgstr "पास के फार्मेसी में दवाएं खोजें"
+
+#: templates/core/user_dashboard.html:58
+msgid "Upload Prescription"
+msgstr "प्रिस्क्रिप्शन अपलोड करें"
+
+#: templates/core/user_dashboard.html:59
+msgid "Upload and order from prescription"
+msgstr "प्रिस्क्रिप्शन से अपलोड और ऑर्डर करें"
+
+#: templates/core/user_dashboard.html:68
+msgid "Set Reminder"
+msgstr "रिमाइंडर सेट करें"
+
+#: templates/core/user_dashboard.html:69
+msgid "Add medicine reminders"
+msgstr "दवा रिमाइंडर जोड़ें"
+
+#: templates/core/user_dashboard.html:78
+msgid "Emergency"
+msgstr "आपातकाल"
+
+#: templates/core/user_dashboard.html:79
+msgid "24x7 pharmacy access"
+msgstr "24x7 फार्मेसी पहुंच"
+
+#: templates/core/user_dashboard.html:90
+msgid "Today's Medicine Reminders"
+msgstr "आज के दवा रिमाइंडर"
+
+#: templates/core/user_dashboard.html:98
+msgid "Upcoming Reminders"
+msgstr "आगामी रिमाइंडर"
+
+#: templates/core/user_dashboard.html:104
+msgid "Reminder Settings"
+msgstr "रिमाइंडर सेटिंग्स"
+
+#: templates/core/user_dashboard.html:108
+msgid "Email Notifications"
+msgstr "ईमेल सूचनाएं"
+
+#: templates/core/user_dashboard.html:113
+msgid "SMS Notifications"
+msgstr "एसएमएस सूचनाएं"
+
+#: templates/core/user_dashboard.html:118
+msgid "App Notifications"
+msgstr "ऐप सूचनाएं"
+
+#: templates/core/user_dashboard.html:125
+msgid "Manage Reminders"
+msgstr "रिमाइंडर प्रबंधित करें"
+
+#: templates/core/user_dashboard.html:127
+msgid "Add New Reminder"
+msgstr "नया रिमाइंडर जोड़ें"
+
+#: templates/core/user_dashboard.html:133
+msgid "No active reminders. Set up medicine reminders to stay on track!"
+msgstr "कोई सक्रिय रिमाइंडर नहीं। ट्रैक पर रहने के लिए दवा रिमाइंडर सेट करें!"
+
+#: templates/core/user_dashboard.html:135
+msgid "Add Your First Reminder"
+msgstr "अपना पहला रिमाइंडर जोड़ें" 

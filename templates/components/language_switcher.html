@@ -1,0 +1,40 @@
+{% load i18n %}
+<div class="language-switcher">
+    <div class="dropdown">
+        <button class="btn btn-outline-light dropdown-toggle" type="button" id="languageDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fas fa-globe me-1"></i>
+            {% if LANGUAGE_CODE == 'hi' %}हिंदी{% elif LANGUAGE_CODE == 'mr' %}मराठी{% else %}English{% endif %}
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="languageDropdown">
+            <li><h6 class="dropdown-header">{% trans "Select Language" %}</h6></li>
+            <li><hr class="dropdown-divider"></li>
+            <li>
+                <form method="post" action="{% url 'core:change_language' %}" style="display: inline;">
+                    {% csrf_token %}
+                    <input type="hidden" name="language" value="en">
+                    <button type="submit" class="dropdown-item">
+                        <i class="fas fa-flag me-2"></i>English
+                    </button>
+                </form>
+            </li>
+            <li>
+                <form method="post" action="{% url 'core:change_language' %}" style="display: inline;">
+                    {% csrf_token %}
+                    <input type="hidden" name="language" value="hi">
+                    <button type="submit" class="dropdown-item">
+                        <i class="fas fa-flag me-2"></i>हिंदी (Hindi)
+                    </button>
+                </form>
+            </li>
+            <li>
+                <form method="post" action="{% url 'core:change_language' %}" style="display: inline;">
+                    {% csrf_token %}
+                    <input type="hidden" name="language" value="mr">
+                    <button type="submit" class="dropdown-item">
+                        <i class="fas fa-flag me-2"></i>मराठी (Marathi)
+                    </button>
+                </form>
+            </li>
+        </ul>
+    </div>
+</div> 

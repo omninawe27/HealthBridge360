@@ -1,0 +1,339 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Search Medicines - HealthKart 360{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- Search Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="text-primary mb-3">
+                        <i class="fas fa-search me-2"></i>Search Medicines & Pharmacies
+                    </h2>
+                    <form method="GET" action="{% url 'core:search' %}" class="row g-3">
+                        <div class="col-md-8">
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="fas fa-pills"></i>
+                                </span>
+                                <input type="text" name="q" class="form-control form-control-lg" 
+                                       placeholder="Search for medicines, brands, or pharmacies..." 
+                                       value="{{ query }}" required>
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    <i class="fas fa-search me-2"></i>Search
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <select name="filter" class="form-select form-select-lg">
+                                <option value="">All</option>
+                                <option value="medicine" {% if request.GET.filter == 'medicine' %}selected{% endif %}>Medicines Only</option>
+                                <option value="pharmacy" {% if request.GET.filter == 'pharmacy' %}selected{% endif %}>Pharmacies Only</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if query %}
+        <!-- Search Results -->
+        <div class="row">
+            <!-- Medicines Results -->
+            {% if medicines %}
+            <div class="col-lg-8 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="fas fa-pills me-2"></i>Medicines Found ({{ medicines.count }})
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        {% for medicine in medicines %}
+                        <div class="medicine-card card mb-3">
+                            <div class="card-body">
+                                <div class="row align-items-center">
+                                    <div class="col-md-8">
+                                        <h6 class="card-title mb-1">{{ medicine.name }}</h6>
+                                        <p class="text-muted mb-1">
+                                            <strong>Brand:</strong> {{ medicine.brand }} | 
+                                            <strong>Type:</strong> {{ medicine.get_medicine_type_display }} |
+                                            <strong>Strength:</strong> {{ medicine.strength }}
+                                        </p>
+                                        <p class="text-muted mb-2">
+                                            <strong>Generic:</strong> {{ medicine.generic_name }}
+                                        </p>
+                                        <div class="d-flex align-items-center mb-2">
+                                            <span class="status-badge status-{{ medicine.stock_status }}">
+                                                {{ medicine.status_display }}
+                                            </span>
+                                            {% if medicine.is_essential %}
+                                            <span class="badge bg-danger ms-2">
+                                                <i class="fas fa-exclamation-triangle me-1"></i>Essential
+                                            </span>
+                                            {% endif %}
+                                        </div>
+                                        <p class="mb-0">
+                                            <strong>Price:</strong> ₹{{ medicine.price }} | 
+                                            <strong>Available:</strong> {{ medicine.quantity }} units
+                                        </p>
+                                    </div>
+                                    <div class="col-md-4 text-md-end">
+                                        <div class="mb-2">
+                                            <small class="text-muted">
+                                                <i class="fas fa-map-marker-alt me-1"></i>
+                                                {{ medicine.pharmacy.name }}
+                                            </small>
+                                        </div>
+                                        {% if medicine.quantity > 0 %}
+                                        <button class="btn btn-primary btn-sm mb-2 w-100" 
+                                                onclick="addToCart({{ medicine.id }})">
+                                            <i class="fas fa-cart-plus me-1"></i>Add to Cart
+                                        </button>
+                                        {% endif %}
+                                        <button class="btn btn-outline-info btn-sm w-100" 
+                                                onclick="showAlternatives({{ medicine.id }})">
+                                            <i class="fas fa-exchange-alt me-1"></i>Alternatives
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Pharmacies Results -->
+            {% if pharmacies %}
+            <div class="col-lg-4 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="fas fa-clinic-medical me-2"></i>Nearby Pharmacies ({{ pharmacies.count }})
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        {% for pharmacy in pharmacies %}
+                        <div class="search-result mb-3">
+                            <h6 class="mb-2">{{ pharmacy.name }}</h6>
+                            <p class="text-muted mb-2">
+                                <i class="fas fa-map-marker-alt me-1"></i>
+                                {{ pharmacy.address }}
+                            </p>
+                            <p class="text-muted mb-2">
+                                <i class="fas fa-phone me-1"></i>
+                                {{ pharmacy.phone_number }}
+                            </p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    {% if pharmacy.is_24x7 %}
+                                    <span class="badge bg-success">
+                                        <i class="fas fa-clock me-1"></i>24x7
+                                    </span>
+                                    {% endif %}
+                                </div>
+                                <div>
+                                    <a href="tel:{{ pharmacy.phone_number }}" class="btn btn-success btn-sm">
+                                        <i class="fas fa-phone me-1"></i>Call
+                                    </a>
+                                    <button class="btn btn-outline-primary btn-sm ms-1" 
+                                            onclick="getDirections({{ pharmacy.latitude }}, {{ pharmacy.longitude }})">
+                                        <i class="fas fa-directions me-1"></i>Navigate
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- No Results -->
+            {% if not medicines and not pharmacies %}
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body text-center py-5">
+                        <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                        <h4 class="text-muted mb-2">No results found</h4>
+                        <p class="text-muted mb-3">Try searching with different keywords or check spelling</p>
+                        <div class="row justify-content-center">
+                            <div class="col-md-6">
+                                <h6 class="text-primary mb-2">Popular Searches:</h6>
+                                <div class="d-flex flex-wrap justify-content-center gap-2">
+                                    <a href="?q=paracetamol" class="btn btn-outline-primary btn-sm">Paracetamol</a>
+                                    <a href="?q=vitamin" class="btn btn-outline-primary btn-sm">Vitamin</a>
+                                    <a href="?q=diabetes" class="btn btn-outline-primary btn-sm">Diabetes</a>
+                                    <a href="?q=asthma" class="btn btn-outline-primary btn-sm">Asthma</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    {% else %}
+        <!-- Search Suggestions -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="fas fa-lightbulb me-2"></i>Popular Categories
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3 col-sm-6 mb-3">
+                                <div class="card dashboard-card h-100">
+                                    <div class="card-body text-center">
+                                        <i class="fas fa-heartbeat fa-2x text-danger mb-3"></i>
+                                        <h6>Chronic Conditions</h6>
+                                        <div class="d-flex flex-column gap-1">
+                                            <a href="?q=diabetes" class="btn btn-outline-primary btn-sm">Diabetes</a>
+                                            <a href="?q=hypertension" class="btn btn-outline-primary btn-sm">Hypertension</a>
+                                            <a href="?q=asthma" class="btn btn-outline-primary btn-sm">Asthma</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-6 mb-3">
+                                <div class="card dashboard-card h-100">
+                                    <div class="card-body text-center">
+                                        <i class="fas fa-vitamin fa-2x text-warning mb-3"></i>
+                                        <h6>Vitamins & Supplements</h6>
+                                        <div class="d-flex flex-column gap-1">
+                                            <a href="?q=vitamin d" class="btn btn-outline-primary btn-sm">Vitamin D</a>
+                                            <a href="?q=vitamin b12" class="btn btn-outline-primary btn-sm">Vitamin B12</a>
+                                            <a href="?q=calcium" class="btn btn-outline-primary btn-sm">Calcium</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-6 mb-3">
+                                <div class="card dashboard-card h-100">
+                                    <div class="card-body text-center">
+                                        <i class="fas fa-pills fa-2x text-info mb-3"></i>
+                                        <h6>Common Medicines</h6>
+                                        <div class="d-flex flex-column gap-1">
+                                            <a href="?q=paracetamol" class="btn btn-outline-primary btn-sm">Paracetamol</a>
+                                            <a href="?q=crocin" class="btn btn-outline-primary btn-sm">Crocin</a>
+                                            <a href="?q=combiflam" class="btn btn-outline-primary btn-sm">Combiflam</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-6 mb-3">
+                                <div class="card dashboard-card h-100">
+                                    <div class="card-body text-center">
+                                        <i class="fas fa-baby fa-2x text-success mb-3"></i>
+                                        <h6>Pediatric</h6>
+                                        <div class="d-flex flex-column gap-1">
+                                            <a href="?q=baby" class="btn btn-outline-primary btn-sm">Baby Care</a>
+                                            <a href="?q=syrup" class="btn btn-outline-primary btn-sm">Syrups</a>
+                                            <a href="?q=drops" class="btn btn-outline-primary btn-sm">Drops</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+<!-- Alternatives Modal -->
+<div class="modal fade" id="alternativesModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Alternative Medicines</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="alternativesContent">
+                <!-- Content will be loaded here -->
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function addToCart(medicineId) {
+    // Add to cart functionality
+    fetch(`/orders/add-to-cart/${medicineId}/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+            'Content-Type': 'application/json',
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showToast('Medicine added to cart!', 'success');
+        } else {
+            showToast('Failed to add medicine to cart', 'error');
+        }
+    });
+}
+
+function showAlternatives(medicineId) {
+    // Show alternatives modal
+    fetch(`/medicines/${medicineId}/alternatives/`)
+    .then(response => response.json())
+    .then(data => {
+        const modal = new bootstrap.Modal(document.getElementById('alternativesModal'));
+        document.getElementById('alternativesContent').innerHTML = data.html;
+        modal.show();
+    });
+}
+
+function getDirections(lat, lng) {
+    // Open navigation in maps app
+    if (lat && lng) {
+        window.open(`https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`, '_blank');
+    } else {
+        showToast('Location not available', 'warning');
+    }
+}
+
+function showToast(message, type) {
+    // Simple toast notification
+    const toast = document.createElement('div');
+    toast.className = `alert alert-${type === 'success' ? 'success' : type === 'error' ? 'danger' : 'warning'} alert-dismissible fade show position-fixed`;
+    toast.style.cssText = 'top: 20px; right: 20px; z-index: 9999;';
+    toast.innerHTML = `
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+        toast.remove();
+    }, 3000);
+}
+
+// Add CSRF token to all forms
+document.addEventListener('DOMContentLoaded', function() {
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]');
+    if (!csrfToken) {
+        const token = document.createElement('input');
+        token.type = 'hidden';
+        token.name = 'csrfmiddlewaretoken';
+        token.value = '{{ csrf_token }}';
+        document.querySelector('form').appendChild(token);
+    }
+});
+</script>
+{% endblock %} 

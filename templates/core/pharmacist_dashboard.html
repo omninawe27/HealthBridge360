@@ -1,0 +1,288 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Pharmacist Dashboard - HealthKart 360{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- Welcome Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h2 class="text-primary mb-2">
+                        <i class="fas fa-clinic-medical me-2"></i>Welcome, {{ pharmacy.name }}
+                    </h2>
+                    <p class="text-muted">Manage your pharmacy inventory and orders efficiently</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="row mb-4">
+        <div class="col-md-3 col-sm-6 mb-3">
+            <div class="stat-card">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <div class="stat-number">{{ pending_orders }}</div>
+                        <div class="stat-label">Pending Orders</div>
+                    </div>
+                    <i class="fas fa-clock fa-2x opacity-75"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 mb-3">
+            <div class="stat-card">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <div class="stat-number">{{ low_stock_medicines }}</div>
+                        <div class="stat-label">Low Stock Items</div>
+                    </div>
+                    <i class="fas fa-exclamation-triangle fa-2x opacity-75"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 mb-3">
+            <div class="stat-card">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <div class="stat-number">{{ pharmacy.medicine_set.count }}</div>
+                        <div class="stat-label">Total Medicines</div>
+                    </div>
+                    <i class="fas fa-pills fa-2x opacity-75"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 mb-3">
+            <div class="stat-card">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <div class="stat-number">{{ in_stock_medicines }}</div>
+                        <div class="stat-label">In Stock</div>
+                    </div>
+                    <i class="fas fa-check-circle fa-2x opacity-75"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-bolt me-2"></i>Quick Actions</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 col-sm-6 mb-3">
+                            <a href="{% url 'medicines:add' %}" class="btn btn-primary btn-lg w-100">
+                                <i class="fas fa-plus me-2"></i>Add Medicine
+                            </a>
+                        </div>
+                        <div class="col-md-4 col-sm-6 mb-3">
+                            <a href="{% url 'orders:pharmacy_orders' %}" class="btn btn-success btn-lg w-100">
+                                <i class="fas fa-list me-2"></i>View Orders
+                            </a>
+                        </div>
+                        <div class="col-md-4 col-sm-6 mb-3">
+                            <a href="{% url 'medicines:inventory' %}" class="btn btn-info btn-lg w-100">
+                                <i class="fas fa-boxes me-2"></i>Inventory
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Orders -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="fas fa-shopping-cart me-2"></i>Recent Orders</h5>
+                    <a href="{% url 'orders:pharmacy_orders' %}" class="btn btn-sm btn-outline-primary">View All</a>
+                </div>
+                <div class="card-body">
+                    {% if recent_orders %}
+                        <div class="table-responsive">
+                            <table class="table table-hover" id="recent-orders-table">
+                                <thead>
+                                    <tr>
+                                        <th>Order ID</th>
+                                        <th>Customer</th>
+                                        <th>Status</th>
+                                        <th>Amount</th>
+                                        <th>Date</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for order in recent_orders %}
+                                    <tr>
+                                        <td>#{{ order.id }}</td>
+                                        <td>{{ order.user.first_name }} {{ order.user.last_name }}</td>
+                                        <td>
+                                            <span class="order-status status-{{ order.status }}">
+                                                {{ order.get_status_display }}
+                                            </span>
+                                        </td>
+                                        <td>₹{{ order.total_amount }}</td>
+                                        <td>{{ order.created_at|date:"M d, Y" }}</td>
+                                        <td>
+                                            <a href="{% url 'orders:detail' order.id %}" class="btn btn-sm btn-outline-primary">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="text-center py-4">
+                            <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                            <p class="text-muted">No orders yet</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Low Stock Alerts -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-exclamation-triangle me-2 text-warning"></i>Low Stock Alerts</h5>
+                </div>
+                <div class="card-body">
+                    {% if low_stock_medicines > 0 %}
+                        <div class="alert alert-warning">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            You have {{ low_stock_medicines }} medicines with low stock. 
+                            <a href="{% url 'medicines:inventory' %}" class="alert-link">Update inventory</a>
+                        </div>
+                    {% else %}
+                        <div class="text-center py-3">
+                            <i class="fas fa-check-circle fa-2x text-success mb-2"></i>
+                            <p class="text-success mb-0">All medicines are well stocked!</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Real-time dashboard updates
+let dashboardUpdateInterval;
+
+function updateDashboard() {
+    fetch('{% url "orders:get_orders_data" %}')
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Update statistics
+                updateStats(data.stats);
+                
+                // Update recent orders
+                updateRecentOrders(data.orders);
+            }
+        })
+        .catch(error => {
+            console.error('Error updating dashboard:', error);
+        });
+}
+
+function updateStats(stats) {
+    // Update pending orders count
+    const pendingElement = document.querySelector('.stat-card .stat-number');
+    if (pendingElement) {
+        pendingElement.textContent = stats.pending_count;
+    }
+    
+    // Update other stats if they exist
+    const statsElements = document.querySelectorAll('.stat-number');
+    if (statsElements.length >= 4) {
+        statsElements[1].textContent = stats.confirmed_count || 0;
+        statsElements[2].textContent = stats.ready_count || 0;
+        statsElements[3].textContent = stats.delivered_count || 0;
+    }
+}
+
+function updateRecentOrders(orders) {
+    const ordersTable = document.querySelector('#recent-orders-table tbody');
+    if (ordersTable && orders.length > 0) {
+        ordersTable.innerHTML = '';
+        
+        orders.slice(0, 5).forEach(order => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>#${order.id}</td>
+                <td>${order.customer_name}</td>
+                <td>
+                    <span class="order-status status-${order.status}">
+                        ${order.status_display}
+                    </span>
+                </td>
+                <td>₹${order.total_amount}</td>
+                <td>${order.created_at}</td>
+                <td>
+                    <a href="/orders/detail/${order.id}/" class="btn btn-sm btn-outline-primary">
+                        <i class="fas fa-eye"></i>
+                    </a>
+                </td>
+            `;
+            ordersTable.appendChild(row);
+        });
+    }
+}
+
+// Initialize dashboard
+document.addEventListener('DOMContentLoaded', function() {
+    // Start real-time updates
+    updateDashboard();
+    dashboardUpdateInterval = setInterval(updateDashboard, 30000); // Update every 30 seconds
+    
+    // Add loading states to buttons
+    const buttons = document.querySelectorAll('.btn');
+    buttons.forEach(button => {
+        button.addEventListener('click', function() {
+            if (this.classList.contains('btn-lg')) {
+                const originalContent = this.innerHTML;
+                this.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Loading...';
+                this.disabled = true;
+                
+                // Re-enable after a delay
+                setTimeout(() => {
+                    this.innerHTML = originalContent;
+                    this.disabled = false;
+                }, 2000);
+            }
+        });
+    });
+    
+    // Add hover effects to stat cards
+    const statCards = document.querySelectorAll('.stat-card');
+    statCards.forEach(card => {
+        card.addEventListener('mouseenter', function() {
+            HealthKart360.animate(this, 'pulse');
+        });
+    });
+});
+
+// Clean up interval when page is unloaded
+window.addEventListener('beforeunload', function() {
+    if (dashboardUpdateInterval) {
+        clearInterval(dashboardUpdateInterval);
+    }
+});
+</script>
+{% endblock %} 

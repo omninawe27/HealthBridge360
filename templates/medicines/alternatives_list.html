@@ -1,0 +1,57 @@
+{% if alternatives %}
+    <div class="alternatives-list">
+        <h6 class="mb-3">
+            <i class="fas fa-exchange-alt me-2"></i>
+            Alternatives for {{ original_medicine.name }}
+        </h6>
+        
+        {% for medicine in alternatives %}
+        <div class="alternative-item card mb-2">
+            <div class="card-body py-2">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <h6 class="mb-1">{{ medicine.name }}</h6>
+                        <p class="text-muted mb-1">
+                            <strong>Brand:</strong> {{ medicine.brand }} | 
+                            <strong>Type:</strong> {{ medicine.get_medicine_type_display }} |
+                            <strong>Strength:</strong> {{ medicine.strength }}
+                        </p>
+                        <small class="text-muted">
+                            <i class="fas fa-map-marker-alt me-1"></i>
+                            {{ medicine.pharmacy.name }}
+                        </small>
+                    </div>
+                    <div class="col-md-4 text-md-end">
+                        <div class="mb-2">
+                            <span class="badge bg-success">₹{{ medicine.price }}</span>
+                        </div>
+                        <div class="mb-2">
+                            <span class="status-badge status-{{ medicine.stock_status }}">
+                                {{ medicine.status_display }}
+                            </span>
+                        </div>
+                        {% if medicine.quantity > 0 %}
+                        <button class="btn btn-primary btn-sm w-100" 
+                                onclick="addToCart({{ medicine.id }})">
+                            <i class="fas fa-cart-plus me-1"></i>Add to Cart
+                        </button>
+                        {% else %}
+                        <button class="btn btn-outline-secondary btn-sm w-100" disabled>
+                            <i class="fas fa-times me-1"></i>Out of Stock
+                        </button>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="text-center py-4">
+        <i class="fas fa-search fa-2x text-muted mb-3"></i>
+        <h6 class="text-muted">No alternatives found</h6>
+        <p class="text-muted small">
+            No alternative medicines are currently available for {{ original_medicine.name }}
+        </p>
+    </div>
+{% endif %} 

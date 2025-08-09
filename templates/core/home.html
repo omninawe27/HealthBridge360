@@ -1,0 +1,163 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans "HealthKart 360" %} - {% trans "Healthcare for Rural India" %}{% endblock %}
+
+{% block content %}
+<div class="hero-section bg-primary text-white py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold mb-4">
+                    <i class="fas fa-heartbeat me-3"></i>
+                    HealthBridge 360
+                </h1>
+                <p class="lead mb-4">
+                    Your trusted healthcare companion for rural India. Find medicines, upload prescriptions, set reminders, and access emergency help - all in one place.
+                </p>
+                <div class="d-grid gap-2 d-md-flex">
+                    <a href="{% url 'users:register' %}" class="btn btn-light btn-lg me-md-2">
+                        <i class="fas fa-user-plus me-2"></i>Get Started
+                    </a>
+                    <a href="{% url 'pharmacy:register' %}" class="btn btn-outline-light btn-lg">
+                        <i class="fas fa-store me-2"></i>Register Pharmacy
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-6 text-center">
+                <img src="/placeholder.svg" 
+                     alt="HealthKart 360 App" class="img-fluid rounded-lg shadow-lg">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container py-5">
+    <!-- Features Section -->
+    <div class="row mb-5">
+        <div class="col-12 text-center mb-5">
+            <h2 class="display-5 fw-bold text-primary">Key Features</h2>
+            <p class="lead text-muted">Everything you need for healthcare management</p>
+        </div>
+        
+        <div class="col-md-6 col-lg-3 mb-4">
+            <div class="card h-100 text-center border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="feature-icon bg-primary text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                        <i class="fas fa-search fa-2x"></i>
+                    </div>
+                    <h5 class="card-title">🔍 Medicine Search</h5>
+                    <p class="card-text">Find medicines at nearby pharmacies with real-time availability and pricing.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6 col-lg-3 mb-4">
+            <div class="card h-100 text-center border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="feature-icon bg-success text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                        <i class="fas fa-camera fa-2x"></i>
+                    </div>
+                    <h5 class="card-title">🧾 Prescription Upload</h5>
+                    <p class="card-text">Upload prescription images and get medicine suggestions with alternatives.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6 col-lg-3 mb-4">
+            <div class="card h-100 text-center border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="feature-icon bg-warning text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                        <i class="fas fa-bell fa-2x"></i>
+                    </div>
+                    <h5 class="card-title">🔔 Medicine Reminders</h5>
+                    <p class="card-text">Set personalized reminders for your medications with custom alerts.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6 col-lg-3 mb-4">
+            <div class="card h-100 text-center border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="feature-icon bg-danger text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                        <i class="fas fa-exclamation-triangle fa-2x"></i>
+                    </div>
+                    <h5 class="card-title">🆘 Emergency Mode</h5>
+                    <p class="card-text">Quick access to 24x7 pharmacies and essential medicines during emergencies.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Language Support -->
+    <div class="row mb-5">
+        <div class="col-12 text-center">
+            <h3 class="fw-bold text-primary mb-4">Multi-Language Support</h3>
+            <div class="d-flex justify-content-center gap-4 flex-wrap">
+                <span class="badge bg-primary fs-6 py-2 px-3">🇬🇧 English</span>
+                <span class="badge bg-success fs-6 py-2 px-3">🇮🇳 हिंदी (Hindi)</span>
+                <span class="badge bg-warning fs-6 py-2 px-3">🇮🇳 मराठी (Marathi)</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- How It Works -->
+    <div class="row mb-5">
+        <div class="col-12 text-center mb-5">
+            <h2 class="display-5 fw-bold text-primary">How It Works</h2>
+            <p class="lead text-muted">Simple steps to get started</p>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="text-center">
+                <div class="step-number bg-primary text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                    <span class="fw-bold fs-4">1</span>
+                </div>
+                <h5>Register Account</h5>
+                <p class="text-muted">Create your account with basic details and choose your preferred language.</p>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="text-center">
+                <div class="step-number bg-success text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                    <span class="fw-bold fs-4">2</span>
+                </div>
+                <h5>Search & Order</h5>
+                <p class="text-muted">Search for medicines, upload prescriptions, and place orders from nearby pharmacies.</p>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="text-center">
+                <div class="step-number bg-warning text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                    <span class="fw-bold fs-4">3</span>
+                </div>
+                <h5>Stay Healthy</h5>
+                <p class="text-muted">Set reminders, track orders, and access emergency help when needed.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card bg-gradient text-success text-center py-5" style="background: linear-gradient(135deg, #2c5aa0, #28a745);">
+                <div class="card-body">
+                    <h3 class="fw-bold mb-3">Ready to Get Started?</h3>
+                    <p class="lead mb-4">Join thousands of users who trust HealthKart 360 for their healthcare needs.</p>
+                    <div class="d-grid gap-2 d-md-flex justify-content-center">
+                        <a href="{% url 'users:register' %}" class="btn btn-light btn-lg me-md-2">
+                            <i class="fas fa-user-plus me-2"></i>Register Now
+                        </a>
+                        <a href="{% url 'users:login' %}" class="btn btn-outline-light btn-lg">
+                            <i class="fas fa-sign-in-alt me-2"></i>Login
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
