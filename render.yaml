@@ -21,13 +21,13 @@ services:
           name: healthkart360-backend
           property: host
       - key: RAZORPAY_KEY_ID
-        sync: false
+        value: placeholder_razorpay_key_id
       - key: RAZORPAY_KEY_SECRET
-        sync: false
+        value: placeholder_razorpay_key_secret
       - key: EMAIL_HOST_USER
-        sync: false
+        value: placeholder_email@gmail.com
       - key: EMAIL_HOST_PASSWORD
-        sync: false
+        value: placeholder_email_password
       - key: EMAIL_HOST
         value: smtp.gmail.com
       - key: EMAIL_PORT
