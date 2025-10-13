@@ -4,8 +4,8 @@ services:
     name: healthkart360-backend
     runtime: python
     plan: free
-    buildCommand: "pip install -r requirements.txt && python manage.py collectstatic --noinput --clear"
-    startCommand: "gunicorn healthkart360.wsgi:application --bind 0.0.0.0:$PORT --workers 1 --threads 2"
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "python manage.py migrate && python manage.py collectstatic --noinput --clear && gunicorn healthkart360.wsgi:application --bind 0.0.0.0:$PORT --workers 1 --threads 2"
     envVars:
       - key: DEBUG
         value: false
