@@ -2,6 +2,7 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 
+import dj_database_url
 # Load environment variables from .env file
 load_dotenv()
 
@@ -84,19 +85,15 @@ TEMPLATES = [
 WSGI_APPLICATION = 'healthkart360.wsgi.application'
 
 # Database
-DATABASES = {
-    'default': {
-        'ENGINE': os.getenv('DB_ENGINE', 'django.db.backends.mysql'),
-        'NAME': os.getenv('DB_NAME', 'healthkart360'),
-        'USER': os.getenv('DB_USER', 'root'),
-        'PASSWORD': os.getenv('DB_PASSWORD'),
-        'HOST': os.getenv('DB_HOST', 'localhost'),
-        'PORT': os.getenv('DB_PORT', '3306'),
-        'OPTIONS': {
-            'charset': 'utf8mb4',
-        },
-    }
-}
+# Database configuration using dj-database-url
+# For local development, your .env file can look like:
+# DATABASE_URL=postgres://user:password@localhost:5432/healthkart360
+# For production, you'll get this URL from your provider (e.g., Supabase, Neon).
+DATABASE_URL = os.getenv('DATABASE_URL')
+if DATABASE_URL:
+    DATABASES = {'default': dj_database_url.config(default=DATABASE_URL, conn_max_age=600)}
+else:
+    raise ValueError("DATABASE_URL environment variable is not set.")
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
