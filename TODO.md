@@ -1,11 +1,30 @@
-# TODO: Secure Credentials and Push to GitHub
+# TODO: Deployment and Testing
 
-- [x] Update healthkart360/settings.py to use os.getenv for SECRET_KEY, DATABASES, EMAIL_HOST_USER, EMAIL_HOST_PASSWORD, RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET
-- [x] Update healthkart360/razorpay_settings.py to use os.getenv for RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET
-- [x] Create .env.example with placeholders for all sensitive variables
-- [x] Update .gitignore to include healthkart360/razorpay_settings.py
-- [x] Check git status and ensure sensitive files are not tracked
-- [x] Add GitHub remote https://github.com/omninawe27/HealthBridge360.git if not present
-- [x] Add all changes to git
-- [x] Commit changes with message "Secure credentials by moving to environment variables"
-- [x] Push to GitHub repo
+## Deployment Tasks
+- [x] Fix Python dependencies for Render deployment
+- [x] Update Pillow version for compatibility
+- [x] Add missing pymysql dependency
+- [x] Fix psycopg2-binary compatibility with Python 3.13
+- [x] Add setuptools for pkg_resources import
+- [x] Update razorpay version for better compatibility
+- [x] Add gunicorn for production server
+- [x] Configure render.yaml for Blueprint deployment
+- [x] Fix Next.js SSR localStorage error
+- [x] Deploy frontend and backend to Render.com
+- [x] Verify frontend deployment (200 OK response)
+
+## Testing Tasks
+- [ ] Configure environment variables in Render dashboard
+- [ ] Run database migrations on deployed backend
+- [ ] Create superuser for admin access
+- [ ] Test backend API endpoints
+- [ ] Test user registration and authentication
+- [ ] Test medicine search functionality
+- [ ] Test order placement and payment flow
+- [ ] Test pharmacist dashboard
+- [ ] Test medicine reminder system
+- [ ] Test email notifications
+- [ ] Test mobile responsiveness
+- [ ] Test multi-language support (Hindi, Marathi)
+- [ ] Test emergency mode functionality
+- [ ] Performance testing and optimization
