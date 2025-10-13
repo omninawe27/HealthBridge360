@@ -1,7 +1,10 @@
 "use client"
 
-import "../static/js/main.js"
-
 export default function SyntheticV0PageForDeployment() {
-  return <div />
+  return (
+    <div>
+      <h1>HealthKart 360</h1>
+      <p>Healthcare Web Application</p>
+    </div>
+  )
 }
