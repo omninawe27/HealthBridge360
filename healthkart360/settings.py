@@ -17,9 +17,9 @@ if not SECRET_KEY:
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',') if os.getenv('ALLOWED_HOSTS') else ['localhost', '127.0.0.1', 'healthkart360-backend.onrender.com']
-if not ALLOWED_HOSTS or ALLOWED_HOSTS == ['']:
-    raise ValueError('ALLOWED_HOSTS must be set in production')
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+if not ALLOWED_HOSTS:
+    raise ValueError('ALLOWED_HOSTS must be set')
 
 # Application definition
 INSTALLED_APPS = [
@@ -174,7 +174,7 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 PHARMACIST_EMAIL = 'omninawe27@gmail.com'  # Change this to the actual pharmacist email
 
 # Site URL for email links
-SITE_URL = 'http://localhost:8000'  # Change this to your production URL
+SITE_URL = os.getenv('SITE_URL', 'http://localhost:8000')
 
 # Razorpay Test Mode Keys
 RAZORPAY_KEY_ID = os.getenv('RAZORPAY_KEY_ID')
