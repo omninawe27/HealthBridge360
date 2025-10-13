@@ -1,7 +1,7 @@
 "use client"
 
-import  from "../static/js/main"
+import "../static/js/main.js"
 
 export default function SyntheticV0PageForDeployment() {
-  return < />
+  return <div />
 }
