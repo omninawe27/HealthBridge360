@@ -8,7 +8,8 @@ A comprehensive, mobile-first healthcare web application designed for rural Indi
 - **Multi-language Support**: English, Hindi, Marathi
 - **Medicine Search**: Find medicines and nearby pharmacies
 - **Prescription Upload**: Upload prescription images for medicine orders
-- **Medicine Reminders**: Set reminders with customizable alerts
+- **Advance Orders**: Order medicines not currently in stock with payment upfront
+- **Medicine Reminders**: Set reminders with customizable alerts and automated notifications
 - **Order Management**: Track order history and live status
 - **Emergency Mode**: Quick access to 24x7 pharmacies and essential medicines
 - **Shopping Cart**: Add medicines to cart and checkout
@@ -18,24 +19,30 @@ A comprehensive, mobile-first healthcare web application designed for rural Indi
 - **Pharmacy Dashboard**: Overview of orders, inventory, and statistics
 - **Inventory Management**: Add, edit, and manage medicine stock
 - **Order Management**: Process and update order status
+- **Advance Order Processing**: Handle advance orders for out-of-stock medicines
 - **Stock Alerts**: Low stock and expiry notifications
 - **Medicine Alternatives**: Manage alternative medicine relationships
 
 ### 🔧 Technical Features
 - **Mobile-First Design**: Responsive design optimized for mobile devices
-- **Real-time Notifications**: Toast notifications and alerts
+- **Real-time Notifications**: Toast notifications and email alerts
+- **Automated Reminder System**: Background scheduler for medication reminders
 - **AJAX Integration**: Smooth user experience with asynchronous requests
 - **Session Management**: Shopping cart and user session handling
 - **Database Management**: Comprehensive data models and relationships
+- **Email Integration**: SMTP-based email notifications for orders and reminders
 
 ## 🛠️ Tech Stack
 
-- **Backend**: Django 4.2.7 (Python)
+- **Backend**: Django 5.2.7 (Python)
 - **Database**: MySQL
-- **Frontend**: HTML5, CSS3, JavaScript (Bootstrap 5)
+- **Frontend**: Next.js 15.2.4 (React, TypeScript), HTML5, CSS3, JavaScript (Tailwind CSS)
+- **Package Manager**: pnpm
 - **Authentication**: Django's built-in authentication system
 - **File Upload**: Image upload for prescriptions
 - **Geolocation**: Pharmacy location services
+- **Caching**: Django's cache framework
+- **Pagination**: Django pagination for large datasets
 
 ## 📋 Prerequisites
 
@@ -88,12 +95,23 @@ python manage.py createsuperuser
 python scripts/init_database.py
 ```
 
-### 8. Run Development Server
+### 8. Install Frontend Dependencies
 ```bash
-python manage.py runserver
+pnpm install
 ```
 
-The application will be available at `http://localhost:8000`
+### 9. Run Development Servers
+```bash
+# Terminal 1: Django backend
+python manage.py runserver
+
+# Terminal 2: Next.js frontend
+pnpm dev
+```
+
+The application will be available at:
+- **Backend API**: `http://localhost:8000`
+- **Frontend**: `http://localhost:3000`
 
 ## 👥 Default Login Credentials
 
@@ -116,13 +134,16 @@ healthkart360/
 ├── core/                     # Core application views
 ├── healthkart360/           # Main Django project
 ├── medicines/               # Medicine management app
+├── notifications/           # Notification management app
 ├── orders/                  # Order management app
 ├── pharmacy/                # Pharmacy management app
 ├── reminders/               # Reminder management app
 ├── users/                   # User management app
 ├── static/                  # Static files (CSS, JS, images)
 ├── templates/               # HTML templates
-├── scripts/                 # Database initialization scripts
+├── scripts/                 # Automation and initialization scripts
+├── locale/                  # Translation files
+├── media/                   # User uploaded files
 └── manage.py               # Django management script
 ```
 
@@ -159,14 +180,19 @@ DATABASES = {
 - **User**: Extended user model with phone number and language preferences
 - **Pharmacy**: Pharmacy information with location and operating hours
 - **Medicine**: Medicine details with stock and pricing information
-- **Order**: Order management with status tracking
-- **Reminder**: Medicine reminder system with time slots
+- **Order**: Order management with status tracking and advance order support
+- **OrderItem**: Individual items within orders with advance order flags
+- **AdvanceOrder**: Special orders for out-of-stock medicines
+- **Reminder**: Medicine reminder system with time slots and automated scheduling
+- **Notification**: Email and system notification management
 
 ### Key Relationships
 - Users can place orders and set reminders
 - Pharmacies have medicines and receive orders
 - Medicines can have alternatives and belong to pharmacies
 - Orders contain multiple order items (medicines)
+- Advance orders are linked to regular orders after payment
+- Notifications are sent for orders, reminders, and system events
 
 ## 🎨 UI/UX Features
 
@@ -209,6 +235,21 @@ DATABASES = {
 - Prescription upload support
 - Order status tracking
 - Alternative medicine suggestions
+
+### Advance Orders
+- Order medicines that are currently out of stock
+- Pay upfront for advance orders
+- Automatic conversion to regular orders when stock becomes available
+- Pharmacist notifications for advance order processing
+- Separate tracking for advance vs regular orders
+
+### Automated Reminder System
+- Background scheduler for medication reminders
+- Configurable reminder intervals (every 5-10 minutes)
+- Email notifications for upcoming medication times
+- Support for multiple reminder time slots (Morning, Afternoon, Evening, Night)
+- Automated service management with Windows Task Scheduler and Linux Cron
+- Comprehensive logging and monitoring
 
 ## 🚀 Deployment
 
@@ -258,12 +299,18 @@ coverage report
 
 ## 🔒 Security Features
 
-- CSRF protection on all forms
-- SQL injection prevention
-- XSS protection
-- Secure file upload validation
-- User authentication and authorization
-- Session management
+- **CSRF Protection**: All forms protected against Cross-Site Request Forgery attacks
+- **SQL Injection Prevention**: Django ORM prevents SQL injection attacks
+- **XSS Protection**: Automatic HTML escaping and Content Security Policy (CSP) headers
+- **Secure File Upload**: File type, size, and content validation for prescription uploads
+- **Rate Limiting**: Prevents brute force attacks with configurable request limits
+- **Security Headers**: HSTS, X-Frame-Options, X-Content-Type-Options, and CSP headers
+- **Session Security**: HttpOnly and Secure cookie flags, session expiration
+- **Input Validation**: Comprehensive validation for user inputs, phone numbers, and usernames
+- **Password Security**: Strong password requirements with minimum length and complexity
+- **Logging**: Security event logging for suspicious activities and authentication failures
+- **Environment Variables**: Sensitive settings stored securely via environment variables
+- **HTTPS Enforcement**: SSL redirect and secure cookie settings for production
 
 ## 🌐 Internationalization
 
@@ -294,6 +341,36 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 5. Submit a pull request
 
 ## 📝 Changelog
+
+### Version 1.1.2
+- Security enhancements implemented
+- Added comprehensive security middleware (rate limiting, security logging)
+- Enhanced input validation for user registration and forms
+- Improved file upload security with content validation
+- Added security headers (HSTS, CSP, X-Frame-Options)
+- Implemented environment variable usage for sensitive settings
+- Strengthened password validation requirements
+- Added security event logging and monitoring
+- Updated documentation with detailed security features
+
+### Version 1.1.1
+- Performance optimizations implemented
+- Optimized reminder sending to filter by time window in database
+- Added database indexes on frequently queried fields (14 indexes added)
+- Implemented caching for expensive queries
+- Added pagination to inventory views to handle large datasets
+- Optimized database queries with select_related and prefetch_related
+- Removed unnecessary files and directories for cleaner codebase
+- Updated tech stack documentation to include Next.js frontend
+
+### Version 1.1.0
+- Added Advance Orders feature for out-of-stock medicines
+- Implemented Automated Reminder System with background scheduling
+- Added Notifications app for email and system notifications
+- Enhanced Order model with advance order support
+- Added comprehensive logging and monitoring for reminder system
+- Improved pharmacist dashboard with advance order management
+- Added Windows Task Scheduler and Linux Cron support for automation
 
 ### Version 1.0.0
 - Initial release

@@ -1,0 +1,209 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans "Language Test" %} - {% trans "HealthBridge 360" %}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="text-center mb-4">Language Switcher Test Page</h1>
+
+            <!-- Test Content in English -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h3>Test Content (English)</h3>
+                </div>
+                <div class="card-body">
+                    <p>This is a test page to verify that the language switcher is working correctly.</p>
+                    <p>The language switcher should appear in the navigation bar above.</p>
+                    <p>Try clicking on different languages to see if the page content changes.</p>
+                    <ul>
+                        <li>English - Default language</li>
+                        <li>Hindi - भारतीय भाषा</li>
+                        <li>Marathi - मराठी भाषा</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Debug Information -->
+            <div class="card mb-4">
+                <div class="card-header bg-info text-white">
+                    <h4>Debug Information</h4>
+                </div>
+                <div class="card-body">
+                    <h5>Google Translate Status:</h5>
+                    <p id="gt-status">Checking...</p>
+
+                    <h5>Language Switcher Elements:</h5>
+                    <ul id="elements-list">
+                        <li>Checking for language switcher...</li>
+                    </ul>
+
+                    <h5>Console Logs:</h5>
+                    <div id="console-logs" style="background: #f8f9fa; padding: 10px; border-radius: 5px; font-family: monospace; max-height: 200px; overflow-y: auto;">
+                        <!-- Console logs will appear here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Manual Test Buttons -->
+            <div class="card">
+                <div class="card-header bg-warning">
+                    <h4>Manual Test</h4>
+                </div>
+                <div class="card-body">
+                    <p>If the automatic language switching is not working, try these manual tests:</p>
+                    <button class="btn btn-primary me-2" onclick="testEnglish()">Test English</button>
+                    <button class="btn btn-success me-2" onclick="testHindi()">Test Hindi</button>
+                    <button class="btn btn-info" onclick="testMarathi()">Test Marathi</button>
+
+                    <div class="mt-3">
+                        <button class="btn btn-secondary me-2" onclick="checkGoogleTranslate()">Check Google Translate</button>
+                        <button class="btn btn-secondary" onclick="clearConsole()">Clear Console</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Custom console logging to display in the page
+let originalLog = console.log;
+let originalError = console.error;
+let consoleOutput = document.getElementById('console-logs');
+
+function addToConsole(message, type = 'log') {
+    const timestamp = new Date().toLocaleTimeString();
+    const color = type === 'error' ? 'red' : type === 'warn' ? 'orange' : 'black';
+    consoleOutput.innerHTML += `<div style="color: ${color}">[${timestamp}] ${message}</div>`;
+    consoleOutput.scrollTop = consoleOutput.scrollHeight;
+}
+
+console.log = function(...args) {
+    originalLog.apply(console, args);
+    addToConsole(args.join(' '), 'log');
+};
+
+console.error = function(...args) {
+    originalError.apply(console, args);
+    addToConsole(args.join(' '), 'error');
+};
+
+// Override the language switching functions to add debugging
+function testEnglish() {
+    console.log('Manually testing English switch');
+    switchLanguage('en');
+}
+
+function testHindi() {
+    console.log('Manually testing Hindi switch');
+    switchLanguage('hi');
+}
+
+function testMarathi() {
+    console.log('Manually testing Marathi switch');
+    switchLanguage('mr');
+}
+
+function checkGoogleTranslate() {
+    console.log('Checking Google Translate status...');
+
+    // Check if Google Translate is loaded
+    if (typeof google !== 'undefined' && google.translate) {
+        console.log('✓ Google Translate API is available');
+    } else {
+        console.log('✗ Google Translate API is not available');
+    }
+
+    // Check for combo box
+    const comboBox = document.querySelector('.goog-te-combo');
+    if (comboBox) {
+        console.log('✓ Found combo box:', comboBox.value);
+    } else {
+        console.log('✗ Combo box not found');
+    }
+
+    // Check for menu items
+    const menuItems = document.querySelectorAll('.goog-te-menu2-item');
+    if (menuItems.length > 0) {
+        console.log('✓ Found', menuItems.length, 'menu items');
+        menuItems.forEach((item, index) => {
+            console.log(`  ${index + 1}. ${item.textContent.trim()}`);
+        });
+    } else {
+        console.log('✗ No menu items found');
+    }
+
+    // Check for language switcher
+    const switcher = document.querySelector('.language-switcher-wrapper');
+    if (switcher) {
+        console.log('✓ Language switcher found');
+    } else {
+        console.log('✗ Language switcher not found');
+    }
+
+    // Update status
+    const status = document.getElementById('gt-status');
+    status.textContent = googleTranslateLoaded ? 'Loaded' : 'Not Loaded';
+    status.style.color = googleTranslateLoaded ? 'green' : 'red';
+}
+
+function clearConsole() {
+    consoleOutput.innerHTML = '';
+}
+
+// Check elements on page load
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Page loaded, checking elements...');
+
+    setTimeout(() => {
+        checkGoogleTranslate();
+
+        // Update elements list
+        const elementsList = document.getElementById('elements-list');
+        elementsList.innerHTML = '';
+
+        const switcher = document.querySelector('.language-switcher-wrapper');
+        if (switcher) {
+            elementsList.innerHTML += '<li>✓ Language switcher wrapper found</li>';
+
+            const button = switcher.querySelector('.language-btn');
+            if (button) {
+                elementsList.innerHTML += '<li>✓ Language button found</li>';
+            } else {
+                elementsList.innerHTML += '<li>✗ Language button not found</li>';
+            }
+
+            const menu = switcher.querySelector('.language-menu');
+            if (menu) {
+                elementsList.innerHTML += '<li>✓ Language menu found</li>';
+            } else {
+                elementsList.innerHTML += '<li>✗ Language menu not found</li>';
+            }
+        } else {
+            elementsList.innerHTML += '<li>✗ Language switcher wrapper not found</li>';
+        }
+    }, 2000);
+});
+</script>
+
+<style>
+.card {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: none;
+    border-radius: 10px;
+}
+
+.card-header {
+    border-radius: 10px 10px 0 0 !important;
+    font-weight: bold;
+}
+
+.btn {
+    margin: 2px;
+}
+</style>
+{% endblock %}

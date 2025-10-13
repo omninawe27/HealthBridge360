@@ -12,9 +12,9 @@ class Medicine(models.Model):
     ]
     
     STOCK_STATUS = [
-        ('in_stock', '🟢 In Stock'),
-        ('out_of_stock', '🔴 Out of Stock'),
-        ('expiring_soon', '⚠️ Expiring Soon'),
+        ('in_stock', '🟢 In Stock'),    
+        ('out_of_stock', '🔴 Out of Stock'),    
+        ('expiring_soon', '⚠️ Expiring Soon'),  
     ]
     
     pharmacy = models.ForeignKey(Pharmacy, on_delete=models.CASCADE)

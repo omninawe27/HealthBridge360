@@ -28,6 +28,9 @@ def user_login(request):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
+                # Redirect pharmacists to pharmacy dashboard
+                if hasattr(user, 'is_pharmacist') and user.is_pharmacist:
+                    return redirect('pharmacy:dashboard')
                 return redirect('core:dashboard')
             else:
                 messages.error(request, 'Invalid username or password.')
@@ -45,32 +48,55 @@ def profile(request):
         user.email = request.POST.get('email', user.email)
         user.phone_number = request.POST.get('phone_number', user.phone_number)
         user.preferred_language = request.POST.get('preferred_language', user.preferred_language)
-        
+
+        # Handle pharmacy name update for pharmacists
+        if hasattr(user, 'is_pharmacist') and user.is_pharmacist:
+            pharmacy = getattr(user, 'pharmacy', None) or getattr(user, 'owned_pharmacy', None)
+            if pharmacy:
+                pharmacy_name = request.POST.get('pharmacy_name')
+                if pharmacy_name:
+                    pharmacy.name = pharmacy_name
+                    pharmacy.save()
+
         # Handle profile picture upload
         if 'profile_picture' in request.FILES:
             user.profile_picture = request.FILES['profile_picture']
-        
+
         user.save()
         messages.success(request, 'Profile updated successfully!')
         return redirect('users:profile')
-    
-    return render(request, 'users/profile.html', {'user': request.user})
+
+    # Get pharmacy for pharmacists
+    pharmacy = None
+    if hasattr(request.user, 'is_pharmacist') and request.user.is_pharmacist:
+        pharmacy = getattr(request.user, 'pharmacy', None) or getattr(request.user, 'owned_pharmacy', None)
+
+    return render(request, 'users/profile.html', {'user': request.user, 'pharmacy': pharmacy})
 
 @login_required
 def change_password(request):
     if request.method == 'POST':
-        form = PasswordChangeForm(request.user, request.POST)
-        if form.is_valid():
-            user = form.save()
-            update_session_auth_hash(request, user)
-            messages.success(request, 'Password changed successfully!')
-            return redirect('users:profile')
+        current_password = request.POST.get('current_password')
+        new_password1 = request.POST.get('new_password1')
+        new_password2 = request.POST.get('new_password2')
+        user = request.user
+
+        if not user.check_password(current_password):
+            messages.error(request, 'Current password is incorrect.')
+        elif new_password1 != new_password2:
+            messages.error(request, 'New passwords do not match.')
+        elif len(new_password1) < 8:
+            messages.error(request, 'New password must be at least 8 characters.')
         else:
-            messages.error(request, 'Please correct the errors below.')
-    else:
-        form = PasswordChangeForm(request.user)
-    
-    return render(request, 'users/change_password.html', {'form': form})
+            user.set_password(new_password1)
+            user.save()
+            messages.success(request, 'Password changed successfully.')
+            return redirect('users:profile')
+
+        # If error, redirect back to profile and open modal
+        return redirect('users:profile')  # Always redirect to profile
+
+    return redirect('users:profile')
 
 @login_required
 def delete_account(request):

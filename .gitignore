@@ -19,6 +19,9 @@ yarn-error.log*
 # env files
 .env*
 
+# Sensitive settings files
+healthkart360/razorpay_settings.py
+
 # vercel
 .vercel
 

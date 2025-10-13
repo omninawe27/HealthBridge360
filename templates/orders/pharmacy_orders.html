@@ -1,29 +1,208 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load i18n %}
 
 {% block title %}Pharmacy Orders - HealthKart 360{% endblock %}
 
 {% block content %}
-<div class="container-fluid py-4">
-    <div class="row">
+{% csrf_token %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+<style>
+/* Interactive Dashboard Styles */
+.stat-card {
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border-radius: 15px;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    height: 120px;
+}
+
+.stat-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    filter: brightness(1.1) saturate(1.2);
+}
+
+.stat-number {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Welcome Section with Creative Shape */
+.welcome-gradient {
+    background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
+    background-size: 400% 400%;
+    animation: gradientShift 8s ease infinite;
+    position: relative;
+    overflow: hidden;
+    border-radius: 25px 75px 25px 75px;
+    transform: perspective(1000px) rotateX(0deg);
+    transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    cursor: pointer;
+    box-shadow: 0 15px 35px rgba(102, 126, 234, 0.3);
+}
+
+.welcome-gradient:hover {
+    transform: perspective(1000px) rotateX(5deg) translateY(-10px) scale(1.02);
+    box-shadow: 0 25px 50px rgba(102, 126, 234, 0.4);
+    filter: brightness(1.1) saturate(1.2);
+}
+
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Enhanced Card Styles */
+.card {
+    border-radius: 15px;
+    border: none;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+}
+
+.card-header {
+    border-radius: 15px 15px 0 0 !important;
+    border: none;
+    background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%) !important;
+    color: white;
+}
+
+/* Button Styles */
+.btn {
+    border-radius: 25px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+/* Table Styles */
+.table {
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.table thead th {
+    background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
+    color: white;
+    border: none;
+    font-weight: 600;
+}
+
+.table tbody tr:hover {
+    background-color: rgba(102, 126, 234, 0.1);
+    transform: scale(1.01);
+    transition: all 0.2s ease;
+}
+
+/* Badge Styles */
+.badge {
+    border-radius: 20px;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+}
+
+/* Form Controls */
+.form-control, .form-select {
+    border-radius: 10px;
+    border: 2px solid #e9ecef;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #667EEA;
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+}
+
+/* Modal Styles */
+.modal-content {
+    border-radius: 15px;
+    border: none;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .stat-number {
+        font-size: 2rem;
+    }
+
+    .container-fluid {
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+    }
+}
+</style>
+
+<div class="container-fluid py-4 px-5">
+    <!-- Welcome Section -->
+    <div class="row mb-4">
         <div class="col-12">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2><i class="fas fa-shopping-cart me-2"></i>Pharmacy Orders</h2>
+            <div class="card welcome-gradient text-white">
+                <div class="card-body py-5">
+                    <h2 class="fw-bold mb-2">
+                        <i class="fas fa-store me-2"></i>
+                        {% trans "Welcome to Pharmacy Dashboard" %}, {{ user.first_name }}!
+                    </h2>
+                    <p class="mb-0 opacity-75">{% trans "Manage orders, track revenue, and serve your customers efficiently." %}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header with Actions -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <h2 class="fw-bold text-primary mb-0">
+                    <i class="fas fa-shopping-cart me-2"></i>Pharmacy Orders
+                </h2>
                 <div>
-                    <button class="btn btn-outline-success me-2" onclick="exportOrders()">
-                        <i class="fas fa-download me-2"></i>Export
+                    <button class="btn btn-success me-2" onclick="exportOrders()">
+                        <i class="fas fa-download me-2"></i>Export Orders
                     </button>
                     <a href="{% url 'core:dashboard' %}" class="btn btn-outline-primary">
                         <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
                     </a>
                 </div>
             </div>
+        </div>
+    </div>
 
             <!-- Statistics Cards -->
             <div class="row mb-4">
                 <div class="col-md-3 col-sm-6 mb-3">
-                    <div class="stat-card">
-                        <div class="d-flex justify-content-between align-items-center">
+                    <div class="card stat-card">
+                        <div class="card-body d-flex justify-content-between align-items-center">
                             <div>
                                 <div class="stat-number">{{ total_orders }}</div>
                                 <div class="stat-label">Total Orders</div>
@@ -33,10 +212,10 @@
                     </div>
                 </div>
                 <div class="col-md-3 col-sm-6 mb-3">
-                    <div class="stat-card">
-                        <div class="d-flex justify-content-between align-items-center">
+                    <div class="card stat-card">
+                        <div class="card-body d-flex justify-content-between align-items-center">
                             <div>
-                                <div class="stat-number">{{ pending_orders }}</div>
+                                <div class="stat-number">{{ pending_count }}</div>
                                 <div class="stat-label">Pending</div>
                             </div>
                             <i class="fas fa-clock fa-2x opacity-75 text-warning"></i>
@@ -44,10 +223,10 @@
                     </div>
                 </div>
                 <div class="col-md-3 col-sm-6 mb-3">
-                    <div class="stat-card">
-                        <div class="d-flex justify-content-between align-items-center">
+                    <div class="card stat-card">
+                        <div class="card-body d-flex justify-content-between align-items-center">
                             <div>
-                                <div class="stat-number">{{ completed_orders }}</div>
+                                <div class="stat-number">{{ completed_count }}</div>
                                 <div class="stat-label">Completed</div>
                             </div>
                             <i class="fas fa-check-circle fa-2x opacity-75 text-success"></i>
@@ -55,8 +234,8 @@
                     </div>
                 </div>
                 <div class="col-md-3 col-sm-6 mb-3">
-                    <div class="stat-card">
-                        <div class="d-flex justify-content-between align-items-center">
+                    <div class="card stat-card">
+                        <div class="card-body d-flex justify-content-between align-items-center">
                             <div>
                                 <div class="stat-number">₹{{ total_revenue }}</div>
                                 <div class="stat-label">Total Revenue</div>
@@ -78,8 +257,11 @@
                             <select id="statusFilter" class="form-select">
                                 <option value="">All Status</option>
                                 <option value="pending">Pending</option>
-                                <option value="processing">Processing</option>
+                                <option value="confirmed">Confirmed</option>
+                                <option value="preparing">Preparing</option>
                                 <option value="ready">Ready for Pickup</option>
+                                <option value="out_for_delivery">Out for Delivery</option>
+                                <option value="delivered">Delivered</option>
                                 <option value="completed">Completed</option>
                                 <option value="cancelled">Cancelled</option>
                             </select>
@@ -117,11 +299,13 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {% for order in orders %}
-                                    <tr data-status="{{ order.status }}" data-date="{{ order.created_at|date:'Y-m-d' }}">
+                                    {% for order in combined_orders %}
+                                    <tr data-status="{{ order.status }}" data-date="{{ order.created_at|date:'Y-m-d' }}" data-order-id="{{ order.id }}">
                                         <td>
                                             <strong>#{{ order.id }}</strong>
-                                            {% if order.prescription %}
+                                            {% if order.is_advance_order %}
+                                                <br><small class="text-warning"><i class="fas fa-clock"></i> Advance Order</small>
+                                            {% elif order.prescription %}
                                                 <br><small class="text-info"><i class="fas fa-file-medical"></i> Prescription</small>
                                             {% endif %}
                                         </td>
@@ -130,18 +314,35 @@
                                             <br><small class="text-muted">{{ order.user.phone_number }}</small>
                                         </td>
                                         <td>
-                                            <span class="badge bg-primary">{{ order.orderitem_set.count }} items</span>
-                                            <br><small class="text-muted">
-                                                {% for item in order.orderitem_set.all|slice:":2" %}
-                                                    {{ item.medicine.name }}{% if not forloop.last %}, {% endif %}
-                                                {% endfor %}
-                                                {% if order.orderitem_set.count > 2 %}
-                                                    +{{ order.orderitem_set.count|add:"-2" }} more
-                                                {% endif %}
-                                            </small>
+                                            {% if order.is_advance_order %}
+                                                <span class="badge bg-warning">{{ order.advance_order.items.count }} items</span>
+                                                <br><small class="text-muted">
+                                                    {% for item in order.advance_order.items.all|slice:":2" %}
+                                                        {{ item.medicine_name }}{% if not forloop.last %}, {% endif %}
+                                                    {% endfor %}
+                                                    {% if order.advance_order.items.count > 2 %}
+                                                        +{{ order.advance_order.items.count|add:"-2" }} more
+                                                    {% endif %}
+                                                </small>
+                                            {% else %}
+                                                <span class="badge bg-primary">{{ order.order.items.count }} items</span>
+                                                <br><small class="text-muted">
+                                                    {% for item in order.order.items.all|slice:":2" %}
+                                                        {{ item.medicine.name }}{% if not forloop.last %}, {% endif %}
+                                                    {% endfor %}
+                                                    {% if order.order.items.count > 2 %}
+                                                        +{{ order.order.items.count|add:"-2" }} more
+                                                    {% endif %}
+                                                </small>
+                                            {% endif %}
                                         </td>
                                         <td>
-                                            <strong>₹{{ order.total_amount }}</strong>
+                                            {% if order.is_advance_order %}
+                                                <strong>₹{{ order.total_amount }}</strong>
+                                                <br><small class="text-muted">Estimated</small>
+                                            {% else %}
+                                                <strong>₹{{ order.total_amount }}</strong>
+                                            {% endif %}
                                         </td>
                                         <td>
                                             <span class="badge status-{{ order.status }}">
@@ -154,11 +355,18 @@
                                         </td>
                                         <td>
                                             <div class="btn-group" role="group">
-                                                <a href="{% url 'orders:detail' order.id %}" class="btn btn-sm btn-outline-primary">
-                                                    <i class="fas fa-eye"></i>
-                                                </a>
-                                                <button type="button" class="btn btn-sm btn-outline-success" 
-                                                        onclick="updateStatus({{ order.id }}, '{{ order.status }}')">
+                                                {% if order.is_advance_order %}
+                                                    <a href="{% url 'orders:advance_order_detail' order.id %}" class="btn btn-sm btn-outline-primary">
+                                                        <i class="fas fa-eye"></i>
+                                                    </a>
+                                                {% else %}
+                                                    <a href="{% url 'orders:order_detail' order.id %}" class="btn btn-sm btn-outline-primary">
+                                                        <i class="fas fa-eye"></i>
+                                                    </a>
+                                                {% endif %}
+                                                <button type="button" class="btn btn-sm btn-outline-success update-status-btn"
+                                                        data-order-id="{{ order.id }}" data-status="{{ order.status }}"
+                                                        data-is-advance="{{ order.is_advance_order|yesno:'true,false' }}">
                                                     <i class="fas fa-edit"></i>
                                                 </button>
                                                 {% if order.prescription %}
@@ -200,8 +408,11 @@
                         <label for="newStatus" class="form-label">New Status</label>
                         <select id="newStatus" class="form-select" required>
                             <option value="pending">Pending</option>
-                            <option value="processing">Processing</option>
+                            <option value="confirmed">Confirmed</option>
+                            <option value="preparing">Preparing</option>
                             <option value="ready">Ready for Pickup</option>
+                            <option value="out_for_delivery">Out for Delivery</option>
+                            <option value="delivered">Delivered</option>
                             <option value="completed">Completed</option>
                             <option value="cancelled">Cancelled</option>
                         </select>
@@ -219,6 +430,7 @@
         </div>
     </div>
 </div>
+{% block footer %}{% endblock footer %}
 
 <script>
 let currentOrderId = null;
@@ -258,46 +470,185 @@ document.getElementById('clearFilters').addEventListener('click', function() {
     document.getElementById('searchInput').value = '';
     document.getElementById('statusFilter').value = '';
     document.getElementById('dateFilter').value = '';
-    
+
     const rows = document.querySelectorAll('#ordersTable tbody tr');
     rows.forEach(row => row.style.display = '');
+});
+
+// Event delegation for status update buttons
+document.addEventListener('click', function(e) {
+    if (e.target.closest('.update-status-btn')) {
+        const button = e.target.closest('.update-status-btn');
+        const orderId = button.getAttribute('data-order-id');
+        const status = button.getAttribute('data-status');
+        updateStatus(orderId, status);
+    }
 });
 
 // Status update functionality
 function updateStatus(orderId, currentStatus) {
     currentOrderId = orderId;
-    document.getElementById('newStatus').value = currentStatus;
+    // Map display status to actual status values
+    const statusMap = {
+        'pending': 'pending',
+        'confirmed': 'confirmed',
+        'preparing': 'preparing',
+        'ready for pickup': 'ready',
+        'out for delivery': 'out_for_delivery',
+        'delivered': 'delivered',
+        'completed': 'completed',
+        'cancelled': 'cancelled'
+    };
+
+    let normalizedStatus = statusMap[currentStatus.toLowerCase()] || 'pending';
+    document.getElementById('newStatus').value = normalizedStatus;
     document.getElementById('statusNotes').value = '';
     new bootstrap.Modal(document.getElementById('statusModal')).show();
+}
+
+// Update status badge in table row after successful update
+function updateStatusBadge(orderId, newStatus, statusDisplay) {
+    const row = document.querySelector(`tr[data-order-id="${orderId}"]`);
+    if (row) {
+        row.dataset.status = newStatus;
+        const badge = row.querySelector('span.badge');
+        if (badge) {
+            badge.className = `badge status-${newStatus}`;
+            badge.textContent = statusDisplay;
+        }
+    }
 }
 
 function saveStatusUpdate() {
     const newStatus = document.getElementById('newStatus').value;
     const notes = document.getElementById('statusNotes').value;
-    
-    fetch(`/orders/update-status/${currentOrderId}/`, {
+    const updateBtn = document.querySelector('#statusModal .btn-primary');
+
+    // Get the order type from the button that was clicked
+    const clickedButton = document.querySelector(`[data-order-id="${currentOrderId}"].update-status-btn`);
+    const isAdvanceOrder = clickedButton ? clickedButton.getAttribute('data-is-advance') === 'true' : false;
+
+    console.log('Debug - saveStatusUpdate called with:', {
+        currentOrderId,
+        newStatus,
+        notes,
+        isAdvanceOrder,
+        clickedButton: clickedButton ? 'found' : 'not found'
+    });
+
+    // Disable button and show loading state
+    updateBtn.disabled = true;
+    updateBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Updating...';
+
+    const formData = new FormData();
+    formData.append('status', newStatus);
+    formData.append('notes', notes);
+
+    const langPrefix = window.location.pathname.split('/')[1];
+    let updateUrl;
+
+    if (isAdvanceOrder) {
+        updateUrl = `/${langPrefix}/orders/update-advance-order-status/${currentOrderId}/`;
+    } else {
+        updateUrl = `/${langPrefix}/orders/update-status/${currentOrderId}/`;
+    }
+
+    console.log('Debug - Making request to:', updateUrl);
+    console.log('Debug - CSRF Token:', document.querySelector('[name=csrfmiddlewaretoken]').value);
+
+    fetch(updateUrl, {
         method: 'POST',
         headers: {
             'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
-            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
         },
-        body: JSON.stringify({
-            status: newStatus,
-            notes: notes
-        })
+        body: formData
+    })
+    .then(response => {
+        console.log('Debug - Response status:', response.status);
+        console.log('Debug - Response headers:', response.headers);
+        return response.json();
+    })
+    .then(data => {
+        console.log('Debug - Response data:', data);
+        if (data.success) {
+            // Update the status badge immediately
+            updateStatusBadge(currentOrderId, newStatus, data.status_display);
+
+            // Close modal first for better UX
+            bootstrap.Modal.getInstance(document.getElementById('statusModal')).hide();
+
+            // Show success message
+            showSuccessMessage('Order status updated successfully!');
+
+            // Update statistics cards in background (non-blocking)
+            setTimeout(updateStatistics, 100);
+        } else {
+            console.error('Debug - Server returned success=false:', data.message);
+            alert(`Failed to update order status: ${data.message || 'Unknown error'}`);
+            // Re-enable button on failure
+            updateBtn.disabled = false;
+            updateBtn.innerHTML = 'Update';
+        }
+    })
+    .catch(error => {
+        console.error('Debug - Fetch error:', error);
+        alert(`Failed to update order status: ${error.message || 'Network error'}`);
+        // Re-enable button on error
+        updateBtn.disabled = false;
+        updateBtn.innerHTML = 'Update';
+    })
+    .finally(() => {
+        // Ensure button is re-enabled
+        if (updateBtn.disabled) {
+            updateBtn.disabled = false;
+            updateBtn.innerHTML = 'Update';
+        }
+    });
+}
+
+// Update statistics cards
+function updateStatistics() {
+    fetch('{% url "orders:get_orders_data" %}', {
+        method: 'GET',
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+        }
     })
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            location.reload();
-        } else {
-            alert('Failed to update order status.');
+            // Update statistics cards
+            document.querySelector('.stat-number').textContent = data.stats.total_orders;
+            document.querySelectorAll('.stat-number')[1].textContent = data.stats.pending_count;
+            document.querySelectorAll('.stat-number')[2].textContent = data.stats.completed_count;
+            document.querySelectorAll('.stat-number')[3].textContent = '₹' + data.stats.total_revenue;
         }
     })
     .catch(error => {
-        console.error('Error:', error);
-        alert('Failed to update order status.');
+        console.error('Error updating statistics:', error);
     });
+}
+
+// Show success message
+function showSuccessMessage(message) {
+    // Create a temporary success message
+    const alertDiv = document.createElement('div');
+    alertDiv.className = 'alert alert-success alert-dismissible fade show position-fixed';
+    alertDiv.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+    alertDiv.innerHTML = `
+        <i class="fas fa-check-circle me-2"></i>${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+
+    document.body.appendChild(alertDiv);
+
+    // Auto remove after 3 seconds
+    setTimeout(() => {
+        if (alertDiv.parentNode) {
+            alertDiv.remove();
+        }
+    }, 3000);
 }
 
 // Export functionality
@@ -328,20 +679,23 @@ function exportOrders() {
     window.URL.revokeObjectURL(url);
 }
 
-// Auto-refresh every 30 seconds
+// Auto-refresh every 60 seconds to reduce server load
 setInterval(function() {
-    // Only refresh if no modal is open
-    if (!document.querySelector('.modal.show')) {
+    // Only refresh if no modal is open and no active updates
+    if (!document.querySelector('.modal.show') && !document.querySelector('.update-status-btn:disabled')) {
         location.reload();
     }
-}, 30000);
+}, 60000);
 </script>
 
 <style>
 .status-pending { background-color: #ffc107; color: #000; }
-.status-processing { background-color: #17a2b8; color: #fff; }
+.status-confirmed { background-color: #17a2b8; color: #fff; }
+.status-preparing { background-color: #fd7e14; color: #fff; }
 .status-ready { background-color: #28a745; color: #fff; }
-.status-completed { background-color: #28a745; color: #fff; }
+.status-out-for-delivery { background-color: #20c997; color: #fff; }
+.status-delivered { background-color: #28a745; color: #fff; }
+.status-completed { background-color: #007bff; color: #fff; }
 .status-cancelled { background-color: #dc3545; color: #fff; }
 </style>
 {% endblock %} 

@@ -2,10 +2,42 @@
 {% load static %}
 {% load i18n %}
 
-{% block title %}{% trans "HealthKart 360" %} - {% trans "Healthcare for Rural India" %}{% endblock %}
+{% block title %}{% trans "HealthBridge 360" %} - {% trans "Healthcare for Rural India" %}{% endblock %}
 
 {% block content %}
-<div class="hero-section bg-primary text-white py-5">
+
+<!-- <div class="hero-section bg-primary text-white py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold mb-4">
+                    <i class="fas fa-heartbeat me-3"></i>
+                    {% trans "HealthBridge 360" %}
+                </h1>
+                <p class="lead mb-4">
+                    {% trans "Your trusted healthcare companion for rural India. Find medicines, upload prescriptions, set reminders, and access emergency help - all in one place." %}
+                </p>
+                <div class="d-grid gap-2 d-md-flex">
+                    <a href="{% url 'users:register' %}" class="btn btn-light btn-lg me-md-2">
+                        <i class="fas fa-user-plus me-2"></i>{% trans "Get Started" %}
+                    </a>
+                    <a href="{% url 'pharmacy:register' %}" class="btn btn-outline-light btn-lg">
+                        <i class="fas fa-store me-2"></i>{% trans "Register Pharmacy" %}
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-6 text-center">
+                <img src="/placeholder.svg?height=400&width=500" 
+                     alt="HealthKart 360 App" class="img-fluid rounded-lg shadow-lg">
+            </div>
+        </div>
+    </div>
+</div> -->
+
+<div class="hero-section text-white py-5"
+     style="background: linear-gradient(135deg, rgb(255, 0, 150), rgb(0, 204, 255)); transition: background 0.8s ease;"
+     onmouseover="this.style.background='linear-gradient(135deg, rgb(200, 0, 120), rgb(0, 180, 220))';"
+     onmouseout="this.style.background='linear-gradient(135deg, rgb(255, 0, 150), rgb(0, 204, 255))';">
     <div class="container">
         <div class="row align-items-center">
             <div class="col-lg-6">
@@ -25,20 +57,17 @@
                     </a>
                 </div>
             </div>
-            <div class="col-lg-6 text-center">
-                <img src="/placeholder.svg" 
-                     alt="HealthKart 360 App" class="img-fluid rounded-lg shadow-lg">
-            </div>
         </div>
     </div>
 </div>
+
 
 <div class="container py-5">
     <!-- Features Section -->
     <div class="row mb-5">
         <div class="col-12 text-center mb-5">
-            <h2 class="display-5 fw-bold text-primary">Key Features</h2>
-            <p class="lead text-muted">Everything you need for healthcare management</p>
+            <h2 class="display-5 fw-bold text-primary">{% trans "Key Features" %}</h2>
+            <p class="lead text-muted">{% trans "Everything you need for healthcare management" %}</p>
         </div>
         
         <div class="col-md-6 col-lg-3 mb-4">
@@ -141,9 +170,9 @@
     </div>
 
     <!-- CTA Section -->
-    <div class="row">
+    <!-- <div class="row">
         <div class="col-12">
-            <div class="card bg-gradient text-success text-center py-5" style="background: linear-gradient(135deg, #2c5aa0, #28a745);">
+            <div class="card bg-gradient text-success text-center py-5" style="background: linear-gradient(135deg, #8db8f9, #28a745);">
                 <div class="card-body">
                     <h3 class="fw-bold mb-3">Ready to Get Started?</h3>
                     <p class="lead mb-4">Join thousands of users who trust HealthKart 360 for their healthcare needs.</p>
@@ -158,6 +187,26 @@
                 </div>
             </div>
         </div>
+    </div> -->
+    <div class="row">
+    <div class="col-12">
+        <div class="card text-white text-center py-5" 
+             style="background: linear-gradient(135deg, #a3ffe8, #2575fc);">
+            <div class="card-body">
+                <h3 class="fw-bold mb-3">Ready to Get Started?</h3>
+                <p class="lead mb-4">Join thousands of users who trust HealthKart 360 for their healthcare needs.</p>
+                <div class="d-grid gap-2 d-md-flex justify-content-center">
+                    <a href="{% url 'users:register' %}" class="btn btn-light btn-lg me-md-2">
+                        <i class="fas fa-user-plus me-2"></i>Register Now
+                    </a>
+                    <a href="{% url 'users:login' %}" class="btn btn-outline-light btn-lg">
+                        <i class="fas fa-sign-in-alt me-2"></i>Login
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
+</div>
+
 </div>
 {% endblock %}

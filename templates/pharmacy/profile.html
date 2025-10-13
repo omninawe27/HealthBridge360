@@ -25,7 +25,20 @@
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label class="form-label fw-bold">Pharmacy Name</label>
-                                        <p class="form-control-plaintext">{{ pharmacy.name }}</p>
+                                        <div class="d-flex align-items-center">
+                                            <p class="form-control-plaintext mb-0 me-2" id="pharmacy-name-display">{{ pharmacy.name }}</p>
+                                            <button type="button" class="btn btn-sm btn-outline-primary" onclick="toggleEditName()">
+                                                <i class="fas fa-edit"></i> Edit
+                                            </button>
+                                        </div>
+                                        <form method="post" id="edit-name-form" style="display: none;">
+                                            {% csrf_token %}
+                                            <div class="input-group">
+                                                <input type="text" name="name" value="{{ pharmacy.name }}" class="form-control" required>
+                                                <button type="submit" class="btn btn-success">Save</button>
+                                                <button type="button" class="btn btn-secondary" onclick="toggleEditName()">Cancel</button>
+                                            </div>
+                                        </form>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -119,6 +132,9 @@
                                 <a href="{% url 'orders:pharmacy_orders' %}" class="btn btn-success">
                                     <i class="fas fa-list me-2"></i>View Orders
                                 </a>
+                                <a href="{% url 'users:change_password' %}" class="btn btn-warning">
+                                    <i class="fas fa-key me-2"></i>Change Password
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -127,4 +143,18 @@
         </div>
     </div>
 </div>
-{% endblock %} 
+
+<script>
+function toggleEditName() {
+    const display = document.getElementById('pharmacy-name-display');
+    const form = document.getElementById('edit-name-form');
+    if (form.style.display === 'none') {
+        form.style.display = 'block';
+        display.style.display = 'none';
+    } else {
+        form.style.display = 'none';
+        display.style.display = 'block';
+    }
+}
+</script>
+{% endblock %}

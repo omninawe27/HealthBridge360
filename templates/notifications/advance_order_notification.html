@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>New Advance Order</title>
+  <style>
+    body { font-family: Arial, sans-serif; background-color: #f9f9f9; color: #333; }
+    .container { max-width: 600px; margin: 20px auto; background: #fff; padding: 20px; border-radius: 8px; }
+    h1 { color: #fd7e14; }
+    .order-details { background: #fff3cd; padding: 15px; border-radius: 5px; margin: 20px 0; }
+    .button {
+      display: inline-block;
+      padding: 10px 20px;
+      margin-top: 20px;
+      font-size: 16px;
+      color: #fff;
+      background-color: #28a745;
+      border-radius: 5px;
+      text-decoration: none;
+    }
+    .footer { font-size: 12px; color: #777; margin-top: 30px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>New Advance Order</h1>
+    <p>Dear Pharmacist,</p>
+    <p>A new advance order has been placed!</p>
+    <div class="order-details">
+      <p><strong>Order ID:</strong> {{ advance_order.id }}</p>
+      <p><strong>Customer:</strong> {{ user.first_name }} {{ user.last_name }}</p>
+      <p><strong>Email:</strong> {{ user.email }}</p>
+      <p><strong>Order Type:</strong> {{ advance_order.get_order_type_display }}</p>
+      <p><strong>Status:</strong> {{ advance_order.get_status_display }}</p>
+    </div>
+    <h3>Items:</h3>
+    <ul>
+      {% for item in advance_order.items.all %}
+      <li>{{ item.medicine_name }} ({{ item.dosage }}) x {{ item.quantity_requested }}</li>
+      {% endfor %}
+    </ul>
+    <p><strong>Please take your order after 1 day on {{ collect_date_str }} at {{ collect_time_str }} for collection or delivery.</strong></p>
+    <p>Please process this advance order as soon as possible.</p>
+    <a href="{{ advance_order_detail_url }}" class="button">View Advance Order Details</a>
+    <p class="footer">Best regards,<br/>HealthBridge 360 Team</p>
+  </div>
+</body>
+</html>

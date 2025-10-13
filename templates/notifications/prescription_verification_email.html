@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Prescription Verification Code</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #333; margin: 0; padding: 20px; }
+    .container { max-width: 600px; margin: 20px auto; background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 8px 32px rgba(0,0,0,0.1); }
+    h1 { color: #667eea; text-align: center; }
+    .code { font-size: 24px; font-weight: bold; color: #28a745; background: #d4edda; padding: 10px; border-radius: 5px; display: inline-block; }
+    .button {
+      display: inline-block;
+      padding: 12px 24px;
+      margin-top: 20px;
+      font-size: 16px;
+      color: #fff;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 8px;
+      text-decoration: none;
+      text-align: center;
+    }
+    .footer { font-size: 12px; color: #777; margin-top: 30px; text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Prescription Verification Code</h1>
+    <p>Hello {{ user.first_name }},</p>
+    <p>Your prescription has been uploaded successfully!</p>
+    <p><strong>Verification Code:</strong> <span class="code">{{ verification_code }}</span></p>
+    <p>Please provide this code to the pharmacist to verify your prescription.</p>
+    <p>If you did not upload this prescription, please contact our support team immediately.</p>
+    <p class="footer">Best regards,<br/>HealthBridge 360 Team</p>
+  </div>
+</body>
+</html>

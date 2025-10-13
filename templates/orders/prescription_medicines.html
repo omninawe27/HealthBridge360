@@ -1,0 +1,382 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Select Medicines - HealthKart 360{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>
+                    <i class="fas fa-pills me-2"></i>Medicines from Prescription
+                </h2>
+                <div>
+                    <a href="{% url 'orders:upload_prescription' %}" class="btn btn-outline-primary">
+                        <i class="fas fa-upload me-2"></i>Upload Another Prescription
+                    </a>
+                </div>
+            </div>
+
+            <!-- Summary Cards -->
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="card bg-success text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h4 class="mb-0">{{ available_count }}</h4>
+                                    <p class="mb-0">Available Medicines</p>
+                                </div>
+                                <i class="fas fa-check-circle fa-2x opacity-75"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-warning text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h4 class="mb-0">{{ unavailable_count }}</h4>
+                                    <p class="mb-0">Unavailable Medicines</p>
+                                </div>
+                                <i class="fas fa-exclamation-triangle fa-2x opacity-75"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-info text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h4 class="mb-0">{{ prescription_medicines.count }}</h4>
+                                    <p class="mb-0">Total Medicines</p>
+                                </div>
+                                <i class="fas fa-list fa-2x opacity-75"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-primary text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h4 class="mb-0">₹<span id="totalEstimate">0</span></h4>
+                                    <p class="mb-0">Estimated Total</p>
+                                </div>
+                                <i class="fas fa-calculator fa-2x opacity-75"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% if prescription_medicines|length > 0 %}
+            <form method="post" id="medicineSelectionForm">
+                {% csrf_token %}
+
+                <!-- Medicine Selection Cards -->
+                <div class="row">
+                    {% for medicine in prescription_medicines %}
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100 {% if medicine.is_available %}border-success{% else %}border-warning{% endif %}">
+                            <div class="card-header {% if medicine.is_available %}bg-success text-white{% else %}bg-warning text-white{% endif %}">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h5 class="mb-0">
+                                        <i class="fas fa-pills me-2"></i>{{ medicine.medicine_name }}
+                                    </h5>
+                                    {% if medicine.is_available %}
+                                        <span class="badge bg-light text-success">Available</span>
+                                    {% else %}
+                                        <span class="badge bg-light text-warning">Unavailable</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                {% if medicine.dosage %}
+                                <p class="mb-2"><strong>Dosage:</strong> {{ medicine.dosage }}</p>
+                                {% endif %}
+                                {% if medicine.frequency %}
+                                <p class="mb-2"><strong>Frequency:</strong> {{ medicine.frequency }}</p>
+                                {% endif %}
+                                {% if medicine.is_available and medicine.matched_medicine %}
+                                <p class="mb-2"><strong>Price:</strong> ₹{{ medicine.matched_medicine.price }}</p>
+                                <p class="mb-2"><strong>Stock:</strong> {{ medicine.matched_medicine.quantity }} units</p>
+                                <p class="mb-2"><strong>Pharmacy:</strong> {{ medicine.matched_medicine.pharmacy.name }}</p>
+                                {% endif %}
+
+                                <div class="row mt-3">
+                                    <div class="col-6">
+                                        {% if medicine.is_available %}
+                                        <input type="checkbox" class="form-check-input select-medicine d-none"
+                                               id="select_{{ medicine.id }}" name="select_{{ medicine.id }}"
+                                               data-medicine-id="{{ medicine.id }}">
+                                        <button type="button" class="btn btn-outline-primary btn-sm select-btn w-100"
+                                                data-medicine-id="{{ medicine.id }}">
+                                            <div class="select-btn-label">
+                                                <i class="fas fa-check me-1"></i>
+                                                <span>Select</span>
+                                            </div>
+                                        </button>
+                                        {% else %}
+                                        <input type="checkbox" class="form-check-input advance-select-medicine d-none"
+                                               id="advance_select_{{ medicine.id }}" name="advance_select_{{ medicine.id }}"
+                                               data-medicine-id="{{ medicine.id }}">
+                                        <button type="button" class="btn btn-outline-warning btn-sm advance-select-btn w-100"
+                                                data-medicine-id="{{ medicine.id }}">
+                                            <div class="advance-select-btn-label">
+                                                <i class="fas fa-clock me-1"></i>
+                                                <span>Advance Order</span>
+                                            </div>
+                                        </button>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="input-group">
+                                            <span class="input-group-text">Qty</span>
+                                            {% if medicine.is_available %}
+                                            <input type="number" class="form-control quantity-input"
+                                                   name="quantity_{{ medicine.id }}" id="quantity_{{ medicine.id }}"
+                                                   value="0" min="0" max="{{ medicine.matched_medicine.quantity }}"
+                                                   data-price="{% if medicine.matched_medicine %}{{ medicine.matched_medicine.price }}{% else %}0{% endif %}">
+                                            {% else %}
+                                            <input type="number" class="form-control advance-quantity-input"
+                                                   name="advance_quantity_{{ medicine.id }}" id="advance_quantity_{{ medicine.id }}"
+                                                   value="0" min="0"
+                                                   data-price="50">
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <span class="text-muted">Selected: <span id="selectedCount">0</span> medicines</span>
+                            </div>
+                            <div>
+                                <input type="hidden" name="action" id="formAction" value="">
+                                <button type="submit" class="btn btn-success me-2" id="addToCartBtn"
+                                        onclick="document.getElementById('formAction').value='add_to_cart'">
+                                    <i class="fas fa-cart-plus me-2"></i>Add to Cart
+                                </button>
+                                <button type="submit" class="btn btn-warning" id="advanceOrderBtn"
+                                        onclick="document.getElementById('formAction').value='create_advance_orders'">
+                                    <i class="fas fa-clock me-2"></i>Create Advance Order
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Totals Summary -->
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h6 class="card-title">Available Medicines Total</h6>
+                                <h4 class="text-success">₹<span id="availableTotal">0.00</span></h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h6 class="card-title">Advance Order Total</h6>
+                                <h4 class="text-warning">₹<span id="advanceTotal">0.00</span></h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            {% else %}
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle me-2"></i>No medicines found in this prescription.
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% block footer %}{% endblock footer %}
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Interactive select button toggles checkbox and focuses quantity, updates button style
+    document.querySelectorAll('.select-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            const medicineId = btn.dataset.medicineId;
+            const checkbox = document.getElementById('select_' + medicineId);
+            const qtyInput = document.querySelector('input[name="quantity_' + medicineId + '"]');
+            checkbox.checked = !checkbox.checked;
+            // Update button style
+            if (checkbox.checked) {
+                btn.classList.remove('btn-outline-primary');
+                btn.classList.add('btn-success');
+                btn.querySelector('.select-btn-label span').textContent = 'Selected';
+                if (qtyInput) {
+                    qtyInput.focus();
+                    if (qtyInput.value === '0' || qtyInput.value === '') {
+                        qtyInput.value = 1;
+                        qtyInput.dispatchEvent(new Event('input'));
+                    }
+                }
+            } else {
+                btn.classList.remove('btn-success');
+                btn.classList.add('btn-outline-primary');
+                btn.querySelector('.select-btn-label span').textContent = 'Select';
+                if (qtyInput) {
+                    qtyInput.value = 0;
+                    qtyInput.dispatchEvent(new Event('input'));
+                }
+            }
+            updateTotals();
+        });
+        // Set initial state
+        const medicineId = btn.dataset.medicineId;
+        const checkbox = document.getElementById('select_' + medicineId);
+        if (checkbox.checked) {
+            btn.classList.remove('btn-outline-primary');
+            btn.classList.add('btn-success');
+            btn.querySelector('.select-btn-label span').textContent = 'Selected';
+        } else {
+            btn.classList.remove('btn-success');
+            btn.classList.add('btn-outline-primary');
+            btn.querySelector('.select-btn-label span').textContent = 'Select';
+        }
+    });
+
+    // Advance select buttons
+    document.querySelectorAll('.advance-select-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            const medicineId = btn.dataset.medicineId;
+            const checkbox = document.getElementById('advance_select_' + medicineId);
+            const qtyInput = document.querySelector('input[name="advance_quantity_' + medicineId + '"]');
+            checkbox.checked = !checkbox.checked;
+            // Update button style
+            if (checkbox.checked) {
+                btn.classList.remove('btn-outline-warning');
+                btn.classList.add('btn-warning');
+                btn.querySelector('.advance-select-btn-label span').textContent = 'Selected';
+                if (qtyInput) {
+                    qtyInput.focus();
+                    if (qtyInput.value === '0' || qtyInput.value === '') {
+                        qtyInput.value = 1;
+                        qtyInput.dispatchEvent(new Event('input'));
+                    }
+                }
+            } else {
+                btn.classList.remove('btn-warning');
+                btn.classList.add('btn-outline-warning');
+                btn.querySelector('.advance-select-btn-label span').textContent = 'Select';
+                if (qtyInput) {
+                    qtyInput.value = 0;
+                    qtyInput.dispatchEvent(new Event('input'));
+                }
+            }
+            updateTotals();
+        });
+        // Set initial state
+        const medicineId = btn.dataset.medicineId;
+        const checkbox = document.getElementById('advance_select_' + medicineId);
+        if (checkbox.checked) {
+            btn.classList.remove('btn-outline-warning');
+            btn.classList.add('btn-warning');
+            btn.querySelector('.advance-select-btn-label span').textContent = 'Selected';
+        } else {
+            btn.classList.remove('btn-warning');
+            btn.classList.add('btn-outline-warning');
+            btn.querySelector('.advance-select-btn-label span').textContent = 'Select';
+        }
+    });
+
+    const quantityInputs = document.querySelectorAll('.quantity-input, .advance-quantity-input');
+    const availableTotalSpan = document.getElementById('availableTotal');
+    const advanceTotalSpan = document.getElementById('advanceTotal');
+    const selectedCountSpan = document.getElementById('selectedCount');
+    const totalEstimateSpan = document.getElementById('totalEstimate');
+    const addToCartBtn = document.getElementById('addToCartBtn');
+    const advanceOrderBtn = document.getElementById('advanceOrderBtn');
+
+    function updateTotals() {
+        let availableTotal = 0;
+        let advanceTotal = 0;
+        let selectedCount = 0;
+
+        // Available medicines
+        document.querySelectorAll('.select-medicine').forEach(function(checkbox) {
+            if (checkbox.checked) {
+                const medicineId = checkbox.dataset.medicineId;
+                const quantityInput = document.querySelector('input[name="quantity_' + medicineId + '"]');
+                const price = parseFloat(quantityInput.dataset.price);
+                const quantity = parseInt(quantityInput.value) || 0;
+                availableTotal += price * quantity;
+                selectedCount++;
+            }
+        });
+
+        // Advance order medicines
+        document.querySelectorAll('.advance-select-medicine').forEach(function(checkbox) {
+            if (checkbox.checked) {
+                const medicineId = checkbox.dataset.medicineId;
+                const quantityInput = document.querySelector('input[name="advance_quantity_' + medicineId + '"]');
+                const price = parseFloat(quantityInput.dataset.price);
+                const quantity = parseInt(quantityInput.value) || 0;
+                advanceTotal += price * quantity;
+                selectedCount++;
+            }
+        });
+
+        const totalAmount = availableTotal + advanceTotal;
+
+        availableTotalSpan.textContent = availableTotal.toFixed(2);
+        advanceTotalSpan.textContent = advanceTotal.toFixed(2);
+        totalEstimateSpan.textContent = totalAmount.toFixed(0);
+        selectedCountSpan.textContent = selectedCount;
+
+        // Enable/disable buttons
+        const hasAvailableSelected = document.querySelectorAll('.select-medicine:checked').length > 0;
+        const hasAdvanceSelected = document.querySelectorAll('.advance-select-medicine:checked').length > 0;
+
+        if (addToCartBtn) addToCartBtn.disabled = !hasAvailableSelected;
+        if (advanceOrderBtn) advanceOrderBtn.disabled = !hasAdvanceSelected;
+    }
+
+    // Update totals when quantity changes
+    quantityInputs.forEach(input => {
+        input.addEventListener('input', updateTotals);
+    });
+
+    // Initial calculation
+    updateTotals();
+
+    // Form submission
+    document.getElementById('medicineSelectionForm').addEventListener('submit', function(e) {
+        const selectedCount = parseInt(selectedCountSpan.textContent);
+        if (selectedCount === 0) {
+            e.preventDefault();
+            alert('Please select at least one medicine.');
+            return;
+        }
+
+        const action = document.getElementById('formAction').value;
+        if (action === 'add_to_cart') {
+            addToCartBtn.disabled = true;
+            addToCartBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Processing...';
+        } else if (action === 'create_advance_orders') {
+            advanceOrderBtn.disabled = true;
+            advanceOrderBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Processing...';
+        }
+    });
+});
+</script>
+{% endblock %}

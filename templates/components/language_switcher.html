@@ -1,40 +1,53 @@
-{% load i18n %}
-<div class="language-switcher">
-    <div class="dropdown">
-        <button class="btn btn-outline-light dropdown-toggle" type="button" id="languageDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="fas fa-globe me-1"></i>
-            {% if LANGUAGE_CODE == 'hi' %}हिंदी{% elif LANGUAGE_CODE == 'mr' %}मराठी{% else %}English{% endif %}
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="languageDropdown">
-            <li><h6 class="dropdown-header">{% trans "Select Language" %}</h6></li>
-            <li><hr class="dropdown-divider"></li>
-            <li>
-                <form method="post" action="{% url 'core:change_language' %}" style="display: inline;">
-                    {% csrf_token %}
-                    <input type="hidden" name="language" value="en">
-                    <button type="submit" class="dropdown-item">
-                        <i class="fas fa-flag me-2"></i>English
-                    </button>
-                </form>
-            </li>
-            <li>
-                <form method="post" action="{% url 'core:change_language' %}" style="display: inline;">
-                    {% csrf_token %}
-                    <input type="hidden" name="language" value="hi">
-                    <button type="submit" class="dropdown-item">
-                        <i class="fas fa-flag me-2"></i>हिंदी (Hindi)
-                    </button>
-                </form>
-            </li>
-            <li>
-                <form method="post" action="{% url 'core:change_language' %}" style="display: inline;">
-                    {% csrf_token %}
-                    <input type="hidden" name="language" value="mr">
-                    <button type="submit" class="dropdown-item">
-                        <i class="fas fa-flag me-2"></i>मराठी (Marathi)
-                    </button>
-                </form>
-            </li>
-        </ul>
+<!-- Django i18n Language Switcher -->
+<div class="language-switcher-wrapper" style="position: relative; display: inline-block;">
+    <button id="languageSwitcherBtn" style="background: #007bff; color: white; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 600;">
+        <i class="fas fa-globe"></i> <span id="currentLangLabel">{{ CURRENT_LANGUAGE|slice:":2"|upper }}</span> <i id="dropdownArrow" style="margin-left: 8px; transition: transform 0.3s;">&#9660;</i>
+    </button>
+    <div id="languageOptions" style="display: none; position: absolute; top: 100%; left: 0; background: white; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); min-width: 140px; z-index: 1000;">
+        {% for lang_code, lang_name in LANGUAGES %}
+        <form method="post" action="{% url 'set_language' %}" style="margin: 0;">
+            {% csrf_token %}
+            <input name="language" type="hidden" value="{{ lang_code }}">
+            <input name="next" type="hidden" value="{{ request.get_full_path }}">
+            <button type="submit" class="language-option" style="width: 100%; padding: 10px 16px; border: none; background: none; text-align: left; cursor: pointer;">
+                {% if lang_code == 'en' %}🇺🇸{% elif lang_code == 'hi' %}🇮🇳{% elif lang_code == 'mr' %}🇮🇳{% endif %} {{ lang_name }}
+            </button>
+        </form>
+        {% endfor %}
     </div>
-</div> 
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const btn = document.getElementById('languageSwitcherBtn');
+    const options = document.getElementById('languageOptions');
+    const arrow = document.getElementById('dropdownArrow');
+
+    btn.addEventListener('click', function() {
+        if (options.style.display === 'none') {
+            options.style.display = 'block';
+            arrow.style.transform = 'rotate(180deg)';
+        } else {
+            options.style.display = 'none';
+            arrow.style.transform = 'rotate(0deg)';
+        }
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(event) {
+        if (!btn.contains(event.target) && !options.contains(event.target)) {
+            options.style.display = 'none';
+            arrow.style.transform = 'rotate(0deg)';
+        }
+    });
+});
+</script>
+
+<style>
+.language-switcher-wrapper button.language-option:hover {
+    background-color: #f0f0f0;
+}
+.language-switcher-wrapper form {
+    display: block;
+}
+</style>

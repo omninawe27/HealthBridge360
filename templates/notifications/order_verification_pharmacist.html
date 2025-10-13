@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Order Verification Code</title>
+  <style>
+    body { font-family: Arial, sans-serif; background-color: #f9f9f9; color: #333; }
+    .container { max-width: 600px; margin: 20px auto; background: #fff; padding: 20px; border-radius: 8px; }
+    h1 { color: #17a2b8; }
+    .code { font-size: 24px; font-weight: bold; color: #dc3545; background: #f8d7da; padding: 10px; border-radius: 5px; display: inline-block; }
+    .button {
+      display: inline-block;
+      padding: 10px 20px;
+      margin-top: 20px;
+      font-size: 16px;
+      color: #fff;
+      background-color: #28a745;
+      border-radius: 5px;
+      text-decoration: none;
+    }
+    .footer { font-size: 12px; color: #777; margin-top: 30px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>{{ order_type }} Verification Code</h1>
+    <p>Dear Pharmacist,</p>
+    <p>A new {{ order_type.lower }} has been placed and requires verification!</p>
+    <div style="background: #f8f9fa; padding: 15px; border-radius: 5px; margin: 20px 0;">
+      <p><strong>{{ order_type }} ID:</strong> #{{ order_id }}</p>
+      <p><strong>Customer:</strong> {{ customer.first_name }} {{ customer.last_name }}</p>
+      <p><strong>Email:</strong> {{ customer.email }}</p>
+      <p><strong>Pharmacy:</strong> {{ pharmacy.name }}</p>
+    </div>
+    <p><strong>Verification Code:</strong> <span class="code">{{ verification_code }}</span></p>
+    <p>Please use this verification code to verify and process the {{ order_type.lower }}.</p>
+    <p class="footer">Best regards,<br/>HealthBridge 360 Team</p>
+  </div>
+</body>
+</html>

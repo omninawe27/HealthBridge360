@@ -9,76 +9,84 @@ from .forms import MedicineForm
 
 @login_required
 def add_medicine(request):
-    if not hasattr(request.user, 'pharmacy'):
+    # Get pharmacy from user.pharmacy or user.owned_pharmacy
+    pharmacy = getattr(request.user, 'pharmacy', None) or getattr(request.user, 'owned_pharmacy', None)
+    if pharmacy is None:
         messages.error(request, 'Access denied.')
         return redirect('core:dashboard')
-    
+
     if request.method == 'POST':
         form = MedicineForm(request.POST)
         if form.is_valid():
             medicine = form.save(commit=False)
-            medicine.pharmacy = request.user.pharmacy
+            medicine.pharmacy = pharmacy
             medicine.save()
             messages.success(request, 'Medicine added successfully!')
-            return redirect('pharmacy:inventory')
+            return redirect('medicines:inventory')
     else:
         form = MedicineForm()
-    
+
     return render(request, 'medicines/add_medicine.html', {'form': form})
 
 @login_required
 def edit_medicine(request, medicine_id):
-    if not hasattr(request.user, 'pharmacy'):
+    # Get pharmacy from user.pharmacy or user.owned_pharmacy
+    pharmacy = getattr(request.user, 'pharmacy', None) or getattr(request.user, 'owned_pharmacy', None)
+    if pharmacy is None:
         messages.error(request, 'Access denied.')
         return redirect('core:dashboard')
-    
-    medicine = get_object_or_404(Medicine, id=medicine_id, pharmacy=request.user.pharmacy)
-    
+
+    medicine = get_object_or_404(Medicine, id=medicine_id, pharmacy=pharmacy)
+
     if request.method == 'POST':
         form = MedicineForm(request.POST, instance=medicine)
         if form.is_valid():
             form.save()
             messages.success(request, 'Medicine updated successfully!')
-            return redirect('pharmacy:inventory')
+            return redirect('medicines:inventory')
     else:
         form = MedicineForm(instance=medicine)
-    
+
     return render(request, 'medicines/edit_medicine.html', {'form': form, 'medicine': medicine})
 
 @login_required
 def delete_medicine(request, medicine_id):
-    if not hasattr(request.user, 'pharmacy'):
+    # Get pharmacy from user.pharmacy or user.owned_pharmacy
+    pharmacy = getattr(request.user, 'pharmacy', None) or getattr(request.user, 'owned_pharmacy', None)
+    if pharmacy is None:
         messages.error(request, 'Access denied.')
         return redirect('core:dashboard')
-    
-    medicine = get_object_or_404(Medicine, id=medicine_id, pharmacy=request.user.pharmacy)
-    
+
+    medicine = get_object_or_404(Medicine, id=medicine_id, pharmacy=pharmacy)
+
     if request.method == 'POST':
         medicine.delete()
         messages.success(request, 'Medicine deleted successfully!')
         return redirect('medicines:inventory')
-    
+
     return render(request, 'medicines/delete_medicine.html', {'medicine': medicine})
 
 @login_required
 def delete_medicine_ajax(request, medicine_id):
     """AJAX endpoint to delete medicine"""
-    if not hasattr(request.user, 'pharmacy'):
+    # Get pharmacy from user.pharmacy or user.owned_pharmacy
+    pharmacy = getattr(request.user, 'pharmacy', None) or getattr(request.user, 'owned_pharmacy', None)
+    if pharmacy is None:
         return JsonResponse({'success': False, 'message': 'Access denied'})
-    
+
     if request.method == 'POST':
         try:
-            medicine = get_object_or_404(Medicine, id=medicine_id, pharmacy=request.user.pharmacy)
+            medicine = get_object_or_404(Medicine, id=medicine_id, pharmacy=pharmacy)
             medicine_name = medicine.name
             medicine.delete()
-            
+
             return JsonResponse({
                 'success': True,
                 'message': f'{medicine_name} deleted successfully!'
             })
         except Exception as e:
             return JsonResponse({'success': False, 'message': str(e)})
-    
+
     return JsonResponse({'success': False, 'message': 'Invalid request method'})
 
 @login_required
@@ -117,10 +125,14 @@ def get_alternatives(request, medicine_id):
             quantity__gt=0
         ).exclude(id=medicine_id)[:10]
         
-        html = render_to_string('medicines/alternatives_list.html', {
-            'alternatives': alternatives,
-            'original_medicine': medicine
-        })
+        html = render_to_string(
+            'medicines/alternatives_list.html',
+            {
+                'alternatives': alternatives,
+                'original_medicine': medicine
+            },
+            request=request
+        )
         
         return JsonResponse({'html': html, 'success': True})
     except Exception as e:
@@ -129,13 +141,18 @@ def get_alternatives(request, medicine_id):
 @login_required
 def inventory(request):
     """Pharmacy inventory management"""
-    if not hasattr(request.user, 'pharmacy'):
+    # Get pharmacy from user.pharmacy or user.owned_pharmacy
+    pharmacy = getattr(request.user, 'pharmacy', None) or getattr(request.user, 'owned_pharmacy', None)
+    if pharmacy is None:
         messages.error(request, 'Access denied.')
         return redirect('core:dashboard')
-    
-    pharmacy = request.user.pharmacy
-    medicines = Medicine.objects.filter(pharmacy=pharmacy).order_by('name')
-    
+
+    from django.core.paginator import Paginator
+    from django.core.cache import cache
+
+    # Base queryset
+    medicines = Medicine.objects.filter(pharmacy=pharmacy)
+
     # Filter by status
     status_filter = request.GET.get('status')
     if status_filter:
@@ -147,32 +164,60 @@ def inventory(request):
             from django.utils import timezone
             from datetime import timedelta
             medicines = medicines.filter(expiry_date__lte=timezone.now().date() + timedelta(days=30))
-    
+
+    # Cache counts for 10 minutes
+    counts_cache_key = f'inventory_counts_{pharmacy.id}_{status_filter or "all"}'
+    cached_counts = cache.get(counts_cache_key)
+
+    if cached_counts:
+        total_medicines, in_stock_count, low_stock_count, out_of_stock_count = cached_counts
+    else:
+        total_medicines = medicines.count()
+        all_medicines = Medicine.objects.filter(pharmacy=pharmacy)
+        in_stock_count = all_medicines.filter(quantity__gte=10).count()
+        low_stock_count = all_medicines.filter(quantity__lt=10, quantity__gt=0).count()
+        out_of_stock_count = all_medicines.filter(quantity=0).count()
+        cache.set(counts_cache_key, (total_medicines, in_stock_count, low_stock_count, out_of_stock_count), 600)
+
+    # Paginate results
+    medicines = medicines.order_by('name')
+    paginator = Paginator(medicines, 50)  # 50 items per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
     context = {
         'pharmacy': pharmacy,
-        'medicines': medicines,
-        'total_medicines': medicines.count(),
-        'low_stock_count': medicines.filter(quantity__lt=10).count(),
-        'out_of_stock_count': medicines.filter(quantity=0).count(),
+        'medicines': page_obj,
+        'total_medicines': total_medicines,
+        'in_stock_count': in_stock_count,
+        'low_stock_count': low_stock_count,
+        'out_of_stock_count': out_of_stock_count,
+        'status_filter': status_filter,
     }
     return render(request, 'medicines/inventory.html', context)
 
 @login_required
 def update_stock(request, medicine_id):
     """AJAX endpoint to update medicine stock"""
-    if not hasattr(request.user, 'pharmacy'):
-        return JsonResponse({'success': False, 'message': 'Access denied'})
-    
+    # Get pharmacy from user.pharmacy or user.owned_pharmacy
+    pharmacy = getattr(request.user, 'pharmacy', None) or getattr(request.user, 'owned_pharmacy', None)
+    if pharmacy is None:
+        return JsonResponse({'success': False, 'message': 'Access denied - no pharmacy associated'})
+
     if request.method == 'POST':
         try:
-            medicine = get_object_or_404(Medicine, id=medicine_id, pharmacy=request.user.pharmacy)
-            quantity = int(request.POST.get('quantity', 0))
-            price = float(request.POST.get('price', medicine.price))
-            
+            import json
+            medicine = get_object_or_404(Medicine, id=medicine_id, pharmacy=pharmacy)
+            if request.content_type == 'application/json':
+                data = json.loads(request.body)
+                quantity = int(data.get('quantity', medicine.quantity))
+                price = float(data.get('price', medicine.price or 0))
+            else:
+                quantity = int(request.POST.get('quantity', medicine.quantity))
+                price = float(request.POST.get('price', medicine.price or 0))
             medicine.quantity = quantity
             medicine.price = price
             medicine.save()
-            
             return JsonResponse({
                 'success': True,
                 'message': 'Stock updated successfully',
@@ -184,7 +229,6 @@ def update_stock(request, medicine_id):
             return JsonResponse({'success': False, 'message': 'Invalid data provided'})
         except Exception as e:
             return JsonResponse({'success': False, 'message': str(e)})
-    
     return JsonResponse({'success': False, 'message': 'Invalid request method'})
 
 @login_required
@@ -192,11 +236,14 @@ def medicine_details(request, medicine_id):
     """Get detailed information about a medicine"""
     try:
         medicine = get_object_or_404(Medicine, id=medicine_id)
-        
+
+        # Get pharmacy from user.pharmacy or user.owned_pharmacy
+        user_pharmacy = getattr(request.user, 'pharmacy', None) or getattr(request.user, 'owned_pharmacy', None)
+
         # Check if user has access to this medicine
-        if hasattr(request.user, 'pharmacy') and medicine.pharmacy != request.user.pharmacy:
+        if user_pharmacy is None or medicine.pharmacy != user_pharmacy:
             return JsonResponse({'success': False, 'message': 'Access denied'})
-        
+
         data = {
             'id': medicine.id,
             'name': medicine.name,
@@ -215,7 +262,7 @@ def medicine_details(request, medicine_id):
             'pharmacy_address': medicine.pharmacy.address,
             'pharmacy_phone': medicine.pharmacy.phone_number,
         }
-        
+
         return JsonResponse({'success': True, 'medicine': data})
     except Exception as e:
         return JsonResponse({'success': False, 'message': str(e)})
@@ -223,27 +270,29 @@ def medicine_details(request, medicine_id):
 @login_required
 def bulk_update_stock(request):
     """Bulk update medicine stock"""
-    if not hasattr(request.user, 'pharmacy'):
+    # Get pharmacy from user.pharmacy or user.owned_pharmacy
+    pharmacy = getattr(request.user, 'pharmacy', None) or getattr(request.user, 'owned_pharmacy', None)
+    if pharmacy is None:
         return JsonResponse({'success': False, 'message': 'Access denied'})
-    
+
     if request.method == 'POST':
         try:
             updates = request.POST.getlist('updates[]')
             updated_count = 0
-            
+
             for update in updates:
                 medicine_id, quantity, price = update.split(',')
-                medicine = get_object_or_404(Medicine, id=medicine_id, pharmacy=request.user.pharmacy)
+                medicine = get_object_or_404(Medicine, id=medicine_id, pharmacy=pharmacy)
                 medicine.quantity = int(quantity)
                 medicine.price = float(price)
                 medicine.save()
                 updated_count += 1
-            
+
             return JsonResponse({
                 'success': True,
                 'message': f'{updated_count} medicines updated successfully'
             })
         except Exception as e:
             return JsonResponse({'success': False, 'message': str(e)})
-    
+
     return JsonResponse({'success': False, 'message': 'Invalid request method'})

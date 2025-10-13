@@ -4,7 +4,7 @@ from .models import Reminder
 class ReminderForm(forms.ModelForm):
     class Meta:
         model = Reminder
-        fields = ['medicine_name', 'time_slot', 'specific_time', 'notes', 'alert_type', 'send_email', 'send_sms']
+        fields = ['medicine_name', 'time_slot', 'specific_time', 'notes', 'alert_type', 'send_email']
         widgets = {
             'medicine_name': forms.TextInput(attrs={
                 'class': 'form-control',
@@ -26,9 +26,6 @@ class ReminderForm(forms.ModelForm):
                 'class': 'form-select'
             }),
             'send_email': forms.CheckboxInput(attrs={
-                'class': 'form-check-input'
-            }),
-            'send_sms': forms.CheckboxInput(attrs={
                 'class': 'form-check-input'
             })
         }

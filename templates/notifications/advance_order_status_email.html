@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Advance Order Status Update</title>
+  <style>
+    body { font-family: Arial, sans-serif; background-color: #f9f9f9; color: #333; }
+    .container { max-width: 600px; margin: 20px auto; background: #fff; padding: 20px; border-radius: 8px; }
+    h1 { color: #17a2b8; }
+    .status { font-size: 18px; font-weight: bold; color: #28a745; background: #d4edda; padding: 10px; border-radius: 5px; display: inline-block; }
+    .button {
+      display: inline-block;
+      padding: 10px 20px;
+      margin-top: 20px;
+      font-size: 16px;
+      color: #fff;
+      background-color: #28a745;
+      border-radius: 5px;
+      text-decoration: none;
+    }
+    .footer { font-size: 12px; color: #777; margin-top: 30px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Advance Order Status Update</h1>
+    <p>Hello {{ user.first_name }},</p>
+    <p>Your advance order status has been updated!</p>
+    <div style="background: #f8f9fa; padding: 15px; border-radius: 5px; margin: 20px 0;">
+      <p><strong>Order ID:</strong> #{{ advance_order.id }}</p>
+      <p><strong>Pharmacy:</strong> {{ advance_order.pharmacy.name }}</p>
+      <p><strong>Order Type:</strong> {{ advance_order.get_order_type_display }}</p>
+      <p><strong>Current Status:</strong> <span class="status">{{ advance_order.get_status_display }}</span></p>
+    </div>
+    <p><strong>Items Ordered:</strong></p>
+    <ul>
+      {% for item in advance_order.items.all %}
+      <li>{{ item.medicine_name }} ({{ item.dosage }}) x {{ item.quantity_requested }}</li>
+      {% endfor %}
+    </ul>
+    <p>You can track your advance order status on our website.</p>
+    <a href="{{ order_tracking_url }}" class="button">Track Your Order</a>
+    <p class="footer">Best regards,<br/>HealthBridge 360 Team</p>
+  </div>
+</body>
+</html>

@@ -7,12 +7,13 @@ class User(AbstractUser):
         ('hi', 'Hindi'),
         ('mr', 'Marathi'),
     ]
-    
+
     phone_number = models.CharField(max_length=15, unique=True)
     preferred_language = models.CharField(max_length=2, choices=LANGUAGE_CHOICES, default='en')
     is_pharmacist = models.BooleanField(default=False)
+    pharmacy = models.ForeignKey('pharmacy.Pharmacy', on_delete=models.SET_NULL, null=True, blank=True, related_name='pharmacists')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    
+
     def __str__(self):
         return f"{self.first_name} {self.last_name} ({self.phone_number})"

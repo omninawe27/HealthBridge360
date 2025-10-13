@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Advance Orders - HealthKart 360{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>
+                    <i class="fas fa-clock me-2"></i>Advance Orders
+                </h2>
+                <div>
+                    <a href="{% url 'orders:create_advance_order' %}" class="btn btn-warning me-2">
+                        <i class="fas fa-plus me-2"></i>Order Restock
+                    </a>
+                    <a href="{% url 'orders:upload_prescription' %}" class="btn btn-primary">
+                        <i class="fas fa-upload me-2"></i>Upload Prescription
+                    </a>
+                </div>
+            </div>
+
+            {% if advance_orders %}
+                <div class="row">
+                    {% for order in advance_orders %}
+                    <div class="col-lg-6 mb-4">
+                        <div class="card h-100 border-{% if order.status == 'pending' %}warning{% elif order.status == 'confirmed' %}info{% elif order.status == 'ready' %}success{% else %}secondary{% endif %}">
+                            <div class="card-header bg-{% if order.status == 'pending' %}warning{% elif order.status == 'confirmed' %}info{% elif order.status == 'ready' %}success{% else %}secondary{% endif %} text-white">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h6 class="mb-0">
+                                        <i class="fas fa-clock me-2"></i>
+                                        {% if order.order_type == 'restock' %}
+                                            Restock Order #{{ order.id }}
+                                        {% else %}
+                                            Advance Order #{{ order.id }}
+                                        {% endif %}
+                                    </h6>
+                                    <span class="badge bg-light text-dark">{{ order.get_status_display }}</span>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="row mb-3">
+                                    <div class="col-6">
+                                        <small class="text-muted">Order Date:</small>
+                                        <p class="mb-0">{{ order.created_at|date:"M d, Y" }}</p>
+                                    </div>
+                                    <div class="col-6">
+                                        <small class="text-muted">Type:</small>
+                                        <p class="mb-0">
+                                            {% if order.order_type == 'restock' %}
+                                                <span class="badge bg-info">Inventory Restock</span>
+                                            {% else %}
+                                                <span class="badge bg-primary">Prescription Order</span>
+                                            {% endif %}
+                                        </p>
+                                    </div>
+                                </div>
+                                {% if order.prescription %}
+                                <div class="mb-3">
+                                    <small class="text-muted">Prescription:</small>
+                                    <p class="mb-0">#{{ order.prescription.id }}</p>
+                                </div>
+                                {% endif %}
+                                <div class="mb-3">
+                                    <small class="text-muted">Medicines Requested:</small>
+                                    <ul class="list-unstyled mt-2">
+                                        {% for item in order.items.all %}
+                                        <li class="mb-2">
+                                            <div class="d-flex justify-content-between">
+                                                <span><i class="fas fa-pills me-2 text-primary"></i>{{ item.medicine_name }}</span>
+                                                <span class="badge bg-light text-dark">{{ item.quantity_requested }} units</span>
+                                            </div>
+                                            {% if item.dosage %}
+                                                <small class="text-muted ms-4">{{ item.dosage }} - {{ item.frequency }}</small>
+                                            {% endif %}
+                                        </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                                {% if order.estimated_delivery %}
+                                <div class="alert alert-info mb-3">
+                                    <i class="fas fa-calendar me-2"></i>
+                                    <strong>Estimated Delivery:</strong> {{ order.estimated_delivery|date:"M d, Y" }}
+                                </div>
+                                {% endif %}
+                                {% if order.notes %}
+                                <div class="alert alert-light mb-3">
+                                    <i class="fas fa-sticky-note me-2"></i>
+                                    <strong>Notes:</strong> {{ order.notes }}
+                                </div>
+                                {% endif %}
+                            </div>
+                            <div class="card-footer">
+                                <div class="d-flex justify-content-between">
+                                    <a href="{% url 'orders:advance_order_detail' order.id %}" class="btn btn-outline-primary btn-sm">
+                                        <i class="fas fa-eye me-1"></i>View Details
+                                    </a>
+                                    <small class="text-muted">Updated: {{ order.updated_at|timesince }} ago</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="text-center py-5">
+                    <i class="fas fa-clock fa-4x text-muted mb-4"></i>
+                    <h3 class="text-muted">No Advance Orders</h3>
+                    <p class="text-muted mb-4">You haven't placed any advance orders yet.</p>
+                    <div class="d-flex justify-content-center gap-3">
+                        <a href="{% url 'orders:create_advance_order' %}" class="btn btn-warning btn-lg">
+                            <i class="fas fa-plus me-2"></i>Order Restock
+                        </a>
+                        <a href="{% url 'orders:upload_prescription' %}" class="btn btn-primary btn-lg">
+                            <i class="fas fa-upload me-2"></i>Upload Prescription
+                        </a>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+    .badge {
+        font-size: 0.75rem;
+    }
+    .list-unstyled li {
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #f8f9fa;
+    }
+    .list-unstyled li:last-child {
+        border-bottom: none;
+    }
+</style>
+{% endblock %}
+{% block footer %}{% endblock footer %}

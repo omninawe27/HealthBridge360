@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from medicines.models import Medicine
+from datetime import datetime, time, timedelta
 
 User = get_user_model()
 
@@ -17,8 +18,7 @@ class Reminder(models.Model):
         ('vibrate', '📳 Vibrate'),
         ('visual', '👁️ Visual'),
         ('email', '📧 Email'),
-        ('sms', '📱 SMS'),
-        ('all', '🔔 All (Email + SMS + App)'),
+        ('all', '🔔 All (Email + App)'),
     ]
     
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -29,9 +29,10 @@ class Reminder(models.Model):
     alert_type = models.CharField(max_length=20, choices=ALERT_TYPES, default='all')
     is_active = models.BooleanField(default=True)
     send_email = models.BooleanField(default=True)
-    send_sms = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    taken = models.BooleanField(default=False)
+    taken_at = models.DateTimeField(null=True, blank=True)
     
     def __str__(self):
         return f"{self.medicine_name} - {self.get_time_slot_display()} ({self.user.first_name})"
@@ -52,7 +53,15 @@ class Reminder(models.Model):
                 'evening': '18:00',
                 'night': '21:00'
             }
-            from datetime import time
             time_str = default_times.get(self.time_slot, '07:00')
             hour, minute = map(int, time_str.split(':'))
             return time(hour, minute)
+    
+    def toggle_taken_status(self):
+        """Toggle the taken status of the reminder"""
+        self.taken = not self.taken
+        if self.taken:
+            self.taken_at = datetime.now()
+        else:
+            self.taken_at = None
+        self.save()

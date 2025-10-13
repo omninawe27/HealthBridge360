@@ -1,0 +1,385 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Checkout - HealthKart 360{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>
+                    <i class="fas fa-credit-card me-2"></i>Checkout
+                    {% if has_advance_order_items %}
+                        <span class="badge bg-warning text-dark ms-2">Advance Order</span>
+                    {% endif %}
+                </h2>
+                <a href="{% url 'orders:view_cart' %}" class="btn btn-outline-primary" style="position:fixed;right:200px;">
+                    <i class="fas fa-arrow-left me-2"></i>Back to Cart
+                </a>
+            </div>
+
+            {% if has_advance_order_items %}
+            <div class="alert alert-warning mb-4">
+                <i class="fas fa-info-circle me-2"></i>
+                <strong>Advance Order Notice:</strong> Some items in your order are currently out of stock. You will be charged now, and we will notify you when the medicines are available for pickup/delivery.
+            </div>
+            {% endif %}
+
+            <form method="post" id="checkoutForm">
+                {% csrf_token %}
+                
+                <div class="row">
+                    <div class="col-lg-8">
+                        <!-- Order Items -->
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h5 class="mb-0">
+                                    <i class="fas fa-shopping-bag me-2"></i>Order Items
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                {% for item in cart_items %}
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <div class="d-flex align-items-center">
+                                        <div class="medicine-icon me-3">
+                                            <i class="fas fa-pills fa-lg text-primary"></i>
+                                        </div>
+                                        <div>
+                                            <h6 class="mb-0">{{ item.medicine.name }}</h6>
+                                            <small class="text-muted">{{ item.medicine.brand }} - {{ item.medicine.strength }}</small>
+                                        </div>
+                                    </div>
+                                    <div class="text-end">
+                                        <p class="mb-0">₹{{ item.medicine.price }} × {{ item.quantity }}</p>
+                                        <strong>₹{{ item.total_price }}</strong>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <!-- Delivery Information -->
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h5 class="mb-0">
+                                    <i class="fas fa-truck me-2"></i>Delivery Information
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="{{ form.delivery_method.id_for_label }}" class="form-label">
+                                            <strong>Delivery Method</strong>
+                                        </label>
+                                        {{ form.delivery_method }}
+                                        {% if form.delivery_method.errors %}
+                                            <div class="text-danger mt-1">
+                                                {% for error in form.delivery_method.errors %}
+                                                    <small>{{ error }}</small>
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="{{ form.phone_number.id_for_label }}" class="form-label">
+                                            <strong>Phone Number</strong>
+                                        </label>
+                                        {{ form.phone_number }}
+                                        {% if form.phone_number.errors %}
+                                            <div class="text-danger mt-1">
+                                                {% for error in form.phone_number.errors %}
+                                                    <small>{{ error }}</small>
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-3" id="addressField" style="display: none;">
+                                    <label for="{{ form.delivery_address.id_for_label }}" class="form-label">
+                                        <strong>Delivery Address</strong>
+                                    </label>
+                                    {{ form.delivery_address }}
+                                    {% if form.delivery_address.errors %}
+                                        <div class="text-danger mt-1">
+                                            {% for error in form.delivery_address.errors %}
+                                                <small>{{ error }}</small>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Payment Information -->
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h5 class="mb-0">
+                                    <i class="fas fa-credit-card me-2"></i>Payment Information
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label for="{{ form.payment_method.id_for_label }}" class="form-label">
+                                        <strong>Payment Method</strong>
+                                    </label>
+                                    {{ form.payment_method }}
+                                    {% if form.payment_method.errors %}
+                                        <div class="text-danger mt-1">
+                                            {% for error in form.payment_method.errors %}
+                                                <small>{{ error }}</small>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="alert alert-info">
+                                    <i class="fas fa-info-circle me-2"></i>
+                                    <strong>Payment Options:</strong>
+                                    <ul class="mb-0 mt-2">
+                                        <li><strong>Cash on Delivery:</strong> Pay when you receive your order</li>
+                                        <li><strong>Online Payment:</strong> Pay securely with cards or UPI</li>
+                                        <li><strong>Card Payment:</strong> Credit/Debit card payment</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Additional Notes -->
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h5 class="mb-0">
+                                    <i class="fas fa-sticky-note me-2"></i>Additional Notes
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                {{ form.notes }}
+                                {% if form.notes.errors %}
+                                    <div class="text-danger mt-1">
+                                        {% for error in form.notes.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-4" style="position: sticky;">
+                        <!-- Order Summary -->
+                        <div class="card sticky-top" style="top: 20px;">
+                            <div class="card-header">
+                                <h5 class="mb-0">
+                                    <i class="fas fa-calculator me-2"></i>Order Summary
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Subtotal:</span>
+                                    <span>₹{{ total_amount }}</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Delivery Charges:</span>
+                                    <span id="deliveryCharges">₹0.00</span>
+                                </div>
+                                <hr>
+                                <div class="d-flex justify-content-between mb-3">
+                                    <strong>Total:</strong>
+                                    <strong id="finalTotal">₹{{ total_amount }}</strong>
+                                </div>
+                                
+                                <div class="d-grid gap-2">
+                                    <button type="submit" class="btn btn-primary btn-lg" id="placeOrderBtn">
+                                        <i class="fas fa-check me-2"></i>Place Order
+                                    </button>
+                                </div>
+                                
+                                <div class="alert alert-success mt-3">
+                                    <i class="fas fa-shield-alt me-2"></i>
+                                    <strong>Secure Checkout</strong><br>
+                                    Your payment information is protected
+                                </div>
+                                
+                                <div class="alert alert-info">
+                                    <i class="fas fa-clock me-2"></i>
+                                    <strong>Estimated Delivery:</strong><br>
+                                    <span id="estimatedDelivery">1-2 business days</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const deliveryMethodRadios = document.querySelectorAll('input[name="delivery_method"]');
+    const addressField = document.getElementById('addressField');
+    const deliveryChargesSpan = document.getElementById('deliveryCharges');
+    const finalTotalSpan = document.getElementById('finalTotal');
+    const estimatedDeliverySpan = document.getElementById('estimatedDelivery');
+    const subtotal = parseFloat('{{ total_amount|default:0 }}') || 0;
+
+    console.log('Checkout JS loaded. Subtotal:', subtotal);
+    console.log('Elements found:', {
+        deliveryMethodRadios: deliveryMethodRadios.length,
+        addressField: !!addressField,
+        deliveryChargesSpan: !!deliveryChargesSpan,
+        finalTotalSpan: !!finalTotalSpan,
+        estimatedDeliverySpan: !!estimatedDeliverySpan
+    });
+
+    function getDeliveryMethod() {
+        for (const radio of deliveryMethodRadios) {
+            if (radio.checked) {
+                return radio.value;
+            }
+        }
+        return '';
+    }
+
+    function updateDeliveryInfo() {
+        console.log('updateDeliveryInfo called');
+        if (!addressField) {
+            console.log('Required elements not found');
+            return;
+        }
+        const deliveryMethod = getDeliveryMethod();
+        console.log('Delivery method:', deliveryMethod);
+        let deliveryCharges = 0;
+        let estimatedDelivery = '1-2 business days';
+        if (deliveryMethod === 'home_delivery') {
+            deliveryCharges = 50.00;
+            estimatedDelivery = '2-3 business days';
+            addressField.style.display = 'block';
+        } else {
+            deliveryCharges = 0.00;
+            estimatedDelivery = 'Same day pickup';
+            addressField.style.display = 'none';
+        }
+        const finalTotal = subtotal + deliveryCharges;
+        console.log('Calculated: deliveryCharges=', deliveryCharges, 'finalTotal=', finalTotal);
+        if (deliveryChargesSpan) {
+            deliveryChargesSpan.textContent = '₹' + deliveryCharges.toFixed(2);
+            console.log('Updated deliveryChargesSpan');
+        }
+        if (finalTotalSpan) {
+            finalTotalSpan.textContent = '₹' + finalTotal.toFixed(2);
+            console.log('Updated finalTotalSpan');
+        }
+        if (estimatedDeliverySpan) {
+            estimatedDeliverySpan.textContent = estimatedDelivery;
+            console.log('Updated estimatedDeliverySpan');
+        }
+    }
+
+    deliveryMethodRadios.forEach(radio => {
+        radio.addEventListener('change', function() {
+            console.log('Delivery method changed to:', this.value);
+            updateDeliveryInfo();
+        });
+        console.log('Change listener added to radio');
+    });
+    updateDeliveryInfo();
+
+    // Also update on page load in case initial value is set
+    setTimeout(updateDeliveryInfo, 100);
+
+    // Razorpay integration
+    const checkoutForm = document.getElementById('checkoutForm');
+    if (checkoutForm) {
+        checkoutForm.addEventListener('submit', function(e) {
+            const paymentMethod = document.querySelector('input[name="payment_method"]:checked')?.value;
+            const deliveryMethod = getDeliveryMethod();
+            const addressInput = document.getElementById('id_delivery_address');
+            if (deliveryMethod === 'home_delivery' && addressInput && !addressInput.value.trim()) {
+                e.preventDefault();
+                alert('Please enter your delivery address for home delivery.');
+                if (addressInput.focus) addressInput.focus();
+                return;
+            }
+            if (paymentMethod === 'online' || paymentMethod === 'card') {
+                e.preventDefault();
+                const placeOrderBtn = document.getElementById('placeOrderBtn');
+                if (placeOrderBtn) {
+                    placeOrderBtn.disabled = true;
+                    placeOrderBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Redirecting to Payment...';
+                }
+                // Prepare data for backend order creation
+                const formData = new FormData(checkoutForm);
+                fetch('{% url "orders:create_razorpay_order" %}', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const options = {
+                            key: data.razorpay_key_id,
+                            amount: data.amount,
+                            currency: data.currency,
+                            name: 'HealthKart 360',
+                            description: 'Order Payment',
+                            order_id: data.razorpay_order_id,
+                            handler: function (response) {
+                                // On successful payment, submit payment details to backend
+                                fetch('{% url "orders:razorpay_callback" %}', {
+                                    method: 'POST',
+                                    headers: {
+                                        'X-CSRFToken': '{{ csrf_token }}',
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify({
+                                        razorpay_payment_id: response.razorpay_payment_id,
+                                        razorpay_order_id: response.razorpay_order_id,
+                                        razorpay_signature: response.razorpay_signature
+                                    })
+                                })
+                                .then(res => res.json())
+                                .then(resData => {
+                                    if (resData.success) {
+                                        window.location.href = resData.redirect_url;
+                                    } else {
+                                        alert('Payment verification failed. Please contact support.');
+                                        window.location.reload();
+                                    }
+                                });
+                            },
+                            prefill: {
+                                name: '{{ user.get_full_name|escapejs }}',
+                                email: '{{ user.email|escapejs }}',
+                                contact: '{{ user.phone_number|default:""|escapejs }}'
+                            },
+                            theme: {
+                                color: '#0d6efd'
+                            }
+                        };
+                        const rzp = new Razorpay(options);
+                        rzp.open();
+                    } else {
+                        alert('Failed to initiate payment. Please try again.');
+                        window.location.reload();
+                    }
+                });
+            } else {
+                // COD: allow normal form submit
+                const placeOrderBtn = document.getElementById('placeOrderBtn');
+                if (placeOrderBtn) {
+                    placeOrderBtn.disabled = true;
+                    placeOrderBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Processing...';
+                }
+            }
+        });
+    }
+});
+</script>
+{% endblock %}
+{% block footer %}{% endblock footer %}

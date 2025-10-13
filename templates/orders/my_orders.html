@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}My Orders - HealthKart 360{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+	<div class="row">
+		<div class="col-12">
+			<h2 class="mb-4"><i class="fas fa-box me-2"></i>My Orders</h2>
+			{% if orders %}
+			<div class="table-responsive">
+				<table class="table table-bordered table-hover align-middle">
+					<thead class="table-light">
+						<tr>
+							<th>Order #</th>
+							<th>Date</th>
+							<th>Status</th>
+							<th>Items</th>
+							<th>Total</th>
+							<th>Details</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for order in orders %}
+						<tr>
+							<td>{{ order.id }}</td>
+							<td>{{ order.created_at|date:"M d, Y H:i" }}</td>
+							<td>
+								<span class="badge
+									{% if order.status == 'pending' %}bg-warning text-dark
+									{% elif order.status == 'confirmed' %}bg-info text-white
+									{% elif order.status == 'preparing' %}bg-primary text-white
+									{% elif order.status == 'ready' %}bg-success text-white
+									{% elif order.status == 'out_for_delivery' %}bg-info text-white
+									{% elif order.status == 'delivered' %}bg-success text-white
+									{% elif order.status == 'completed' %}bg-primary text-white
+									{% else %}bg-secondary text-white{% endif %}">
+									{{ order.get_status_display }}
+								</span>
+							</td>
+							<td>
+								<ul class="list-unstyled mb-0">
+									{% for item in order.items.all %}
+									<li>{{ item.medicine.name }} <span class="text-muted">x{{ item.quantity }}</span></li>
+									{% endfor %}
+								</ul>
+							</td>
+							<td>₹{{ order.total_amount }}</td>
+							<td>
+								{% if order.id %}
+									<a href="{% url 'orders:order_detail' order.id %}" class="btn btn-sm btn-outline-primary">View</a>
+								{% else %}
+									<button class="btn btn-sm btn-outline-secondary" disabled>View</button>
+								{% endif %}
+							</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+			{% else %}
+			<div class="alert alert-info text-center my-5">
+				<i class="fas fa-info-circle fa-2x mb-2"></i>
+				<h4>No orders found</h4>
+				<p>You have not placed any orders yet.</p>
+				<a href="{% url 'core:search' %}" class="btn btn-primary mt-2">Start Shopping</a>
+			</div>
+			{% endif %}
+		</div>
+	</div>
+</div>
+{% endblock %}
+{% block footer %}{% endblock footer %}

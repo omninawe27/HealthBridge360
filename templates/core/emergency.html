@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 {% load static %}
 
+<div style="position:fixed;top:0;left:0;z-index:9999;background:#fff;color:#000;padding:4px 8px;border:1px solid #ccc;">user.is_pharmacist: {{ user.is_pharmacist }}</div>
+
 {% block title %}Emergency Mode - HealthKart 360{% endblock %}
 
 {% block content %}
@@ -145,10 +147,12 @@
                                                     {{ medicine.pharmacy.name }}
                                                 </small>
                                                 {% if medicine.quantity > 0 %}
-                                                <button class="btn btn-primary btn-sm mt-1" 
-                                                        onclick="addToCart({{ medicine.id }})">
-                                                    <i class="fas fa-cart-plus me-1"></i>Add to Cart
-                                                </button>
+                                                    {% if not user.is_pharmacist %}
+                                                    <button class="btn btn-primary btn-sm mt-1" 
+                                                            onclick="addToCart({{ medicine.id }})">
+                                                        <i class="fas fa-cart-plus me-1"></i>Add to Cart
+                                                    </button>
+                                                    {% endif %}
                                                 {% endif %}
                                             </div>
                                         </div>
@@ -360,3 +364,4 @@ style.textContent = `
 document.head.appendChild(style);
 </script>
 {% endblock %} 
+{% block footer %}{% endblock footer %}

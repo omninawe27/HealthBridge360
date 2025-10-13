@@ -1,74 +1,609 @@
+{% load i18n %}
+{% load static %} 
+ <!-- new  -->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ LANGUAGE_CODE }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}HealthKart 360{% endblock %}</title>
+    <title>{% block title %}{% trans "HealthBridge 360" %}{% endblock %}</title>
+    <link rel="icon" href="{% static 'images/logo.jpeg' %}" type="image/jpeg">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="{% load static %}{% static 'css/style.css' %}" rel="stylesheet">
+
+    <!-- <link href="{% load static %}{% static 'css/style.css' %}" rel="stylesheet"> -->
+    <style>
+        .custom-error-alert {
+            background-color: lightyellow !important;
+            color: red !important;
+            border-color: #ffcc00 !important;
+        }
+
+        /* Enhanced Interactive Navbar Styles */
+        nav.navbar {
+            background: linear-gradient(135deg, rgb(255, 0, 150), rgb(0, 204, 255));
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            position: sticky;
+            top: 0;
+            z-index: 1030;
+            padding: 12px 0;
+        }
+
+        nav.navbar:hover {
+            background: linear-gradient(135deg, rgb(230, 0, 140), rgb(0, 180, 220));
+            box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+            transform: translateY(-1px);
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            letter-spacing: 1px;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            padding: 10px 16px;
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .navbar-brand::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .navbar-brand:hover::before {
+            left: 100%;
+        }
+
+        .navbar-brand:hover {
+            transform: scale(1.05) translateY(-2px);
+            text-shadow: 0 0 10px rgba(255, 102, 204, 0.5);
+        }
+
+        .navbar-brand i {
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            display: inline-block;
+        }
+
+        .navbar-brand:hover i {
+            transform: rotate(360deg) scale(1.2);
+            color: #ff66cc;
+        }
+
+        .navbar-nav .nav-link {
+            font-weight: 600;
+            font-size: 1rem;
+            color: #f8f9fa;
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            padding: 12px 18px;
+            margin: 0 4px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .navbar-nav .nav-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 102, 204, 0.2), transparent);
+            transition: left 0.4s ease;
+        }
+
+        .navbar-nav .nav-link:hover::before,
+        .navbar-nav .nav-link:focus::before {
+            left: 100%;
+        }
+
+        .navbar-nav .nav-link:hover,
+        .navbar-nav .nav-link:focus {
+            color: #ff66cc;
+            background: rgba(255, 102, 204, 0.1);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 4px 15px rgba(255, 102, 204, 0.3);
+        }
+
+        .navbar-nav .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0%;
+            height: 3px;
+            bottom: 0;
+            left: 50%;
+            background: linear-gradient(90deg, #ff66cc, #ff3366);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .navbar-nav .nav-link:hover::after,
+        .navbar-nav .nav-link:focus::after {
+            width: 80%;
+        }
+
+        /* Special interactive styling for search */
+        .navbar-nav .nav-link[href*="search"] {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+        }
+
+        .navbar-nav .nav-link[href*="search"]::before {
+            background: linear-gradient(45deg, rgba(255, 102, 204, 0.3), rgba(0, 204, 255, 0.3));
+        }
+
+        .navbar-nav .nav-link[href*="search"]:hover {
+            background: rgba(255, 102, 204, 0.2);
+            border-color: rgba(255, 102, 204, 0.5);
+            box-shadow: 0 0 20px rgba(255, 102, 204, 0.4);
+            animation: searchGlow 1.5s ease-in-out infinite alternate;
+        }
+
+        @keyframes searchGlow {
+            0% { box-shadow: 0 0 20px rgba(255, 102, 204, 0.4); }
+            100% { box-shadow: 0 0 30px rgba(255, 102, 204, 0.6), 0 0 40px rgba(255, 102, 204, 0.3); }
+        }
+
+        /* Special styling for emergency with enhanced interaction */
+        .navbar-nav .nav-link[href*="emergency"] {
+            background: rgba(255, 255, 0, 0.1);
+            border: 1px solid rgba(255, 255, 0, 0.3);
+            animation: emergencyPulse 2s infinite;
+            position: relative;
+        }
+
+        .navbar-nav .nav-link[href*="emergency"]:hover {
+            background: rgba(255, 255, 0, 0.2);
+            border-color: rgba(255, 255, 0, 0.8);
+            box-shadow: 0 0 25px rgba(255, 255, 0, 0.5);
+            animation: emergencyPulse 1s infinite, shake 0.5s ease-in-out;
+        }
+
+        @keyframes emergencyPulse {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(255, 255, 0, 0.4);
+            }
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 0 15px 5px rgba(255, 255, 0, 0.3);
+            }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-2px); }
+            75% { transform: translateX(2px); }
+        }
+
+        /* Enhanced dropdown menu */
+        .dropdown-menu {
+            position: absolute !important;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            transform-origin: top center;
+            opacity: 0;
+            transform: translateY(-10px) scale(0.95);
+            pointer-events: none;
+            border: none;
+            background: linear-gradient(135deg, #ffffff, #f8f9fa);
+            backdrop-filter: blur(10px);
+            z-index: 1050 !important;
+            display: block !important;
+            visibility: hidden;
+        }
+
+        /* Ensure dropdown toggle is clickable */
+        .nav-item.dropdown,
+        .nav-item.dropdown > a.nav-link.dropdown-toggle {
+            pointer-events: auto !important;
+            cursor: pointer !important;
+            user-select: none;
+        }
+
+        .dropdown.show .dropdown-menu {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            pointer-events: auto;
+            visibility: visible;
+        }
+
+        /* Specific fixes for user dropdown */
+        .nav-item.dropdown {
+            position: relative !important;
+        }
+
+        .nav-item.dropdown .dropdown-menu {
+            right: 0;
+            left: auto;
+            min-width: 180px;
+        }
+
+        .dropdown-menu a.dropdown-item {
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            border-radius: 8px;
+            margin: 4px 8px;
+            padding: 10px 16px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dropdown-menu a.dropdown-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 102, 204, 0.1), transparent);
+            transition: left 0.4s ease;
+        }
+
+        .dropdown-menu a.dropdown-item:hover::before {
+            left: 100%;
+        }
+
+        .dropdown-menu a.dropdown-item:hover,
+        .dropdown-menu a.dropdown-item:focus {
+            background: linear-gradient(135deg, #ff66cc, #ff3366);
+            color: white;
+            transform: translateX(8px) scale(1.02);
+            box-shadow: 0 4px 12px rgba(255, 102, 204, 0.3);
+        }
+
+        /* User avatar with enhanced interaction */
+        .navbar-user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 10px;
+            border: 3px solid #ff66cc;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow: 0 0 10px rgba(255, 102, 204, 0.3);
+            cursor: pointer;
+        }
+
+        .navbar-user-avatar:hover {
+            transform: scale(1.15) rotate(5deg);
+            box-shadow: 0 0 20px rgba(255, 102, 204, 0.6);
+            border-color: #ff3366;
+        }
+
+        /* Enhanced navbar toggler */
+        .navbar-toggler {
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            outline: none;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            border-radius: 8px;
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .navbar-toggler:focus,
+        .navbar-toggler:hover {
+            transform: rotate(180deg) scale(1.1);
+            filter: brightness(1.2);
+            box-shadow: 0 0 15px rgba(255, 102, 204, 0.4);
+            border-color: #ff66cc;
+            background: rgba(255, 102, 204, 0.1);
+        }
+
+        .navbar-toggler-icon {
+            transition: all 0.3s ease;
+        }
+
+        .navbar-toggler:hover .navbar-toggler-icon {
+            transform: rotate(90deg);
+        }
+
+        /* Enhanced cart badge */
+        #cart-count {
+            animation: cartPulse 2s infinite;
+            border: 2px solid white;
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
+
+        @keyframes cartPulse {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(255, 102, 204, 0.7);
+            }
+            50% {
+                transform: scale(1.2);
+                box-shadow: 0 0 12px 4px rgba(255, 102, 204, 0.5);
+            }
+        }
+
+        /* Enhanced language switcher - ensure Bootstrap dropdown works */
+        .language-switcher .dropdown-toggle {
+            border: 1px solid rgba(255, 255, 255, 0.3) !important;
+            border-radius: 8px !important;
+            padding: 6px 12px !important;
+            transition: all 0.3s ease !important;
+            background: rgba(255, 255, 255, 0.05) !important;
+            position: relative !important;
+            z-index: 1031 !important;
+        }
+
+        .language-switcher .dropdown-toggle:hover {
+            border-color: #ff66cc !important;
+            background: rgba(255, 102, 204, 0.1) !important;
+            transform: translateY(-2px) !important;
+            box-shadow: 0 4px 12px rgba(255, 102, 204, 0.2) !important;
+        }
+
+        .language-switcher .dropdown-menu {
+            border-radius: 8px !important;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2) !important;
+            border: none !important;
+            background: rgba(255, 255, 255, 0.95) !important;
+            backdrop-filter: blur(10px) !important;
+            z-index: 1032 !important;
+            min-width: 120px !important;
+        }
+
+        .language-switcher .dropdown-item {
+            transition: all 0.3s ease !important;
+            border-radius: 4px !important;
+            margin: 2px 4px !important;
+        }
+
+        .language-switcher .dropdown-item:hover {
+            background: linear-gradient(135deg, #ff66cc, #ff3366) !important;
+            color: white !important;
+            transform: translateX(4px) !important;
+        }
+
+        /* Ensure dropdown functionality is not blocked */
+        .language-switcher {
+            position: relative !important;
+        }
+
+        .language-switcher .dropdown {
+            position: relative !important;
+        }
+
+        /* Force language switcher to be clickable */
+        .language-nav-item {
+            pointer-events: auto !important;
+        }
+
+        .language-nav-item * {
+            pointer-events: auto !important;
+        }
+
+        .language-nav-item .language-switcher {
+            pointer-events: auto !important;
+        }
+
+        .language-nav-item .language-switcher * {
+            pointer-events: auto !important;
+        }
+
+        /* Override any navbar interference */
+        nav.navbar .language-nav-item .dropdown-toggle {
+            pointer-events: auto !important;
+            cursor: pointer !important;
+        }
+
+        /* Ensure no overflow hidden blocks the dropdown */
+        nav.navbar {
+            overflow: visible !important;
+        }
+
+        .navbar-collapse {
+            overflow: visible !important;
+        }
+
+        /* Ensure Bootstrap dropdown JavaScript can work */
+        .language-switcher .dropdown-toggle[data-bs-toggle="dropdown"] {
+            pointer-events: auto !important;
+        }
+
+        /* Responsive spacing improvements */
+        @media (max-width: 991.98px) {
+            .navbar-nav .nav-link {
+                margin: 2px 0;
+                padding: 10px 12px;
+            }
+
+            nav.navbar {
+                padding: 8px 0;
+            }
+
+            .navbar-brand {
+                font-size: 1.3rem;
+                padding: 8px 12px;
+            }
+        }
+
+        /* Smooth scrolling for anchor links */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Loading animation for links */
+        .navbar-nav .nav-link.loading {
+            position: relative;
+            color: transparent !important;
+        }
+
+        .navbar-nav .nav-link.loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 16px;
+            height: 16px;
+            margin: -8px 0 0 -8px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid #ff66cc;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Google Translate Widget Styling */
+        .goog-te-gadget {
+            font-family: inherit !important;
+            font-size: 1rem !important;
+            color: #f8f9fa !important;
+        }
+
+        .goog-te-menu-value {
+            background: rgba(255, 255, 255, 0.05) !important;
+            border: 1px solid rgba(255, 255, 255, 0.3) !important;
+            border-radius: 8px !important;
+            padding: 6px 12px !important;
+            color: #f8f9fa !important;
+            transition: all 0.3s ease !important;
+        }
+
+        .goog-te-menu-value:hover {
+            border-color: #ff66cc !important;
+            background: rgba(255, 102, 204, 0.1) !important;
+            transform: translateY(-2px) !important;
+            box-shadow: 0 4px 12px rgba(255, 102, 204, 0.2) !important;
+        }
+
+        .goog-te-menu-value span {
+            color: #f8f9fa !important;
+        }
+
+        .goog-te-gadget .goog-te-button {
+            display: inline-block !important;
+        }
+
+        /* Hide Google branding if possible */
+        .goog-te-gadget .goog-logo-link {
+            display: none !important;
+        }
+
+        .goog-te-gadget .goog-te-gadget-icon {
+            display: none !important;
+        }
+    </style>
 </head>
-<body>
+<body style="background:whitesmoke;">
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
-        <div class="container">
+    <!-- <nav class="navbar navbar-expand-lg navbar-dark sticky-top"
+        style="background: linear-gradient(135deg, rgb(227, 9, 136), rgb(0, 204, 255)); transition: background 0.8s ease;"
+        onmouseover="this.style.background='linear-gradient(135deg, rgb(200, 0, 120), rgb(0, 180, 220))';"
+        onmouseout="this.style.background='linear-gradient(135deg, rgb(255, 0, 150), rgb(0, 204, 255))';"> -->
+    
+    
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top"
+     style="background: linear-gradient(135deg, rgb(255, 0, 150), rgb(0, 204, 255));">
+        <div class="container-fluid">
             <a class="navbar-brand fw-bold" href="{% url 'core:home' %}">
-                <i class="fas fa-heartbeat me-2"></i>HealthBridge 360
+                <i class="fas fa-heartbeat me-2"></i>{% trans "HealthBridge 360" %}
             </a>
-            
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            
+
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     {% if user.is_authenticated %}
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'core:dashboard' %}">
-                                <i class="fas fa-tachometer-alt me-1"></i>Dashboard
+                                <i class="fas fa-tachometer-alt me-1"></i>{% trans "Dashboard" %}
                             </a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item me-3">
                             <a class="nav-link" href="{% url 'core:search' %}">
-                                <i class="fas fa-search me-1"></i>Search
+                                <i class="fas fa-search me-1"></i>{% trans "Search" %}
                             </a>
                         </li>
                         {% if not user.is_pharmacist %}
-                        <li class="nav-item">
+                        <li class="nav-item me-3">
                             <a class="nav-link" href="{% url 'reminders:list' %}">
-                                <i class="fas fa-bell me-1"></i>Reminders
+                                <i class="fas fa-bell me-1"></i>{% trans "Reminders" %}
                             </a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item me-3">
+                            <a class="nav-link" href="{% url 'orders:upload_prescription' %}">
+                                <i class="fas fa-upload me-1"></i>{% trans "Upload Prescription" %}
+                            </a>
+                        </li>
+                        <li class="nav-item me-3">
                             <a class="nav-link" href="{% url 'orders:my_orders' %}">
-                                <i class="fas fa-shopping-bag me-1"></i>My Orders
+                                <i class="fas fa-shopping-bag me-1"></i>{% trans "My Orders" %}
+                            </a>
+                        </li>
+                        <li class="nav-item me-3">
+                            <a class="nav-link position-relative" href="{% url 'orders:view_cart' %}">
+                                <i class="fas fa-shopping-cart me-1"></i>{% trans "Cart" %}
+                                {% if user.is_authenticated %}
+                                    {% load order_filters %}
+                                    {% get_cart_count user as cart_count %}
+                                    {% if cart_count > 0 %}
+                                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="cart-count">
+                                            {{ cart_count }}
+                                            <span class="visually-hidden">{% trans "items in cart" %}</span>
+                                        </span>
+                                    {% endif %}
+                                {% endif %}
+                            </a>
+                        </li>
+                        <li class="nav-item me-3">
+                            <a class="nav-link" href="{% url 'orders:advance_orders' %}">
+                                <i class="fas fa-clock me-1"></i>{% trans "Advance Orders" %}
                             </a>
                         </li>
                         {% endif %}
-                        <li class="nav-item">
-                            <a class="nav-link text-warning" href="{% url 'core:emergency' %}">
-                                <i class="fas fa-exclamation-triangle me-1"></i>Emergency
+                        {% if user.is_pharmacist %}
+                        <li class="nav-item me-3">
+                            <a class="nav-link" href="{% url 'orders:pharmacy_orders' %}">
+                                <i class="fas fa-clipboard-list me-1"></i>{% trans "Orders" %}
                             </a>
+                        </li>
+                        {% endif %}
+                        <li class="nav-item me-3">
+                            <a class="nav-link text-warning" href="{% url 'core:emergency' %}">
+                                <i class="fas fa-exclamation-triangle me-1"></i>{% trans "Emergency" %}
+                            </a>
+                        </li>
+                        
+                        <li class="nav-item me-3 language-nav-item" style="position: relative; z-index: 1060;">
+                            {% include 'components/language_switcher.html' %}
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
                                 <i class="fas fa-user me-1"></i>{{ user.first_name }}
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="{% url 'users:profile' %}">Profile</a></li>
+                                <li><a class="dropdown-item" href="{% url 'users:profile' %}">{% trans "Profile" %}</a></li>
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="{% url 'users:logout' %}">Logout</a></li>
+                                <li><a class="dropdown-item" href="{% url 'users:logout' %}">{% trans "Logout" %}</a></li>
                             </ul>
                         </li>
                     {% else %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'users:login' %}">Login</a>
+                            <a class="nav-link" href="{% url 'users:login' %}">{% trans "Login" %}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'users:register' %}">Register</a>
+                            <a class="nav-link" href="{% url 'users:register' %}">{% trans "Register" %}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'pharmacy:register' %}">Pharmacy Register</a>
+                            <a class="nav-link" href="{% url 'pharmacy:register' %}">{% trans "Pharmacy Register" %}</a>
                         </li>
                     {% endif %}
                 </ul>
@@ -77,10 +612,11 @@
     </nav>
 
     <!-- Messages -->
+
     {% if messages %}
         <div class="container mt-3">
             {% for message in messages %}
-                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show auto-dismiss-alert{% if message.tags == 'error' %} custom-error-alert{% endif %}" role="alert">
                     {{ message }}
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
@@ -95,22 +631,92 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-dark text-light py-4 mt-5">
+    {% block footer %}
+    <footer class="bg-dark text-light py-4 mt-7" style="position:relative; bottom: 0; width: 100%; ">
         <div class="container">
             <div class="row">
                 <div class="col-md-6">
-                    <h5><i class="fas fa-heartbeat me-2"></i>HealthKart 360</h5>
-                    <p class="mb-0">Healthcare for Rural India</p>
+                    <h5><i class="fas fa-heartbeat me-2"></i>{% trans "HealthBridge 360" %}</h5>
+                    <p class="mb-0">{% trans "Healthcare for Rural India" %}</p>
                 </div>
                 <div class="col-md-6 text-md-end">
-                    <p class="mb-0">&copy; 2024 HealthKart 360. All rights reserved.</p>
-                </div>
+                    <p class="mb-0">&copy; 2025 {% trans "HealthBridge 360" %}. {% trans "All rights reserved." %}</p>
             </div>
         </div>
     </footer>
+    {% endblock footer %}
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{% load static %}{% static 'js/main.js' %}"></script>
-    {% block extra_js %}{% endblock %}
+    <script>
+        // Auto dismiss alerts after 3 seconds
+        document.addEventListener('DOMContentLoaded', function () {
+            const alerts = document.querySelectorAll('.auto-dismiss-alert');
+            alerts.forEach(alert => {
+                setTimeout(() => {
+                    // Bootstrap 5 alert dismissal
+                    const bsAlert = new bootstrap.Alert(alert);
+                    bsAlert.close();
+                }, 3000);
+            });
+
+            // Ensure language switcher dropdown works
+            const languageDropdown = document.querySelector('.language-switcher .dropdown-toggle');
+            if (languageDropdown) {
+                console.log('Language switcher found:', languageDropdown);
+
+            // Force Bootstrap dropdown initialization
+            const dropdown = new bootstrap.Dropdown(languageDropdown);
+            }
+
+            // Ensure user dropdown toggle works
+            const userDropdownToggle = document.querySelector('.nav-item.dropdown > a.nav-link.dropdown-toggle');
+            if (userDropdownToggle) {
+                console.log('User dropdown toggle found:', userDropdownToggle);
+                const userDropdown = new bootstrap.Dropdown(userDropdownToggle);
+
+                // Add click event listener to prevent default and toggle manually
+                userDropdownToggle.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log('User dropdown toggle clicked');
+
+                    // Get the parent dropdown element
+                    const dropdown = this.closest('.dropdown');
+                    if (dropdown) {
+                        // Toggle the 'show' class
+                        dropdown.classList.toggle('show');
+                        console.log('Dropdown show class toggled:', dropdown.classList.contains('show'));
+                    }
+                });
+
+                // Also add a mousedown event as backup
+                userDropdownToggle.addEventListener('mousedown', function(e) {
+                    console.log('User dropdown toggle mousedown');
+                });
+            }
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(e) {
+                const userDropdown = document.querySelector('.nav-item.dropdown');
+                if (userDropdown && !userDropdown.contains(e.target)) {
+                    userDropdown.classList.remove('show');
+                }
+            });
+        });
+    </script>
+    {% block extra_js %}
+    <!-- Google Translate Widget Script -->
+    <script type="text/javascript">
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'en',
+        includedLanguages: 'en,hi,mr',
+        layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+      }, 'google_translate_element');
+    }
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    {% endblock %}
 </body>
 </html>

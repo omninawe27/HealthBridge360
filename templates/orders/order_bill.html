@@ -1,0 +1,279 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Order Bill #{{ order.id }} - HealthKart 360{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h4 class="mb-0">
+                            <i class="fas fa-file-invoice me-2"></i>Order Bill
+                        </h4>
+                        <div class="text-end">
+                            <h6 class="mb-0">Bill #{{ bill_number }}</h6>
+                            <small>{{ bill_date|date:"F d, Y" }}</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <!-- Pharmacy Information -->
+                    <div class="row mb-4">
+                        <div class="col-6">
+                            <h6 class="text-primary">{{ order.pharmacy.name }}</h6>
+                            <p class="mb-1">{{ order.pharmacy.address|default:"Pharmacy Address" }}</p>
+                            <p class="mb-1">Phone: {{ order.pharmacy.phone|default:"+91 98765 43210" }}</p>
+                            <p class="mb-0">Email: {{ order.pharmacy.email|default:"info@pharmacy.com" }}</p>
+                        </div>
+                        <div class="col-6 text-end">
+                            <h6 class="text-primary">Customer Information</h6>
+                            <p class="mb-1"><strong>{{ order.user.first_name }} {{ order.user.last_name }}</strong></p>
+                            <p class="mb-1">Email: {{ order.user.email }}</p>
+                            <p class="mb-0">Order #{{ order.id }}</p>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <!-- Order Details -->
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h6>Order Information</h6>
+                            <p class="mb-1"><strong>Order Date:</strong> {{ order.created_at|date:"F d, Y H:i" }}</p>
+                            <p class="mb-1"><strong>Status:</strong>
+                                <span class="badge
+                                    {% if order.status == 'pending' %}bg-warning
+                                    {% elif order.status == 'confirmed' %}bg-info
+                                    {% elif order.status == 'preparing' %}bg-primary
+                                    {% elif order.status == 'ready' %}bg-success
+                                    {% elif order.status == 'out_for_delivery' %}bg-info
+                                    {% elif order.status == 'delivered' %}bg-success
+                                    {% else %}bg-secondary{% endif %}">
+                                    {{ order.get_status_display }}
+                                </span>
+                            </p>
+                            <p class="mb-1"><strong>Payment Method:</strong> {{ order.get_payment_method_display }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Delivery Information</h6>
+                            <p class="mb-1"><strong>Delivery Method:</strong> {{ order.get_delivery_method_display }}</p>
+                            {% if order.delivery_address %}
+                                <p class="mb-1"><strong>Delivery Address:</strong><br>{{ order.delivery_address }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Medicine Details -->
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Medicine Name</th>
+                                    <th>Brand</th>
+                                    <th>Strength</th>
+                                    <th>Quantity</th>
+                                    <th>Unit Price</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in items %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>
+                                        <strong>{{ item.medicine.name }}</strong>
+                                    </td>
+                                    <td>{{ item.medicine.brand }}</td>
+                                    <td>{{ item.medicine.strength }}</td>
+                                    <td>{{ item.quantity }}</td>
+                                    <td>₹{{ item.price }}</td>
+                                    <td>₹{{ item.total_price }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Summary -->
+                    <div class="row">
+                        <div class="col-md-6 offset-md-6">
+                            <table class="table table-borderless">
+                                <tr>
+                                    <td><strong>Subtotal:</strong></td>
+                                    <td class="text-end">₹{{ subtotal }}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Delivery Charges:</strong></td>
+                                    <td class="text-end">₹{{ delivery_charges }}</td>
+                                </tr>
+                                <tr class="border-top">
+                                    <td><strong>Total Amount:</strong></td>
+                                    <td class="text-end"><strong>₹{{ total_amount }}</strong></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    {% if order.notes %}
+                    <!-- Notes -->
+                    <div class="alert alert-info mt-4">
+                        <h6><i class="fas fa-sticky-note me-2"></i>Order Notes:</h6>
+                        <p class="mb-0">{{ order.notes }}</p>
+                    </div>
+                    {% endif %}
+
+                    <!-- Action Buttons -->
+                    <div class="d-flex justify-content-between mt-4">
+                        {% if order.id %}
+                            <a href="{% url 'orders:order_detail' order.id %}" class="btn btn-outline-primary">
+                                <i class="fas fa-arrow-left me-2"></i>Back to Order
+                            </a>
+                        {% else %}
+                            <button class="btn btn-outline-secondary" disabled>
+                                <i class="fas fa-arrow-left me-2"></i>Back to Order
+                            </button>
+                        {% endif %}
+                        <div>
+                            <button onclick="window.print()" class="btn btn-success me-2">
+                                <i class="fas fa-print me-2"></i>Print Bill
+                            </button>
+                            <button onclick="downloadPDF()" class="btn btn-primary">
+                                <i class="fas fa-download me-2"></i>Download PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function downloadPDF() {
+    // Create a new window with the bill content for PDF generation
+    const printWindow = window.open('', '_blank');
+    printWindow.document.write(`
+        <html>
+        <head>
+            <title>Order Bill #{{ order.id }}</title>
+            <style>
+                body { font-family: Arial, sans-serif; margin: 20px; }
+                .header { background-color: #007bff; color: white; padding: 20px; text-align: center; }
+                .bill-info { display: flex; justify-content: space-between; margin: 20px 0; }
+                table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+                th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+                th { background-color: #f2f2f2; }
+                .total { font-weight: bold; }
+                .text-end { text-align: right; }
+                .badge { padding: 4px 8px; border-radius: 4px; color: white; }
+                .bg-warning { background-color: #ffc107; }
+                .bg-info { background-color: #17a2b8; }
+                .bg-primary { background-color: #007bff; }
+                .bg-success { background-color: #28a745; }
+                .bg-secondary { background-color: #6c757d; }
+            </style>
+        </head>
+        <body>
+            <div class="header">
+                <h2>Order Bill #{{ order.id }}</h2>
+                <p>Bill #{{ bill_number }} - {{ bill_date|date:"F d, Y" }}</p>
+            </div>
+
+            <div class="bill-info">
+                <div>
+                    <h4>{{ order.pharmacy.name }}</h4>
+                    <p>{{ order.pharmacy.address|default:"Pharmacy Address" }}</p>
+                    <p>Phone: {{ order.pharmacy.phone|default:"+91 98765 43210" }}</p>
+                </div>
+                <div>
+                    <h4>Customer Information</h4>
+                    <p><strong>{{ order.user.first_name }} {{ order.user.last_name }}</strong></p>
+                    <p>{{ order.user.email }}</p>
+                </div>
+            </div>
+
+            <h4>Order Details</h4>
+            <p><strong>Order Date:</strong> {{ order.created_at|date:"F d, Y H:i" }}</p>
+            <p><strong>Status:</strong> <span class="badge
+                {% if order.status == 'pending' %}bg-warning
+                {% elif order.status == 'confirmed' %}bg-info
+                {% elif order.status == 'preparing' %}bg-primary
+                {% elif order.status == 'ready' %}bg-success
+                {% elif order.status == 'out_for_delivery' %}bg-info
+                {% elif order.status == 'delivered' %}bg-success
+                {% else %}bg-secondary{% endif %}">{{ order.get_status_display }}</span></p>
+            <p><strong>Payment Method:</strong> {{ order.get_payment_method_display }}</p>
+            <p><strong>Delivery Method:</strong> {{ order.get_delivery_method_display }}</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Medicine Name</th>
+                        <th>Brand</th>
+                        <th>Strength</th>
+                        <th>Quantity</th>
+                        <th>Unit Price</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in items %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ item.medicine.name }}</td>
+                        <td>{{ item.medicine.brand }}</td>
+                        <td>{{ item.medicine.strength }}</td>
+                        <td>{{ item.quantity }}</td>
+                        <td>₹{{ item.price }}</td>
+                        <td>₹{{ item.total_price }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <div style="text-align: right; margin-top: 20px;">
+                <p><strong>Subtotal:</strong> ₹{{ subtotal }}</p>
+                <p><strong>Delivery Charges:</strong> ₹{{ delivery_charges }}</p>
+                <p class="total"><strong>Total Amount:</strong> ₹{{ total_amount }}</p>
+            </div>
+
+            {% if order.notes %}
+            <div style="margin-top: 20px; padding: 10px; background-color: #e7f3ff; border-left: 4px solid #007bff;">
+                <h5>Order Notes:</h5>
+                <p>{{ order.notes }}</p>
+            </div>
+            {% endif %}
+        </body>
+        </html>
+    `);
+    printWindow.document.close();
+
+    // Wait for content to load then print (which will trigger save as PDF)
+    printWindow.onload = function() {
+        printWindow.print();
+    };
+}
+</script>
+
+<style>
+@media print {
+    .btn, .navbar, .footer {
+        display: none !important;
+    }
+    .card {
+        border: none !important;
+        box-shadow: none !important;
+    }
+    .card-header {
+        background-color: #f8f9fa !important;
+        color: #000 !important;
+    }
+}
+</style>
+{% endblock %}
+{% block footer %}{% endblock footer %}

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: HealthKart 360 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-01 00:00+0000\n"
+"POT-Creation-Date: 2025-09-07 22:05+0530\n"
 "PO-Revision-Date: 2024-01-01 00:00+0000\n"
 "Last-Translator: \n"
 "Language-Team: Hindi\n"
@@ -15,242 +15,1661 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: templates/base.html:15
-msgid "HealthKart 360"
+#: .\orders\models.py:12
+msgid "Uploaded"
+msgstr "अपलोड किया गया"
+
+#: .\orders\models.py:13
+msgid "Processing"
+msgstr "प्रोसेस हो रहा है"
+
+#: .\orders\models.py:14
+msgid "Processed"
+msgstr "प्रोसेस किया गया"
+
+#: .\orders\models.py:15
+msgid "Verified"
+msgstr "सत्यापित"
+
+#: .\orders\models.py:16
+msgid "Failed"
+msgstr "विफल"
+
+#: .\orders\models.py:81 .\orders\models.py:173
+#, fuzzy
+#| msgid "Pending Orders"
+msgid "Pending"
+msgstr "लंबित ऑर्डर"
+
+#: .\orders\models.py:82 .\orders\models.py:174
+msgid "Confirmed"
+msgstr "पुष्टि की गई"
+
+#: .\orders\models.py:83
+msgid "Preparing"
+msgstr "तैयार हो रहा है"
+
+#: .\orders\models.py:84
+msgid "Ready for Pickup"
+msgstr "पिकअप के लिए तैयार"
+
+#: .\orders\models.py:85
+msgid "Out for Delivery"
+msgstr "डिलीवरी के लिए बाहर"
+
+#: .\orders\models.py:86
+msgid "Delivered"
+msgstr "डिलीवर किया गया"
+
+#: .\orders\models.py:87
+msgid "Completed"
+msgstr "पूर्ण"
+
+#: .\orders\models.py:88 .\orders\models.py:178
+msgid "Cancelled"
+msgstr "रद्द"
+
+#: .\orders\models.py:92
+msgid "Cash on Delivery"
+msgstr "डिलीवरी पर नकद भुगतान"
+
+#: .\orders\models.py:93
+msgid "Online Payment"
+msgstr "ऑनलाइन भुगतान"
+
+#: .\orders\models.py:94
+msgid "Card Payment"
+msgstr "कार्ड भुगतान"
+
+#: .\orders\models.py:98
+msgid "Store Pickup"
+msgstr "स्टोर पिकअप"
+
+#: .\orders\models.py:99
+msgid "Home Delivery"
+msgstr "घरेलू डिलीवरी"
+
+#: .\orders\models.py:149
+msgid "Once Daily"
+msgstr "दैनिक एक बार"
+
+#: .\orders\models.py:150
+msgid "Twice Daily"
+msgstr "दैनिक दो बार"
+
+#: .\orders\models.py:151
+msgid "Thrice Daily"
+msgstr "दैनिक तीन बार"
+
+#: .\orders\models.py:152
+msgid "Before Meals"
+msgstr "भोजन से पहले"
+
+#: .\orders\models.py:153
+msgid "After Meals"
+msgstr "भोजन के बाद"
+
+#: .\orders\models.py:154
+msgid "Custom"
+msgstr "कस्टम"
+
+#: .\orders\models.py:175
+msgid "Ordered from Supplier"
+msgstr "सप्लायर से ऑर्डर किया गया"
+
+#: .\orders\models.py:176
+msgid "Received"
+msgstr "प्राप्त"
+
+#: .\orders\models.py:177
+msgid "Ready for Customer"
+msgstr "ग्राहक के लिए तैयार"
+
+#: .\templates\base.html:7 .\templates\base.html:32 .\templates\base.html:157
+#: .\templates\base.html:161 .\templates\core\home.html:5
+#: .\templates\core\home.html:15
+#, fuzzy
+#| msgid "HealthKart 360"
+msgid "HealthBridge 360"
 msgstr "हेल्थकार्ट 360"
 
-#: templates/base.html:25
+#: .\templates\base.html:46 .\templates\core\user_dashboard.html:5
 msgid "Dashboard"
 msgstr "डैशबोर्ड"
 
-#: templates/base.html:29
+#: .\templates\base.html:51
 msgid "Search"
 msgstr "खोजें"
 
-#: templates/base.html:33
+#: .\templates\base.html:57
 msgid "Reminders"
 msgstr "रिमाइंडर"
 
-#: templates/base.html:37
-msgid "My Orders"
-msgstr "मेरे ऑर्डर"
-
-#: templates/base.html:41
-msgid "Emergency"
-msgstr "आपातकाल"
-
-#: templates/base.html:47
-msgid "Profile"
-msgstr "प्रोफाइल"
-
-#: templates/base.html:49
-msgid "Logout"
-msgstr "लॉगआउट"
-
-#: templates/base.html:55
-msgid "Login"
-msgstr "लॉगिन"
-
-#: templates/base.html:58
-msgid "Register"
-msgstr "रजिस्टर"
-
-#: templates/base.html:61
-msgid "Pharmacy Register"
-msgstr "फार्मेसी रजिस्टर"
-
-#: templates/core/home.html:8
-msgid "Healthcare for Rural India"
-msgstr "ग्रामीण भारत के लिए स्वास्थ्य सेवा"
-
-#: templates/core/home.html:15
-msgid "Get Started"
-msgstr "शुरू करें"
-
-#: templates/core/home.html:18
-msgid "Register Pharmacy"
-msgstr "फार्मेसी रजिस्टर करें"
-
-#: templates/core/home.html:25
-msgid "Key Features"
-msgstr "मुख्य विशेषताएं"
-
-#: templates/core/home.html:26
-msgid "Everything you need for healthcare management"
-msgstr "स्वास्थ्य सेवा प्रबंधन के लिए आपको जो कुछ चाहिए"
-
-#: templates/core/home.html:35
-msgid "Medicine Search"
-msgstr "दवा खोज"
-
-#: templates/core/home.html:36
-msgid "Find medicines at nearby pharmacies with real-time availability and pricing."
-msgstr "वास्तविक समय की उपलब्धता और मूल्य के साथ पास के फार्मेसी में दवाएं खोजें।"
-
-#: templates/core/home.html:45
-msgid "Prescription Upload"
-msgstr "प्रिस्क्रिप्शन अपलोड"
-
-#: templates/core/home.html:46
-msgid "Upload prescription images and get medicine suggestions with alternatives."
-msgstr "प्रिस्क्रिप्शन छवियां अपलोड करें और विकल्पों के साथ दवा सुझाव प्राप्त करें।"
-
-#: templates/core/home.html:55
-msgid "Medicine Reminders"
-msgstr "दवा रिमाइंडर"
-
-#: templates/core/home.html:56
-msgid "Set personalized reminders for your medications with custom alerts."
-msgstr "कस्टम अलर्ट के साथ अपनी दवाओं के लिए व्यक्तिगत रिमाइंडर सेट करें।"
-
-#: templates/core/home.html:65
-msgid "Emergency Mode"
-msgstr "आपातकाल मोड"
-
-#: templates/core/home.html:66
-msgid "Quick access to 24x7 pharmacies and essential medicines during emergencies."
-msgstr "आपातकाल के दौरान 24x7 फार्मेसी और आवश्यक दवाओं तक त्वरित पहुंच।"
-
-#: templates/core/home.html:75
-msgid "Multi-Language Support"
-msgstr "बहुभाषा समर्थन"
-
-#: templates/core/home.html:85
-msgid "How It Works"
-msgstr "यह कैसे काम करता है"
-
-#: templates/core/home.html:86
-msgid "Simple steps to get started"
-msgstr "शुरू करने के लिए सरल कदम"
-
-#: templates/core/home.html:95
-msgid "Register Account"
-msgstr "खाता रजिस्टर करें"
-
-#: templates/core/home.html:96
-msgid "Create your account with basic details and choose your preferred language."
-msgstr "बुनियादी विवरण के साथ अपना खाता बनाएं और अपनी पसंदीदा भाषा चुनें।"
-
-#: templates/core/home.html:105
-msgid "Search & Order"
-msgstr "खोजें और ऑर्डर करें"
-
-#: templates/core/home.html:106
-msgid "Search for medicines, upload prescriptions, and place orders from nearby pharmacies."
-msgstr "दवाएं खोजें, प्रिस्क्रिप्शन अपलोड करें, और पास के फार्मेसी से ऑर्डर करें।"
-
-#: templates/core/home.html:115
-msgid "Stay Healthy"
-msgstr "स्वस्थ रहें"
-
-#: templates/core/home.html:116
-msgid "Set reminders, track orders, and access emergency help when needed."
-msgstr "रिमाइंडर सेट करें, ऑर्डर ट्रैक करें, और जरूरत पड़ने पर आपातकाल सहायता प्राप्त करें।"
-
-#: templates/core/home.html:125
-msgid "Ready to Get Started?"
-msgstr "शुरू करने के लिए तैयार हैं?"
-
-#: templates/core/home.html:126
-msgid "Join thousands of users who trust HealthKart 360 for their healthcare needs."
-msgstr "हजारों उपयोगकर्ताओं में शामिल हों जो अपनी स्वास्थ्य सेवा जरूरतों के लिए हेल्थकार्ट 360 पर भरोसा करते हैं।"
-
-#: templates/core/home.html:130
-msgid "Register Now"
-msgstr "अभी रजिस्टर करें"
-
-#: templates/core/user_dashboard.html:8
-msgid "Welcome back"
-msgstr "वापसी पर स्वागत है"
-
-#: templates/core/user_dashboard.html:9
-msgid "Manage your health, medicines, and orders from your dashboard."
-msgstr "अपने डैशबोर्ड से अपने स्वास्थ्य, दवाओं और ऑर्डर का प्रबंधन करें।"
-
-#: templates/core/user_dashboard.html:20
-msgid "Active Reminders"
-msgstr "सक्रिय रिमाइंडर"
-
-#: templates/core/user_dashboard.html:26
-msgid "Pending Orders"
-msgstr "लंबित ऑर्डर"
-
-#: templates/core/user_dashboard.html:32
-msgid "Recent Orders"
-msgstr "हाल के ऑर्डर"
-
-#: templates/core/user_dashboard.html:39
-msgid "Quick Actions"
-msgstr "त्वरित कार्य"
-
-#: templates/core/user_dashboard.html:48
-msgid "Search Medicine"
-msgstr "दवा खोजें"
-
-#: templates/core/user_dashboard.html:49
-msgid "Find medicines at nearby pharmacies"
-msgstr "पास के फार्मेसी में दवाएं खोजें"
-
-#: templates/core/user_dashboard.html:58
+#: .\templates\base.html:62
 msgid "Upload Prescription"
 msgstr "प्रिस्क्रिप्शन अपलोड करें"
 
-#: templates/core/user_dashboard.html:59
-msgid "Upload and order from prescription"
-msgstr "प्रिस्क्रिप्शन से अपलोड और ऑर्डर करें"
+#: .\templates\base.html:67
+msgid "My Orders"
+msgstr "मेरे ऑर्डर"
 
-#: templates/core/user_dashboard.html:68
-msgid "Set Reminder"
-msgstr "रिमाइंडर सेट करें"
+#: .\templates\base.html:72
+msgid "Cart"
+msgstr "कार्ट"
 
-#: templates/core/user_dashboard.html:69
-msgid "Add medicine reminders"
-msgstr "दवा रिमाइंडर जोड़ें"
+#: .\templates\base.html:79
+msgid "items in cart"
+msgstr "कार्ट में आइटम"
 
-#: templates/core/user_dashboard.html:78
+#: .\templates\base.html:87
+msgid "Advance Orders"
+msgstr "अग्रिम ऑर्डर"
+
+#: .\templates\base.html:94
+msgid "Orders"
+msgstr "ऑर्डर"
+
+#: .\templates\base.html:100
 msgid "Emergency"
 msgstr "आपातकाल"
 
-#: templates/core/user_dashboard.html:79
-msgid "24x7 pharmacy access"
-msgstr "24x7 फार्मेसी पहुंच"
+#: .\templates\base.html:111
+msgid "Profile"
+msgstr "प्रोफाइल"
 
-#: templates/core/user_dashboard.html:90
-msgid "Today's Medicine Reminders"
-msgstr "आज के दवा रिमाइंडर"
+#: .\templates\base.html:113
+msgid "Logout"
+msgstr "लॉगआउट"
 
-#: templates/core/user_dashboard.html:98
-msgid "Upcoming Reminders"
-msgstr "आगामी रिमाइंडर"
+#: .\templates\base.html:118
+msgid "Login"
+msgstr "लॉगिन"
 
-#: templates/core/user_dashboard.html:104
-msgid "Reminder Settings"
-msgstr "रिमाइंडर सेटिंग्स"
+#: .\templates\base.html:121
+msgid "Register"
+msgstr "रजिस्टर"
 
-#: templates/core/user_dashboard.html:108
-msgid "Email Notifications"
-msgstr "ईमेल सूचनाएं"
+#: .\templates\base.html:124
+msgid "Pharmacy Register"
+msgstr "फार्मेसी रजिस्टर"
 
-#: templates/core/user_dashboard.html:113
-msgid "SMS Notifications"
-msgstr "एसएमएस सूचनाएं"
+#: .\templates\base.html:158 .\templates\core\home.html:5
+msgid "Healthcare for Rural India"
+msgstr "ग्रामीण भारत के लिए स्वास्थ्य सेवा"
 
-#: templates/core/user_dashboard.html:118
-msgid "App Notifications"
-msgstr "ऐप सूचनाएं"
+#: .\templates\base.html:161
+msgid "All rights reserved."
+msgstr "सभी अधिकार सुरक्षित।"
 
-#: templates/core/user_dashboard.html:125
-msgid "Manage Reminders"
-msgstr "रिमाइंडर प्रबंधित करें"
+#: .\templates\core\home.html:18
+msgid ""
+"Your trusted healthcare companion for rural India. Find medicines, upload "
+"prescriptions, set reminders, and access emergency help - all in one place."
+msgstr ""
+"ग्रामीण भारत के लिए आपका विश्वसनीय स्वास्थ्य साथी। दवाएं खोजें, प्रिस्क्रिप्शन अपलोड करें, "
+"रिमाइंडर सेट करें, और आपातकालीन सहायता प्राप्त करें - सब कुछ एक जगह पर।"
 
-#: templates/core/user_dashboard.html:127
-msgid "Add New Reminder"
-msgstr "नया रिमाइंडर जोड़ें"
+#: .\templates\core\home.html:22
+msgid "Get Started"
+msgstr "शुरू करें"
 
-#: templates/core/user_dashboard.html:133
-msgid "No active reminders. Set up medicine reminders to stay on track!"
-msgstr "कोई सक्रिय रिमाइंडर नहीं। ट्रैक पर रहने के लिए दवा रिमाइंडर सेट करें!"
+#: .\templates\core\home.html:25
+msgid "Register Pharmacy"
+msgstr "फार्मेसी रजिस्टर करें"
 
-#: templates/core/user_dashboard.html:135
-msgid "Add Your First Reminder"
-msgstr "अपना पहला रिमाइंडर जोड़ें" 
+#: .\templates\core\home.html:69
+msgid "Key Features"
+msgstr "मुख्य विशेषताएं"
+
+#: .\templates\core\home.html:70
+msgid "Everything you need for healthcare management"
+msgstr "स्वास्थ्य सेवा प्रबंधन के लिए आपको जो कुछ चाहिए"
+
+#: .\templates\core\user_dashboard.html:5
+msgid "HealthKart 360"
+msgstr "हेल्थकार्ट 360"
+
+#: .\templates\core\user_dashboard.html:232
+msgid "Welcome back"
+msgstr "वापसी पर स्वागत है"
+
+#: .\templates\core\user_dashboard.html:234
+msgid "Manage your health, medicines, and orders from your dashboard."
+msgstr "अपने डैशबोर्ड से अपने स्वास्थ्य, दवाओं और ऑर्डर का प्रबंधन करें।"
+
+#: .\templates\core\user_dashboard.html:370
+#, fuzzy
+#| msgid "Quick Actions"
+msgid "Quick Health Tips"
+msgstr "त्वरित कार्य"
+
+#: .\templates\orders\pharmacy_orders.html:174
+#: .\templates\pharmacy\dashboard.html:197
+msgid "Welcome to Pharmacy Dashboard"
+msgstr ""
+
+#: .\templates\orders\pharmacy_orders.html:176
+msgid "Manage orders, track revenue, and serve your customers efficiently."
+msgstr ""
+
+#: .\templates\pharmacy\dashboard.html:199
+msgid "Manage your pharmacy inventory and orders efficiently."
+msgstr ""
+
+#: .\templates\pharmacy\dashboard.html:212
+#, fuzzy
+#| msgid "Medicine Search"
+msgid "Medicine Types"
+msgstr "दवा खोज"
+
+#: .\templates\pharmacy\dashboard.html:223
+msgid "Total Quantity"
+msgstr "कुल मात्रा"
+
+#: .\templates\pharmacy\dashboard.html:234
+msgid "In Stock"
+msgstr "स्टॉक में"
+
+#: .\templates\pharmacy\dashboard.html:245
+msgid "Low Stock"
+msgstr "कम स्टॉक"
+
+#: .\templates\pharmacy\dashboard.html:256
+msgid "Pending Orders"
+msgstr "लंबित ऑर्डर"
+
+#: .\templates\pharmacy\dashboard.html:302
+msgid "Quick Actions"
+msgstr "त्वरित कार्य"
+
+#: .\templates\pharmacy\dashboard.html:308
+#, fuzzy
+#| msgid "Search Medicine"
+msgid "Add Medicine"
+msgstr "दवा खोजें"
+
+#: .\templates\pharmacy\dashboard.html:313
+#, fuzzy
+#| msgid "My Orders"
+msgid "View Orders"
+msgstr "मेरे ऑर्डर"
+
+#: .\templates\pharmacy\dashboard.html:318
+msgid "Inventory"
+msgstr "इन्वेंटरी"
+
+#: .\templates\pharmacy\dashboard.html:332
+msgid "Recent Orders"
+msgstr "हाल के ऑर्डर"
+
+#: .\templates\pharmacy\dashboard.html:333
+msgid "View All"
+msgstr "सभी देखें"
+
+#: .\templates\pharmacy\dashboard.html:341
+msgid "Order ID"
+msgstr "ऑर्डर आईडी"
+
+#: .\templates\pharmacy\dashboard.html:342
+msgid "Customer"
+msgstr "ग्राहक"
+
+#: .\templates\pharmacy\dashboard.html:343
+msgid "Status"
+msgstr "स्थिति"
+
+#: .\templates\pharmacy\dashboard.html:344
+msgid "Amount"
+msgstr "राशि"
+
+#: .\templates\pharmacy\dashboard.html:345
+msgid "Date"
+msgstr "तारीख"
+
+#: .\templates\pharmacy\dashboard.html:346
+#, fuzzy
+#| msgid "Quick Actions"
+msgid "Action"
+msgstr "कार्रवाई"
+
+#: .\templates\pharmacy\dashboard.html:380
+msgid "No orders yet"
+msgstr "अभी तक कोई ऑर्डर नहीं"
+
+#: .\venv\Lib\site-packages\django\contrib\messages\apps.py:15
+msgid "Messages"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\contrib\sitemaps\apps.py:8
+msgid "Site Maps"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\contrib\staticfiles\apps.py:9
+msgid "Static Files"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\contrib\syndication\apps.py:7
+msgid "Syndication"
+msgstr ""
+
+#. Translators: String used to replace omitted page numbers in elided page
+#. range generated by paginators, e.g. [1, 2, '…', 5, 6, 7, '…', 9, 10].
+#: .\venv\Lib\site-packages\django\core\paginator.py:30
+msgid "…"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\paginator.py:50
+msgid "That page number is not an integer"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\paginator.py:52
+msgid "That page number is less than 1"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\paginator.py:54
+msgid "That page contains no results"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:22
+msgid "Enter a valid value."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:104
+#: .\venv\Lib\site-packages\django\forms\fields.py:752
+msgid "Enter a valid URL."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:165
+msgid "Enter a valid integer."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:176
+msgid "Enter a valid email address."
+msgstr ""
+
+#. Translators: "letters" means latin letters: a-z and A-Z.
+#: .\venv\Lib\site-packages\django\core\validators.py:259
+msgid ""
+"Enter a valid “slug” consisting of letters, numbers, underscores or hyphens."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:267
+msgid ""
+"Enter a valid “slug” consisting of Unicode letters, numbers, underscores, or "
+"hyphens."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:279
+#: .\venv\Lib\site-packages\django\core\validators.py:287
+#: .\venv\Lib\site-packages\django\core\validators.py:316
+msgid "Enter a valid IPv4 address."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:296
+#: .\venv\Lib\site-packages\django\core\validators.py:317
+msgid "Enter a valid IPv6 address."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:308
+#: .\venv\Lib\site-packages\django\core\validators.py:315
+msgid "Enter a valid IPv4 or IPv6 address."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:351
+msgid "Enter only digits separated by commas."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:357
+#, python-format
+msgid "Ensure this value is %(limit_value)s (it is %(show_value)s)."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:392
+#, python-format
+msgid "Ensure this value is less than or equal to %(limit_value)s."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:401
+#, python-format
+msgid "Ensure this value is greater than or equal to %(limit_value)s."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:410
+#, python-format
+msgid "Ensure this value is a multiple of step size %(limit_value)s."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:420
+#, python-format
+msgid ""
+"Ensure this value has at least %(limit_value)d character (it has "
+"%(show_value)d)."
+msgid_plural ""
+"Ensure this value has at least %(limit_value)d characters (it has "
+"%(show_value)d)."
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:438
+#, python-format
+msgid ""
+"Ensure this value has at most %(limit_value)d character (it has "
+"%(show_value)d)."
+msgid_plural ""
+"Ensure this value has at most %(limit_value)d characters (it has "
+"%(show_value)d)."
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:461
+#: .\venv\Lib\site-packages\django\forms\fields.py:347
+#: .\venv\Lib\site-packages\django\forms\fields.py:386
+msgid "Enter a number."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:463
+#, python-format
+msgid "Ensure that there are no more than %(max)s digit in total."
+msgid_plural "Ensure that there are no more than %(max)s digits in total."
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:468
+#, python-format
+msgid "Ensure that there are no more than %(max)s decimal place."
+msgid_plural "Ensure that there are no more than %(max)s decimal places."
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:473
+#, python-format
+msgid ""
+"Ensure that there are no more than %(max)s digit before the decimal point."
+msgid_plural ""
+"Ensure that there are no more than %(max)s digits before the decimal point."
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:544
+#, python-format
+msgid ""
+"File extension “%(extension)s” is not allowed. Allowed extensions are: "
+"%(allowed_extensions)s."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:605
+msgid "Null characters are not allowed."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\base.py:1423
+#: .\venv\Lib\site-packages\django\forms\models.py:893
+msgid "and"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\base.py:1425
+#, python-format
+msgid "%(model_name)s with this %(field_labels)s already exists."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\constraints.py:17
+#, python-format
+msgid "Constraint “%(name)s” is violated."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:128
+#, python-format
+msgid "Value %(value)r is not a valid choice."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:129
+msgid "This field cannot be null."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:130
+msgid "This field cannot be blank."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:131
+#, python-format
+msgid "%(model_name)s with this %(field_label)s already exists."
+msgstr ""
+
+#. Translators: The 'lookup_type' is one of 'date', 'year' or
+#. 'month'. Eg: "Title must be unique for pub_date year"
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:135
+#, python-format
+msgid ""
+"%(field_label)s must be unique for %(date_field_label)s %(lookup_type)s."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:173
+#, python-format
+msgid "Field of type: %(field_type)s"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1094
+#, python-format
+msgid "“%(value)s” value must be either True or False."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1095
+#, python-format
+msgid "“%(value)s” value must be either True, False, or None."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1097
+msgid "Boolean (Either True or False)"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1147
+#, python-format
+msgid "String (up to %(max_length)s)"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1149
+msgid "String (unlimited)"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1253
+msgid "Comma-separated integers"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1354
+#, python-format
+msgid ""
+"“%(value)s” value has an invalid date format. It must be in YYYY-MM-DD "
+"format."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1358
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1493
+#, python-format
+msgid ""
+"“%(value)s” value has the correct format (YYYY-MM-DD) but it is an invalid "
+"date."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1362
+msgid "Date (without time)"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1489
+#, python-format
+msgid ""
+"“%(value)s” value has an invalid format. It must be in YYYY-MM-DD "
+"HH:MM[:ss[.uuuuuu]][TZ] format."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1497
+#, python-format
+msgid ""
+"“%(value)s” value has the correct format (YYYY-MM-DD HH:MM[:ss[.uuuuuu]]"
+"[TZ]) but it is an invalid date/time."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1502
+msgid "Date (with time)"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1626
+#, python-format
+msgid "“%(value)s” value must be a decimal number."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1628
+msgid "Decimal number"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1789
+#, python-format
+msgid ""
+"“%(value)s” value has an invalid format. It must be in [DD] "
+"[[HH:]MM:]ss[.uuuuuu] format."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1793
+msgid "Duration"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1845
+msgid "Email address"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1870
+msgid "File path"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1948
+#, python-format
+msgid "“%(value)s” value must be a float."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1950
+msgid "Floating point number"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1990
+#, python-format
+msgid "“%(value)s” value must be an integer."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1992
+msgid "Integer"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2088
+msgid "Big (8 byte) integer"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2105
+msgid "Small integer"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2113
+msgid "IPv4 address"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2144
+msgid "IP address"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2237
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2238
+#, python-format
+msgid "“%(value)s” value must be either None, True or False."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2240
+msgid "Boolean (Either True, False or None)"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2291
+msgid "Positive big integer"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2306
+msgid "Positive integer"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2321
+msgid "Positive small integer"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2337
+#, python-format
+msgid "Slug (up to %(max_length)s)"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2373
+msgid "Text"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2448
+#, python-format
+msgid ""
+"“%(value)s” value has an invalid format. It must be in HH:MM[:ss[.uuuuuu]] "
+"format."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2452
+#, python-format
+msgid ""
+"“%(value)s” value has the correct format (HH:MM[:ss[.uuuuuu]]) but it is an "
+"invalid time."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2456
+msgid "Time"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2564
+msgid "URL"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2588
+msgid "Raw binary data"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2653
+#, python-format
+msgid "“%(value)s” is not a valid UUID."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2655
+msgid "Universally unique identifier"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\files.py:232
+msgid "File"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\files.py:393
+msgid "Image"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\json.py:26
+msgid "A JSON object"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\json.py:28
+msgid "Value must be valid JSON."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\related.py:919
+#, python-format
+msgid "%(model)s instance with %(field)s %(value)r does not exist."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\related.py:921
+msgid "Foreign Key (type determined by related field)"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\related.py:1212
+msgid "One-to-one relationship"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\related.py:1269
+#, python-format
+msgid "%(from)s-%(to)s relationship"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\related.py:1271
+#, python-format
+msgid "%(from)s-%(to)s relationships"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\related.py:1319
+msgid "Many-to-many relationship"
+msgstr ""
+
+#. Translators: If found as last label character, these punctuation
+#. characters will prevent the default label_suffix to be appended to the label
+#: .\venv\Lib\site-packages\django\forms\boundfield.py:184
+msgid ":?.!"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:91
+msgid "This field is required."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:298
+msgid "Enter a whole number."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:467
+#: .\venv\Lib\site-packages\django\forms\fields.py:1241
+msgid "Enter a valid date."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:490
+#: .\venv\Lib\site-packages\django\forms\fields.py:1242
+msgid "Enter a valid time."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:517
+msgid "Enter a valid date/time."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:551
+msgid "Enter a valid duration."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:552
+#, python-brace-format
+msgid "The number of days must be between {min_days} and {max_days}."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:621
+msgid "No file was submitted. Check the encoding type on the form."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:622
+msgid "No file was submitted."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:623
+msgid "The submitted file is empty."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:625
+#, python-format
+msgid "Ensure this filename has at most %(max)d character (it has %(length)d)."
+msgid_plural ""
+"Ensure this filename has at most %(max)d characters (it has %(length)d)."
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:630
+msgid "Please either submit a file or check the clear checkbox, not both."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:694
+msgid ""
+"Upload a valid image. The file you uploaded was either not an image or a "
+"corrupted image."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:857
+#: .\venv\Lib\site-packages\django\forms\fields.py:949
+#: .\venv\Lib\site-packages\django\forms\models.py:1566
+#, python-format
+msgid "Select a valid choice. %(value)s is not one of the available choices."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:951
+#: .\venv\Lib\site-packages\django\forms\fields.py:1070
+#: .\venv\Lib\site-packages\django\forms\models.py:1564
+msgid "Enter a list of values."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:1071
+msgid "Enter a complete value."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:1310
+msgid "Enter a valid UUID."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:1340
+msgid "Enter a valid JSON."
+msgstr ""
+
+#. Translators: This is the default suffix added to form field labels
+#: .\venv\Lib\site-packages\django\forms\forms.py:98
+msgid ":"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\forms.py:244
+#: .\venv\Lib\site-packages\django\forms\forms.py:328
+#, python-format
+msgid "(Hidden field %(name)s) %(error)s"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\formsets.py:63
+#, python-format
+msgid ""
+"ManagementForm data is missing or has been tampered with. Missing fields: "
+"%(field_names)s. You may need to file a bug report if the issue persists."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\formsets.py:67
+#, python-format
+msgid "Please submit at most %(num)d form."
+msgid_plural "Please submit at most %(num)d forms."
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\venv\Lib\site-packages\django\forms\formsets.py:72
+#, python-format
+msgid "Please submit at least %(num)d form."
+msgid_plural "Please submit at least %(num)d forms."
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\venv\Lib\site-packages\django\forms\formsets.py:484
+#: .\venv\Lib\site-packages\django\forms\formsets.py:491
+#, fuzzy
+#| msgid "My Orders"
+msgid "Order"
+msgstr "मेरे ऑर्डर"
+
+#: .\venv\Lib\site-packages\django\forms\formsets.py:499
+msgid "Delete"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\models.py:886
+#, python-format
+msgid "Please correct the duplicate data for %(field)s."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\models.py:891
+#, python-format
+msgid "Please correct the duplicate data for %(field)s, which must be unique."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\models.py:898
+#, python-format
+msgid ""
+"Please correct the duplicate data for %(field_name)s which must be unique "
+"for the %(lookup)s in %(date_field)s."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\models.py:907
+msgid "Please correct the duplicate values below."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\models.py:1338
+msgid "The inline value did not match the parent instance."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\models.py:1429
+msgid "Select a valid choice. That choice is not one of the available choices."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\models.py:1568
+#, python-format
+msgid "“%(pk)s” is not a valid value."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\utils.py:226
+#, python-format
+msgid ""
+"%(datetime)s couldn’t be interpreted in time zone %(current_timezone)s; it "
+"may be ambiguous or it may not exist."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\widgets.py:463
+msgid "Clear"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\widgets.py:464
+msgid "Currently"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\widgets.py:465
+msgid "Change"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\widgets.py:794
+msgid "Unknown"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\widgets.py:795
+msgid "Yes"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\widgets.py:796
+msgid "No"
+msgstr ""
+
+#. Translators: Please do not add spaces around commas.
+#: .\venv\Lib\site-packages\django\template\defaultfilters.py:861
+msgid "yes,no,maybe"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\template\defaultfilters.py:891
+#: .\venv\Lib\site-packages\django\template\defaultfilters.py:908
+#, python-format
+msgid "%(size)d byte"
+msgid_plural "%(size)d bytes"
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\venv\Lib\site-packages\django\template\defaultfilters.py:910
+#, python-format
+msgid "%s KB"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\template\defaultfilters.py:912
+#, python-format
+msgid "%s MB"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\template\defaultfilters.py:914
+#, python-format
+msgid "%s GB"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\template\defaultfilters.py:916
+#, python-format
+msgid "%s TB"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\template\defaultfilters.py:918
+#, python-format
+msgid "%s PB"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dateformat.py:73
+msgid "p.m."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dateformat.py:74
+msgid "a.m."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dateformat.py:79
+msgid "PM"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dateformat.py:80
+msgid "AM"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dateformat.py:152
+msgid "midnight"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dateformat.py:154
+msgid "noon"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:7
+msgid "Monday"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:8
+msgid "Tuesday"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:9
+msgid "Wednesday"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:10
+msgid "Thursday"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:11
+msgid "Friday"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:12
+msgid "Saturday"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:13
+msgid "Sunday"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:16
+msgid "Mon"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:17
+msgid "Tue"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:18
+msgid "Wed"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:19
+msgid "Thu"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:20
+msgid "Fri"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:21
+msgid "Sat"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:22
+msgid "Sun"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:25
+msgid "January"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:26
+msgid "February"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:27
+#, fuzzy
+#| msgid "Search"
+msgid "March"
+msgstr "खोजें"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:28
+msgid "April"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:29
+msgid "May"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:30
+msgid "June"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:31
+msgid "July"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:32
+msgid "August"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:33
+msgid "September"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:34
+msgid "October"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:35
+msgid "November"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:36
+msgid "December"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:39
+msgid "jan"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:40
+msgid "feb"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:41
+msgid "mar"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:42
+msgid "apr"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:43
+msgid "may"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:44
+msgid "jun"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:45
+msgid "jul"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:46
+msgid "aug"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:47
+msgid "sep"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:48
+msgid "oct"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:49
+msgid "nov"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:50
+msgid "dec"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:53
+msgctxt "abbrev. month"
+msgid "Jan."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:54
+msgctxt "abbrev. month"
+msgid "Feb."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:55
+#, fuzzy
+#| msgid "Search"
+msgctxt "abbrev. month"
+msgid "March"
+msgstr "खोजें"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:56
+msgctxt "abbrev. month"
+msgid "April"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:57
+msgctxt "abbrev. month"
+msgid "May"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:58
+msgctxt "abbrev. month"
+msgid "June"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:59
+msgctxt "abbrev. month"
+msgid "July"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:60
+msgctxt "abbrev. month"
+msgid "Aug."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:61
+msgctxt "abbrev. month"
+msgid "Sept."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:62
+msgctxt "abbrev. month"
+msgid "Oct."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:63
+msgctxt "abbrev. month"
+msgid "Nov."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:64
+msgctxt "abbrev. month"
+msgid "Dec."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:67
+msgctxt "alt. month"
+msgid "January"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:68
+msgctxt "alt. month"
+msgid "February"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:69
+#, fuzzy
+#| msgid "Search"
+msgctxt "alt. month"
+msgid "March"
+msgstr "खोजें"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:70
+msgctxt "alt. month"
+msgid "April"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:71
+msgctxt "alt. month"
+msgid "May"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:72
+msgctxt "alt. month"
+msgid "June"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:73
+msgctxt "alt. month"
+msgid "July"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:74
+msgctxt "alt. month"
+msgid "August"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:75
+msgctxt "alt. month"
+msgid "September"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:76
+msgctxt "alt. month"
+msgid "October"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:77
+msgctxt "alt. month"
+msgid "November"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:78
+msgctxt "alt. month"
+msgid "December"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\ipv6.py:8
+msgid "This is not a valid IPv6 address."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\text.py:84
+#, python-format
+msgctxt "String to return when truncating text"
+msgid "%(truncated_text)s…"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\text.py:269
+msgid "or"
+msgstr ""
+
+#. Translators: This string is used as a separator between list elements
+#: .\venv\Lib\site-packages\django\utils\text.py:288
+#: .\venv\Lib\site-packages\django\utils\timesince.py:135
+msgid ", "
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\timesince.py:8
+#, python-format
+msgid "%(num)d year"
+msgid_plural "%(num)d years"
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\venv\Lib\site-packages\django\utils\timesince.py:9
+#, python-format
+msgid "%(num)d month"
+msgid_plural "%(num)d months"
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\venv\Lib\site-packages\django\utils\timesince.py:10
+#, python-format
+msgid "%(num)d week"
+msgid_plural "%(num)d weeks"
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\venv\Lib\site-packages\django\utils\timesince.py:11
+#, python-format
+msgid "%(num)d day"
+msgid_plural "%(num)d days"
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\venv\Lib\site-packages\django\utils\timesince.py:12
+#, python-format
+msgid "%(num)d hour"
+msgid_plural "%(num)d hours"
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\venv\Lib\site-packages\django\utils\timesince.py:13
+#, python-format
+msgid "%(num)d minute"
+msgid_plural "%(num)d minutes"
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\venv\Lib\site-packages\django\views\csrf.py:111
+msgid "Forbidden"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\csrf.py:112
+msgid "CSRF verification failed. Request aborted."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\csrf.py:116
+msgid ""
+"You are seeing this message because this HTTPS site requires a “Referer "
+"header” to be sent by your web browser, but none was sent. This header is "
+"required for security reasons, to ensure that your browser is not being "
+"hijacked by third parties."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\csrf.py:122
+msgid ""
+"If you have configured your browser to disable “Referer” headers, please re-"
+"enable them, at least for this site, or for HTTPS connections, or for “same-"
+"origin” requests."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\csrf.py:127
+msgid ""
+"If you are using the <meta name=\"referrer\" content=\"no-referrer\"> tag or "
+"including the “Referrer-Policy: no-referrer” header, please remove them. The "
+"CSRF protection requires the “Referer” header to do strict referer checking. "
+"If you’re concerned about privacy, use alternatives like <a "
+"rel=\"noreferrer\" …> for links to third-party sites."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\csrf.py:136
+msgid ""
+"You are seeing this message because this site requires a CSRF cookie when "
+"submitting forms. This cookie is required for security reasons, to ensure "
+"that your browser is not being hijacked by third parties."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\csrf.py:142
+msgid ""
+"If you have configured your browser to disable cookies, please re-enable "
+"them, at least for this site, or for “same-origin” requests."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\csrf.py:148
+msgid "More information is available with DEBUG=True."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\generic\dates.py:44
+msgid "No year specified"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\generic\dates.py:64
+#: .\venv\Lib\site-packages\django\views\generic\dates.py:115
+#: .\venv\Lib\site-packages\django\views\generic\dates.py:214
+msgid "Date out of range"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\generic\dates.py:94
+msgid "No month specified"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\generic\dates.py:147
+msgid "No day specified"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\generic\dates.py:194
+msgid "No week specified"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\generic\dates.py:349
+#: .\venv\Lib\site-packages\django\views\generic\dates.py:380
+#, python-format
+msgid "No %(verbose_name_plural)s available"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\generic\dates.py:652
+#, python-format
+msgid ""
+"Future %(verbose_name_plural)s not available because "
+"%(class_name)s.allow_future is False."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\generic\dates.py:692
+#, python-format
+msgid "Invalid date string “%(datestr)s” given format “%(format)s”"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\generic\detail.py:56
+#, python-format
+msgid "No %(verbose_name)s found matching the query"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\generic\list.py:70
+msgid "Page is not “last”, nor can it be converted to an int."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\generic\list.py:77
+#, python-format
+msgid "Invalid page (%(page_number)s): %(message)s"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\generic\list.py:169
+#, python-format
+msgid "Empty list and “%(class_name)s.allow_empty” is False."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\static.py:38
+msgid "Directory indexes are not allowed here."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\static.py:40
+#, python-format
+msgid "“%(path)s” does not exist"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\static.py:79
+#, python-format
+msgid "Index of %(directory)s"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:7
+#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:220
+msgid "The install worked successfully! Congratulations!"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:206
+#, python-format
+msgid ""
+"View <a href=\"https://docs.djangoproject.com/en/%(version)s/releases/\" "
+"target=\"_blank\" rel=\"noopener\">release notes</a> for Django %(version)s"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:221
+#, python-format
+msgid ""
+"You are seeing this page because <a href=\"https://docs.djangoproject.com/en/"
+"%(version)s/ref/settings/#debug\" target=\"_blank\" "
+"rel=\"noopener\">DEBUG=True</a> is in your settings file and you have not "
+"configured any URLs."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:229
+msgid "Django Documentation"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:230
+msgid "Topics, references, &amp; how-to’s"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:238
+msgid "Tutorial: A Polling App"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:239
+msgid "Get started with Django"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:247
+msgid "Django Community"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:248
+msgid "Connect, get help, or contribute"
+msgstr ""
+
+#~ msgid ""
+#~ "Find medicines at nearby pharmacies with real-time availability and "
+#~ "pricing."
+#~ msgstr "वास्तविक समय की उपलब्धता और मूल्य के साथ पास के फार्मेसी में दवाएं खोजें।"
+
+#~ msgid "Prescription Upload"
+#~ msgstr "प्रिस्क्रिप्शन अपलोड"
+
+#~ msgid ""
+#~ "Upload prescription images and get medicine suggestions with alternatives."
+#~ msgstr "प्रिस्क्रिप्शन छवियां अपलोड करें और विकल्पों के साथ दवा सुझाव प्राप्त करें।"
+
+#~ msgid "Medicine Reminders"
+#~ msgstr "दवा रिमाइंडर"
+
+#~ msgid "Set personalized reminders for your medications with custom alerts."
+#~ msgstr "कस्टम अलर्ट के साथ अपनी दवाओं के लिए व्यक्तिगत रिमाइंडर सेट करें।"
+
+#~ msgid "Emergency Mode"
+#~ msgstr "आपातकाल मोड"
+
+#~ msgid ""
+#~ "Quick access to 24x7 pharmacies and essential medicines during "
+#~ "emergencies."
+#~ msgstr "आपातकाल के दौरान 24x7 फार्मेसी और आवश्यक दवाओं तक त्वरित पहुंच।"
+
+#~ msgid "Multi-Language Support"
+#~ msgstr "बहुभाषा समर्थन"
+
+#~ msgid "How It Works"
+#~ msgstr "यह कैसे काम करता है"
+
+#~ msgid "Simple steps to get started"
+#~ msgstr "शुरू करने के लिए सरल कदम"
+
+#~ msgid "Register Account"
+#~ msgstr "खाता रजिस्टर करें"
+
+#~ msgid ""
+#~ "Create your account with basic details and choose your preferred language."
+#~ msgstr "बुनियादी विवरण के साथ अपना खाता बनाएं और अपनी पसंदीदा भाषा चुनें।"
+
+#~ msgid "Search & Order"
+#~ msgstr "खोजें और ऑर्डर करें"
+
+#~ msgid ""
+#~ "Search for medicines, upload prescriptions, and place orders from nearby "
+#~ "pharmacies."
+#~ msgstr "दवाएं खोजें, प्रिस्क्रिप्शन अपलोड करें, और पास के फार्मेसी से ऑर्डर करें।"
+
+#~ msgid "Stay Healthy"
+#~ msgstr "स्वस्थ रहें"
+
+#~ msgid "Set reminders, track orders, and access emergency help when needed."
+#~ msgstr "रिमाइंडर सेट करें, ऑर्डर ट्रैक करें, और जरूरत पड़ने पर आपातकाल सहायता प्राप्त करें।"
+
+#~ msgid "Ready to Get Started?"
+#~ msgstr "शुरू करने के लिए तैयार हैं?"
+
+#~ msgid ""
+#~ "Join thousands of users who trust HealthKart 360 for their healthcare "
+#~ "needs."
+#~ msgstr ""
+#~ "हजारों उपयोगकर्ताओं में शामिल हों जो अपनी स्वास्थ्य सेवा जरूरतों के लिए हेल्थकार्ट 360 पर "
+#~ "भरोसा करते हैं।"
+
+#~ msgid "Register Now"
+#~ msgstr "अभी रजिस्टर करें"
+
+#~ msgid "Active Reminders"
+#~ msgstr "सक्रिय रिमाइंडर"
+
+#~ msgid "Find medicines at nearby pharmacies"
+#~ msgstr "पास के फार्मेसी में दवाएं खोजें"
+
+#~ msgid "Upload and order from prescription"
+#~ msgstr "प्रिस्क्रिप्शन से अपलोड और ऑर्डर करें"
+
+#~ msgid "Set Reminder"
+#~ msgstr "रिमाइंडर सेट करें"
+
+#~ msgid "Add medicine reminders"
+#~ msgstr "दवा रिमाइंडर जोड़ें"
+
+#~ msgid "24x7 pharmacy access"
+#~ msgstr "24x7 फार्मेसी पहुंच"
+
+#~ msgid "Today's Medicine Reminders"
+#~ msgstr "आज के दवा रिमाइंडर"
+
+#~ msgid "Upcoming Reminders"
+#~ msgstr "आगामी रिमाइंडर"
+
+#~ msgid "Reminder Settings"
+#~ msgstr "रिमाइंडर सेटिंग्स"
+
+#~ msgid "Email Notifications"
+#~ msgstr "ईमेल सूचनाएं"
+
+#~ msgid "SMS Notifications"
+#~ msgstr "एसएमएस सूचनाएं"
+
+#~ msgid "App Notifications"
+#~ msgstr "ऐप सूचनाएं"
+
+#~ msgid "Manage Reminders"
+#~ msgstr "रिमाइंडर प्रबंधित करें"
+
+#~ msgid "Add New Reminder"
+#~ msgstr "नया रिमाइंडर जोड़ें"
+
+#~ msgid "No active reminders. Set up medicine reminders to stay on track!"
+#~ msgstr "कोई सक्रिय रिमाइंडर नहीं। ट्रैक पर रहने के लिए दवा रिमाइंडर सेट करें!"
+
+#~ msgid "Add Your First Reminder"
+#~ msgstr "अपना पहला रिमाइंडर जोड़ें"
+
+msgid "Order Trends"
+msgstr "ऑर्डर प्रवृत्तियाँ"
+
+#~ msgid "Select Language"
+#~ msgstr "भाषा चुनें"

@@ -1,0 +1,157 @@
+l {% extends 'base.html' %}
+{% load static %}
+{% load order_filters %}
+
+{% block title %}Prescription Bill - HealthKart 360{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h4 class="mb-0">
+                            <i class="fas fa-file-invoice me-2"></i>Prescription Bill
+                        </h4>
+                        <div class="text-end">
+                            <h6 class="mb-0">Bill #{{ bill_number }}</h6>
+                            <small>{{ bill_date|date:"F d, Y" }}</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <!-- Pharmacy Information -->
+                    <div class="row mb-4">
+                        <div class="col-6">
+                            <h6 class="text-primary">HealthKart 360 Pharmacy</h6>
+                            <p class="mb-1">123 Health Street</p>
+                            <p class="mb-1">Medical District, City - 123456</p>
+                            <p class="mb-1">Phone: +91 98765 43210</p>
+                            <p class="mb-0">Email: info@healthkart360.com</p>
+                        </div>
+                        <div class="col-6 text-end">
+                            <h6 class="text-primary">Patient Information</h6>
+                            <p class="mb-1"><strong>{{ prescription.user.first_name }} {{ prescription.user.last_name }}</strong></p>
+                            <p class="mb-1">Email: {{ prescription.user.email }}</p>
+                            <p class="mb-0">Prescription #{{ prescription.id }}</p>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <!-- Medicine Details -->
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Medicine Name</th>
+                                    <th>Dosage</th>
+                                    <th>Frequency</th>
+                                    <th>Quantity</th>
+                                    <th>Unit Price</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for medicine in prescription_medicines %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>
+                                        <strong>{{ medicine.medicine_name }}</strong>
+                                        {% if medicine.is_available and medicine.matched_medicine %}
+                                            <br><small class="text-muted">{{ medicine.matched_medicine.brand }}</small>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ medicine.dosage|default:"As prescribed" }}</td>
+                                    <td>{{ medicine.frequency|default:"As prescribed" }}</td>
+                                    <td>{{ medicine.quantity_required }}</td>
+                                    <td>
+                                        {% if medicine.is_available and medicine.matched_medicine %}
+                                            ₹{{ medicine.matched_medicine.price }}
+                                        {% else %}
+                                            ₹50 (Est.)
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if medicine.is_available and medicine.matched_medicine %}
+                                            ₹{{ medicine.matched_medicine.price|multiply:medicine.quantity_required }}
+                                        {% else %}
+                                            ₹{{ 50|multiply:medicine.quantity_required }}
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Summary -->
+                    <div class="row">
+                        <div class="col-md-6 offset-md-6">
+                            <table class="table table-borderless">
+                                <tr>
+                                    <td><strong>Available Medicines:</strong></td>
+                                    <td class="text-end">₹{{ available_total }}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Advance Orders:</strong></td>
+                                    <td class="text-end">₹{{ unavailable_total }}</td>
+                                </tr>
+                                <tr class="border-top">
+                                    <td><strong>Total Amount:</strong></td>
+                                    <td class="text-end"><strong>₹{{ total_amount }}</strong></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Notes -->
+                    <div class="alert alert-info mt-4">
+                        <h6><i class="fas fa-info-circle me-2"></i>Important Notes:</h6>
+                        <ul class="mb-0">
+                            <li>Available medicines can be purchased immediately</li>
+                            <li>Advance orders will be delivered in 3-5 business days</li>
+                            <li>Prices for advance orders are estimates and may vary</li>
+                            <li>Please keep this bill for reference</li>
+                        </ul>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="d-flex justify-content-between mt-4">
+                        <a href="{% url 'orders:prescription_medicines' prescription.id %}" class="btn btn-outline-primary">
+                            <i class="fas fa-arrow-left me-2"></i>Back to Medicines
+                        </a>
+                        <div>
+                            <button onclick="window.print()" class="btn btn-success me-2">
+                                <i class="fas fa-print me-2"></i>Print Bill
+                            </button>
+                            <a href="{% url 'orders:prescription_medicines' prescription.id %}" class="btn btn-primary">
+                                <i class="fas fa-shopping-cart me-2"></i>Proceed to Order
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+@media print {
+    .btn, .navbar, .footer {
+        display: none !important;
+    }
+    .card {
+        border: none !important;
+        box-shadow: none !important;
+    }
+    .card-header {
+        background-color: #f8f9fa !important;
+        color: #000 !important;
+    }
+}
+</style>
+{% endblock %}
+{% block footer %}{% endblock footer %}

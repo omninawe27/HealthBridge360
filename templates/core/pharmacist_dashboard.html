@@ -1,19 +1,161 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load i18n %}
 
 {% block title %}Pharmacist Dashboard - HealthKart 360{% endblock %}
 
 {% block content %}
-<div class="container-fluid py-4">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+<style>
+/* Interactive Dashboard Styles */
+.stat-card {
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border-radius: 15px;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    background: linear-gradient(135deg, #667EEA 0%, #a687c6 100%);
+}
+
+.stat-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    filter: brightness(1.1) saturate(1.2);
+}
+
+.stat-number {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    opacity: 0.9;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Welcome Section with Creative Shape */
+.welcome-gradient {
+    background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
+    background-size: 400% 400%;
+    animation: gradientShift 8s ease infinite;
+    position: relative;
+    overflow: hidden;
+    border-radius: 25px 75px 25px 75px;
+    transform: perspective(1000px) rotateX(0deg);
+    transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    cursor: pointer;
+    box-shadow: 0 15px 35px rgba(102, 126, 234, 0.3);
+}
+
+.welcome-gradient:hover {
+    transform: perspective(1000px) rotateX(5deg) translateY(-10px) scale(1.02);
+    box-shadow: 0 25px 50px rgba(102, 126, 234, 0.4);
+    filter: brightness(1.1) saturate(1.2);
+}
+
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Enhanced Card Styles */
+.card {
+    border-radius: 15px;
+    border: none;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+}
+
+.card-header {
+    border-radius: 15px 15px 0 0 !important;
+    border: none;
+    background: linear-gradient(135deg, #667EEA 0%, #a480c9 100%) !important;
+    color: white;
+}
+
+/* Button Styles */
+.btn {
+    border-radius: 25px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+/* Table Styles */
+.table {
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.table thead th {
+    background: linear-gradient(135deg, #667EEA 0%, #b8a0d0 100%);
+    color: white;
+    border: none;
+    font-weight: 600;
+}
+
+.table tbody tr:hover {
+    background-color: rgba(102, 126, 234, 0.1);
+    transform: scale(1.01);
+    transition: all 0.2s ease;
+}
+
+/* Badge Styles */
+.badge {
+    border-radius: 20px;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .stat-number {
+        font-size: 2rem;
+    }
+
+    .container-fluid {
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+    }
+}
+</style>
+<div class="container-fluid py-4 px-5">
     <!-- Welcome Section -->
     <div class="row mb-4">
         <div class="col-12">
-            <div class="card">
-                <div class="card-body text-center">
-                    <h2 class="text-primary mb-2">
+            <div class="card welcome-gradient text-white">
+                <div class="card-body text-center py-5">
+                    <h2 class="fw-bold mb-2">
                         <i class="fas fa-clinic-medical me-2"></i>Welcome, {{ pharmacy.name }}
                     </h2>
-                    <p class="text-muted">Manage your pharmacy inventory and orders efficiently</p>
+                    <p class="mb-0 opacity-75">Manage your pharmacy inventory and orders efficiently</p>
                 </div>
             </div>
         </div>
@@ -23,8 +165,8 @@
     <div class="row mb-4">
         <div class="col-md-3 col-sm-6 mb-3">
             <div class="stat-card">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
+                <div class="d-flex flex-column align-items-center justify-content-center text-center">
+                    <div class="mb-2">
                         <div class="stat-number">{{ pending_orders }}</div>
                         <div class="stat-label">Pending Orders</div>
                     </div>
@@ -34,8 +176,8 @@
         </div>
         <div class="col-md-3 col-sm-6 mb-3">
             <div class="stat-card">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
+                <div class="d-flex flex-column align-items-center justify-content-center text-center">
+                    <div class="mb-2">
                         <div class="stat-number">{{ low_stock_medicines }}</div>
                         <div class="stat-label">Low Stock Items</div>
                     </div>
@@ -45,8 +187,8 @@
         </div>
         <div class="col-md-3 col-sm-6 mb-3">
             <div class="stat-card">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
+                <div class="d-flex flex-column align-items-center justify-content-center text-center">
+                    <div class="mb-2">
                         <div class="stat-number">{{ pharmacy.medicine_set.count }}</div>
                         <div class="stat-label">Total Medicines</div>
                     </div>
@@ -56,8 +198,8 @@
         </div>
         <div class="col-md-3 col-sm-6 mb-3">
             <div class="stat-card">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
+                <div class="d-flex flex-column align-items-center justify-content-center text-center">
+                    <div class="mb-2">
                         <div class="stat-number">{{ in_stock_medicines }}</div>
                         <div class="stat-label">In Stock</div>
                     </div>
@@ -132,7 +274,7 @@
                                         <td>₹{{ order.total_amount }}</td>
                                         <td>{{ order.created_at|date:"M d, Y" }}</td>
                                         <td>
-                                            <a href="{% url 'orders:detail' order.id %}" class="btn btn-sm btn-outline-primary">
+                                            <a href="{% url 'orders:order_detail' order.id %}" class="btn btn-sm btn-outline-primary">
                                                 <i class="fas fa-eye"></i>
                                             </a>
                                         </td>
@@ -185,15 +327,15 @@
 let dashboardUpdateInterval;
 
 function updateDashboard() {
-    fetch('{% url "orders:get_orders_data" %}')
+    fetch('{% url "orders:get_pharmacy_dashboard_data" %}')
         .then(response => response.json())
         .then(data => {
             if (data.success) {
                 // Update statistics
                 updateStats(data.stats);
-                
+
                 // Update recent orders
-                updateRecentOrders(data.orders);
+                updateRecentOrders(data.recent_orders);
             }
         })
         .catch(error => {
@@ -202,18 +344,14 @@ function updateDashboard() {
 }
 
 function updateStats(stats) {
-    // Update pending orders count
-    const pendingElement = document.querySelector('.stat-card .stat-number');
-    if (pendingElement) {
-        pendingElement.textContent = stats.pending_count;
-    }
-    
-    // Update other stats if they exist
-    const statsElements = document.querySelectorAll('.stat-number');
-    if (statsElements.length >= 4) {
-        statsElements[1].textContent = stats.confirmed_count || 0;
-        statsElements[2].textContent = stats.ready_count || 0;
-        statsElements[3].textContent = stats.delivered_count || 0;
+    // Update all stat cards with correct mapping
+    const statNumbers = document.querySelectorAll('.stat-number');
+    if (statNumbers.length >= 4) {
+        // Map stats to the correct positions in pharmacist dashboard
+        statNumbers[0].textContent = stats.pending_orders;        // Pending Orders
+        statNumbers[1].textContent = stats.low_stock_count;       // Low Stock Items
+        statNumbers[2].textContent = stats.total_medicines;       // Total Medicines
+        statNumbers[3].textContent = stats.in_stock_count;        // In Stock
     }
 }
 
@@ -235,9 +373,15 @@ function updateRecentOrders(orders) {
                 <td>₹${order.total_amount}</td>
                 <td>${order.created_at}</td>
                 <td>
-                    <a href="/orders/detail/${order.id}/" class="btn btn-sm btn-outline-primary">
-                        <i class="fas fa-eye"></i>
-                    </a>
+                    {% if order.id %}
+                        <a href="{% url 'orders:order_detail' order.id %}" class="btn btn-sm btn-outline-primary">
+                            <i class="fas fa-eye"></i>
+                        </a>
+                    {% else %}
+                        <button class="btn btn-sm btn-outline-secondary" disabled>
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    {% endif %}
                 </td>
             `;
             ordersTable.appendChild(row);

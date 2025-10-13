@@ -91,6 +91,16 @@
                                 <option value="mr" {% if user.preferred_language == 'mr' %}selected{% endif %}>Marathi</option>
                             </select>
                         </div>
+
+                        {% if pharmacy %}
+                        <div class="mb-3">
+                            <label class="form-label">
+                                <i class="fas fa-clinic-medical me-2"></i>Pharmacy Name
+                            </label>
+                            <input type="text" name="pharmacy_name" class="form-control"
+                                   value="{{ pharmacy.name }}" required>
+                        </div>
+                        {% endif %}
                         
                         <div class="d-grid">
                             <button type="submit" class="btn btn-primary btn-lg">

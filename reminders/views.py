@@ -171,26 +171,19 @@ def get_due_reminders(request):
     })
 
 @login_required
-def mark_reminder_taken(request, reminder_id):
-    """Mark a reminder as taken"""
+def toggle_reminder_taken(request, reminder_id):
+    """Toggle the taken status of a reminder"""
     if request.method == 'POST':
         try:
             reminder = get_object_or_404(Reminder, id=reminder_id, user=request.user)
-            
-            # Create a record of taking the medicine
-            # This could be extended to track medicine adherence
-            
-            return JsonResponse({
-                'success': True,
-                'message': f'Marked {reminder.medicine_name} as taken!'
-            })
+            reminder.toggle_taken_status()
+            status = "taken" if reminder.taken else "not taken"
+            messages.success(request, f'Marked {reminder.medicine_name} as {status}!')
+            return redirect('reminders:list')
         except Exception as e:
-            return JsonResponse({
-                'success': False,
-                'message': str(e)
-            })
-    
-    return JsonResponse({'success': False, 'message': 'Invalid request method'})
+            messages.error(request, str(e))
+            return redirect('reminders:list')
+    return redirect('reminders:list')
 
 @login_required
 def reminder_statistics(request):

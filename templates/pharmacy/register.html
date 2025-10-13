@@ -4,16 +4,32 @@
 {% block title %}Pharmacy Registration - HealthKart 360{% endblock %}
 
 {% block content %}
-<div class="container-fluid py-5">
-    <div class="row justify-content-center">
-        <div class="col-lg-8">
-            <div class="card shadow-lg">
-                <div class="card-header text-center bg-success text-white">
-                    <h3 class="mb-0">
-                        <i class="fas fa-clinic-medical me-2"></i>Pharmacy Registration
-                    </h3>
-                    <p class="mb-0">Join HealthKart 360 as a Healthcare Partner</p>
+<div class="container-fluid min-vh-100 position-relative overflow-hidden pt-5" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);">
+    <!-- Animated background elements -->
+    <div class="position-absolute top-0 start-0 w-100 h-100" style="background: radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%), radial-gradient(circle at 40% 40%, rgba(120, 219, 226, 0.2) 0%, transparent 50%); animation: float 20s ease-in-out infinite;"></div>
+
+    <div class="row justify-content-center align-items-center min-vh-100 w-100 position-relative">
+        <div class="col-md-10 col-lg-8 col-xl-7">
+            <!-- Main registration card -->
+            <div class="card shadow-lg border-0 position-relative" style="border-radius: 25px; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px); transform: translateY(0); transition: all 0.3s ease; animation: slideUp 0.8s ease-out;">
+                <!-- Decorative elements -->
+                <div class="position-absolute top-0 end-0 p-3">
+                    <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px; transform: translate(20px, -20px); box-shadow: 0 10px 30px rgba(37, 99, 235, 0.3);">
+                        <i class="fas fa-clinic-medical text-white fa-lg"></i>
+                    </div>
                 </div>
+
+                <div class="card-body p-5">
+                    <!-- Header section -->
+                    <div class="text-center mb-4">
+                        <div class="mb-4">
+                            <div class="bg-gradient-primary d-inline-flex align-items-center justify-content-center rounded-circle" style="width: 80px; height: 80px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);">
+                                <i class="fas fa-clinic-medical text-white fa-2x"></i>
+                            </div>
+                        </div>
+                        <h2 class="fw-bold mb-2" style="color: #1e293b; font-size: 2rem;">Pharmacy Registration</h2>
+                        <p class="text-muted mb-0" style="font-size: 1.1rem;">Join HealthKart 360 as a Healthcare Partner</p>
+                    </div>
                 <div class="card-body p-4">
                     <form method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
@@ -64,14 +80,14 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">
-                                    <i class="fas fa-phone me-2"></i>Phone Number *
+                                    <i class="fas fa-phone me-2"></i>Pharmacy Phone Number *
                                 </label>
                                 {{ form.phone_number }}
                                 {% if form.phone_number.errors %}
                                 <div class="text-danger small mt-1">{{ form.phone_number.errors.0 }}</div>
                                 {% endif %}
                             </div>
-                            <div class="col-md-6 mb-3">
+                            <!-- <div class="col-md-6 mb-3">
                                 <label class="form-label">
                                     <i class="fas fa-clock me-2"></i>Operating Hours
                                 </label>
@@ -81,6 +97,14 @@
                                         24x7 Service Available
                                     </label>
                                 </div>
+                            </div> -->
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">
+                                    <i class="fas fa-clock me-2"></i>Operating Hours
+                                </label>
+                                <select name="operating_hours" class="form-select" id="id_operating_hours">
+                                    <option value="24x7" selected>24x7 Service Available</option>
+                                </select>
                             </div>
                         </div>
                         

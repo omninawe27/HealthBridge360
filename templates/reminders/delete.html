@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Delete Reminder - HealthKart 360{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card">
+                <div class="card-header bg-danger text-white">
+                    <h4 class="mb-0"><i class="fas fa-trash me-2"></i>Delete Reminder</h4>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        <strong>Warning:</strong> Are you sure you want to delete this reminder? This action cannot be undone.
+                    </div>
+
+                    <div class="reminder-details mb-4 p-3 bg-light rounded">
+                        <h5>{{ reminder.medicine_name }}</h5>
+                        <p class="mb-1">
+                            <i class="fas fa-clock me-2"></i>
+                            {{ reminder.get_time_slot_display }}
+                            {% if reminder.specific_time %}
+                                at {{ reminder.specific_time|time:"H:i" }}
+                            {% endif %}
+                        </p>
+                        {% if reminder.notes %}
+                            <p class="mb-1">
+                                <i class="fas fa-sticky-note me-2"></i>
+                                {{ reminder.notes }}
+                            </p>
+                        {% endif %}
+                        <p class="mb-0">
+                            <i class="fas fa-bell me-2"></i>
+                            {{ reminder.get_alert_type_display }}
+                        </p>
+                    </div>
+
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fas fa-trash me-2"></i>Yes, Delete Reminder
+                            </button>
+                            <a href="{% url 'reminders:list' %}" class="btn btn-outline-secondary">
+                                <i class="fas fa-times me-2"></i>Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% block footer %}{% endblock footer %}
+{% endblock %}

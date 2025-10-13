@@ -1,0 +1,201 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}Pharmacy Orders - HealthKart 360{% endblock %}
+
+{% block content %}
+{% csrf_token %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+<style>
+/* Interactive Dashboard Styles */
+.stat-card {
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border-radius: 15px;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    height: 120px;
+}
+
+.stat-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    filter: brightness(1.1) saturate(1.2);
+}
+
+.stat-number {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Welcome Section with Creative Shape */
+.welcome-gradient {
+    background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
+    background-size: 400% 400%;
+    animation: gradientShift 8s ease infinite;
+    position: relative;
+    overflow: hidden;
+    border-radius: 25px 75px 25px 75px;
+    transform: perspective(1000px) rotateX(0deg);
+    transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    cursor: pointer;
+    box-shadow: 0 15px 35px rgba(102, 126, 234, 0.3);
+}
+
+.welcome-gradient:hover {
+    transform: perspective(1000px) rotateX(5deg) translateY(-10px) scale(1.02);
+    box-shadow: 0 25px 50px rgba(102, 126, 234, 0.4);
+    filter: brightness(1.1) saturate(1.2);
+}
+
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Enhanced Card Styles */
+.card {
+    border-radius: 15px;
+    border: none;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+}
+
+.card-header {
+    border-radius: 15px 15px 0 0 !important;
+    border: none;
+    background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%) !important;
+    color: white;
+}
+
+/* Button Styles */
+.btn {
+    border-radius: 25px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+/* Table Styles */
+.table {
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.table thead th {
+    background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
+    color: white;
+    border: none;
+    font-weight: 600;
+}
+
+.table tbody tr:hover {
+    background-color: rgba(102, 126, 234, 0.1);
+    transform: scale(1.01);
+    transition: all 0.2s ease;
+}
+
+/* Badge Styles */
+.badge {
+    border-radius: 20px;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+}
+
+/* Form Controls */
+.form-control, .form-select {
+    border-radius: 10px;
+    border: 2px solid #e9ecef;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #667EEA;
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+}
+
+/* Modal Styles */
+.modal-content {
+    border-radius: 15px;
+    border: none;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .stat-number {
+        font-size: 2rem;
+    }
+
+    .container-fluid {
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+    }
+}
+</style>
+
+<div class="container-fluid py-4 px-5">
+    <!-- Welcome Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card welcome-gradient text-white">
+                <div class="card-body py-5">
+                    <h2 class="fw-bold mb-2">
+                        <i class="fas fa-store me-2"></i>
+                        {% trans "Welcome to Pharmacy Dashboard" %}, {{ user.first_name }}!
+                    </h2>
+                    <p class="mb-0 opacity-75">{% trans "Manage orders, track revenue, and serve your customers efficiently." %}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header with Actions -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <h2 class="fw-bold text-primary mb-0">
+                    <i class="fas fa-shopping-cart me-2"></i>Pharmacy Orders
+                </h2>
+                <div>
+                    <button class="btn btn-success me-2" onclick="exportOrders()">
+                        <i class="fas fa-download me-2"></i>Export Orders
+                    </button>
+                    <a href="{% url 'core:dashboard' %}" class="btn btn-outline-primary">
+                        <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+            <!-- Statistics Cards -->

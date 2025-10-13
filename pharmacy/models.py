@@ -4,10 +4,11 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 class Pharmacy(models.Model):
-    owner = models.OneToOneField(User, on_delete=models.CASCADE)
+    owner = models.OneToOneField(User, on_delete=models.CASCADE, related_name='owned_pharmacy')
     name = models.CharField(max_length=200)
     address = models.TextField()
-    phone_number = models.CharField(max_length=15)
+    phone_number = models.CharField(max_length=10)
+    email = models.EmailField(blank=True, null=True)
     license_number = models.CharField(max_length=50, unique=True)
     latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
     longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)

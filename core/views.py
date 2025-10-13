@@ -23,32 +23,22 @@ def dashboard(request):
     """User dashboard view"""
     try:
         context = {}
-        
-        # Check if user is a pharmacist by looking for pharmacy ownership
-        try:
-            pharmacy = request.user.pharmacy
-            is_pharmacist = True
-        except Pharmacy.DoesNotExist:
-            is_pharmacist = False
-            pharmacy = None
-        
-        if is_pharmacist:
-            context.update({
-                'is_pharmacist': True,
-                'pharmacy': pharmacy,
-                'pending_orders': Order.objects.filter(pharmacy=pharmacy, status='pending').count(),
-                'low_stock_medicines': Medicine.objects.filter(pharmacy=pharmacy, quantity__lt=10).count(),
-                'in_stock_medicines': Medicine.objects.filter(pharmacy=pharmacy, quantity__gt=0).count(),
-                'recent_orders': Order.objects.filter(pharmacy=pharmacy).order_by('-created_at')[:5],
-            })
-            return render(request, 'core/pharmacist_dashboard.html', context)
+
+        # Check if user is a pharmacist using the is_pharmacist field
+        pharmacy = getattr(request.user, 'pharmacy', None) or getattr(request.user, 'owned_pharmacy', None)
+        if request.user.is_pharmacist and pharmacy:
+            # Redirect pharmacists to their dedicated pharmacy dashboard
+            return redirect('pharmacy:dashboard')
         else:
             # User dashboard
             context.update({
                 'is_pharmacist': False,
-                'recent_orders': Order.objects.filter(user=request.user).order_by('-created_at')[:5],
+                'recent_orders': Order.objects.filter(user=request.user).order_by('-created_at').select_related('pharmacy')[:5],
                 'active_reminders': Reminder.objects.filter(user=request.user, is_active=True).count(),
                 'pending_orders': Order.objects.filter(user=request.user, status='pending').count(),
+                'confirmed_orders': Order.objects.filter(user=request.user, status='confirmed').count(),
+                'ready_orders': Order.objects.filter(user=request.user, status='ready').count(),
+                'delivered_orders': Order.objects.filter(user=request.user, status='delivered').count(),
             })
             return render(request, 'core/user_dashboard.html', context)
     except Exception as e:
@@ -60,16 +50,20 @@ def change_language(request):
     """Change language view"""
     if request.method == 'POST':
         language = request.POST.get('language')
-        if language:
-            # Set language in session
-            request.session[translation.LANGUAGE_SESSION_KEY] = language
+        if language and language in [lang[0] for lang in settings.LANGUAGES]:
+            # Set language in session using correct key
+            request.session['django_language'] = language
             # Set language for current request
             translation.activate(language)
             
             # Save user preference if logged in
-            if request.user.is_authenticated:
-                request.user.preferred_language = language
-                request.user.save()
+            if hasattr(request, 'user') and request.user.is_authenticated:
+                try:
+                    request.user.preferred_language = language
+                    request.user.save()
+                except Exception as e:
+                    # Log error but don't break the request
+                    print(f"Error saving user language preference: {e}")
             
             messages.success(request, f'Language changed to {dict(settings.LANGUAGES).get(language, language)}')
     
@@ -79,36 +73,59 @@ def change_language(request):
 @login_required
 def emergency_mode(request):
     """Emergency mode - show 24x7 pharmacies"""
-    emergency_pharmacies = Pharmacy.objects.filter(is_24x7=True, is_active=True)
-    essential_medicines = Medicine.objects.filter(is_essential=True, quantity__gt=0)
-    
-    context = {
-        'emergency_pharmacies': emergency_pharmacies,
-        'essential_medicines': essential_medicines,
-    }
+    from django.core.cache import cache
+    cache_key = 'emergency_mode_data'
+    cached_data = cache.get(cache_key)
+
+    if cached_data:
+        context = cached_data
+    else:
+        emergency_pharmacies = Pharmacy.objects.filter(is_24x7=True, is_active=True).select_related()
+        essential_medicines = Medicine.objects.filter(is_essential=True, quantity__gt=0).select_related('pharmacy')[:50]  # Limit to 50 for performance
+
+        context = {
+            'emergency_pharmacies': emergency_pharmacies,
+            'essential_medicines': essential_medicines,
+        }
+        # Cache for 15 minutes
+        cache.set(cache_key, context, 900)
+
     return render(request, 'core/emergency.html', context)
 
 @login_required
 def search_medicines(request):
     """Search medicines and pharmacies"""
+    from django.core.cache import cache
+
     query = request.GET.get('q', '')
     medicines = []
     pharmacies = []
-    
+
     if query:
-        medicines = Medicine.objects.filter(
-            Q(name__icontains=query) | Q(generic_name__icontains=query),
-            quantity__gt=0
-        ).select_related('pharmacy')
-        
-        pharmacies = Pharmacy.objects.filter(
-            Q(name__icontains=query) | Q(address__icontains=query),
-            is_active=True
-        )
-    
+        # Cache search results for 5 minutes
+        cache_key = f'search_query_{query.lower().strip()}'
+        cached_results = cache.get(cache_key)
+
+        if cached_results:
+            medicines, pharmacies = cached_results
+        else:
+            medicines = Medicine.objects.filter(
+                Q(name__icontains=query) | Q(generic_name__icontains=query),
+                quantity__gt=0
+            ).select_related('pharmacy')[:20]  # Limit results for performance
+
+            pharmacies = Pharmacy.objects.filter(
+                Q(name__icontains=query) | Q(address__icontains=query),
+                is_active=True
+            )[:10]  # Limit results for performance
+
+            # Cache for 5 minutes
+            cache.set(cache_key, (medicines, pharmacies), 300)
+
     context = {
         'query': query,
         'medicines': medicines,
         'pharmacies': pharmacies,
     }
     return render(request, 'core/search.html', context)
+

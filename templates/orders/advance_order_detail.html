@@ -1,0 +1,300 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load order_filters %}
+
+{% block title %}Advance Order Details - HealthKart 360{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>
+                    <i class="fas fa-clock me-2"></i>Advance Order #{{ advance_order.id }}
+                </h2>
+                <div>
+                    <a href="{% url 'orders:advance_orders' %}" class="btn btn-outline-primary me-2">
+                        <i class="fas fa-arrow-left me-2"></i>Back to Orders
+                    </a>
+                    <a href="{% url 'orders:upload_prescription' %}" class="btn btn-primary">
+                        <i class="fas fa-upload me-2"></i>Upload New Prescription
+                    </a>
+                </div>
+            </div>
+
+            <!-- Order Status Card -->
+            <div class="row mb-4">
+                <div class="col-md-8">
+                    <div class="card border-{% if advance_order.status == 'pending' %}warning{% elif advance_order.status == 'confirmed' %}info{% elif advance_order.status == 'ready' %}success{% else %}secondary{% endif %}">
+                        <div class="card-header bg-{% if advance_order.status == 'pending' %}warning{% elif advance_order.status == 'confirmed' %}info{% elif advance_order.status == 'ready' %}success{% else %}secondary{% endif %} text-white">
+                            <h5 class="mb-0">
+                                <i class="fas fa-info-circle me-2"></i>Order Information
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p><strong>Order Date:</strong> {{ advance_order.created_at|date:"F d, Y" }}</p>
+                                    <p><strong>Status:</strong> 
+                                        <span class="badge bg-{% if advance_order.status == 'pending' %}warning{% elif advance_order.status == 'confirmed' %}info{% elif advance_order.status == 'ready' %}success{% else %}secondary{% endif %}">
+                                            {{ advance_order.get_status_display }}
+                                        </span>
+                                    </p>
+                                    <p><strong>Prescription:</strong> #{{ advance_order.prescription.id }}</p>
+                                </div>
+                                <div class="col-md-6">
+                                    {% if advance_order.estimated_delivery %}
+                                        <p><strong>Estimated Delivery:</strong> {{ advance_order.estimated_delivery|date:"F d, Y" }}</p>
+                                    {% endif %}
+                                    <p><strong>Last Updated:</strong> {{ advance_order.updated_at|timesince }} ago</p>
+                                    <p><strong>Total Items:</strong> {{ advance_order.items.count }}</p>
+                                </div>
+                            </div>
+                            
+                            {% if advance_order.notes %}
+                                <div class="alert alert-info mt-3">
+                                    <h6><i class="fas fa-sticky-note me-2"></i>Notes:</h6>
+                                    <p class="mb-0">{{ advance_order.notes }}</p>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="card bg-light">
+                        <div class="card-header">
+                            <h6 class="mb-0">
+                                <i class="fas fa-user me-2"></i>Patient Information
+                            </h6>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Name:</strong> {{ advance_order.user.first_name }} {{ advance_order.user.last_name }}</p>
+                            <p><strong>Email:</strong> {{ advance_order.user.email }}</p>
+                            <p><strong>Phone:</strong> 
+                                {% if advance_order.user.phone_number %}
+                                    {{ advance_order.user.phone_number }}
+                                {% else %}
+                                    Not provided
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Medicine Details -->
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-pills me-2"></i>Requested Medicines
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if advance_order.items.all %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Medicine Name</th>
+                                        <th>Dosage</th>
+                                        <th>Frequency</th>
+                                        <th>Quantity</th>
+                                        <th>Estimated Price</th>
+                                        <th>Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in advance_order.items.all %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>
+                                            <strong>{{ item.medicine_name }}</strong>
+                                        </td>
+                                        <td>{{ item.dosage|default:"As prescribed" }}</td>
+                                        <td>{{ item.frequency|default:"As prescribed" }}</td>
+                                        <td>
+                                            <span class="badge bg-primary">{{ item.quantity_requested }} units</span>
+                                        </td>
+                                        <td>
+                                            {% if item.estimated_price %}
+                                                ₹{{ item.estimated_price }}
+                                            {% else %}
+                                                ₹50 (Est.)
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <strong>
+                                                {% if item.estimated_price %}
+                                                    ₹{{ item.estimated_price|multiply:item.quantity_requested }}
+                                                {% else %}
+                                                    ₹{{ 50|multiply:item.quantity_requested }}
+                                                {% endif %}
+                                            </strong>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <!-- Total Calculation -->
+                        <div class="row">
+                            <div class="col-md-6 offset-md-6">
+                                <table class="table table-borderless">
+                                    <tr>
+                                        <td><strong>Total Estimated Cost:</strong></td>
+                                        <td class="text-end">
+                                            <strong class="text-primary">
+                                                ₹{{ advance_order.items.all|length|multiply:50 }}
+                                            </strong>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="text-center py-4">
+                            <i class="fas fa-exclamation-circle fa-3x text-muted mb-3"></i>
+                            <h5 class="text-muted">No medicines found</h5>
+                            <p class="text-muted">No medicines were requested in this advance order.</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Status Timeline -->
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-history me-2"></i>Order Timeline
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="timeline">
+                        <div class="timeline-item active">
+                            <div class="timeline-marker bg-success"></div>
+                            <div class="timeline-content">
+                                <h6>Order Placed</h6>
+                                <p class="text-muted">{{ advance_order.created_at|date:"F d, Y - g:i A" }}</p>
+                                <p>Your advance order has been successfully placed and is being reviewed by our pharmacy team.</p>
+                            </div>
+                        </div>
+                        
+                        {% if advance_order.status != 'pending' %}
+                        <div class="timeline-item active">
+                            <div class="timeline-marker bg-info"></div>
+                            <div class="timeline-content">
+                                <h6>Order Confirmed</h6>
+                                <p class="text-muted">Order has been confirmed and is being processed.</p>
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        {% if advance_order.status == 'ordered' or advance_order.status == 'received' or advance_order.status == 'ready' %}
+                        <div class="timeline-item active">
+                            <div class="timeline-marker bg-warning"></div>
+                            <div class="timeline-content">
+                                <h6>Ordered from Supplier</h6>
+                                <p class="text-muted">Medicines have been ordered from our suppliers.</p>
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        {% if advance_order.status == 'received' or advance_order.status == 'ready' %}
+                        <div class="timeline-item active">
+                            <div class="timeline-marker bg-primary"></div>
+                            <div class="timeline-content">
+                                <h6>Received from Supplier</h6>
+                                <p class="text-muted">Medicines have been received and are being prepared.</p>
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        {% if advance_order.status == 'ready' %}
+                        <div class="timeline-item active">
+                            <div class="timeline-marker bg-success"></div>
+                            <div class="timeline-content">
+                                <h6>Ready for Pickup</h6>
+                                <p class="text-muted">Your order is ready for pickup!</p>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="d-flex justify-content-center mt-4">
+                <a href="{% url 'orders:advance_orders' %}" class="btn btn-outline-primary me-2">
+                    <i class="fas fa-arrow-left me-2"></i>Back to Orders
+                </a>
+                <a href="{% url 'orders:upload_prescription' %}" class="btn btn-primary">
+                    <i class="fas fa-upload me-2"></i>Upload New Prescription
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% block footer %}{% endblock footer %}
+
+<style>
+.timeline {
+    position: relative;
+    padding-left: 2rem;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 1rem;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--gray-200);
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 2rem;
+    opacity: 0.5;
+}
+
+.timeline-item.active {
+    opacity: 1;
+}
+
+.timeline-marker {
+    position: absolute;
+    left: -1.5rem;
+    top: 0.5rem;
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+    border: 3px solid white;
+    box-shadow: 0 0 0 2px var(--gray-200);
+}
+
+.timeline-content {
+    background: var(--gray-50);
+    padding: 1rem;
+    border-radius: var(--radius-md);
+    border-left: 4px solid var(--primary-color);
+}
+
+.timeline-content h6 {
+    margin-bottom: 0.5rem;
+    color: var(--primary-color);
+}
+
+.table th {
+    font-weight: 600;
+    color: var(--gray-700);
+}
+
+.badge {
+    font-size: 0.75rem;
+}
+</style>
+{% endblock %}

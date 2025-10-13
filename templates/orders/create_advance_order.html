@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block title %}Create Advance Order - HealthKart 360{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h2>Create Advance Order for Low Stock or Out of Stock Medicines</h2>
+    <form method="post" action="{% url 'orders:create_advance_order' %}">
+        {% csrf_token %}
+        <div class="mb-3">
+            <h4>Low Stock Medicines (Quantity < 10)</h4>
+            {% if low_stock_medicines %}
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Select</th>
+                            <th>Medicine Name</th>
+                            <th>Current Quantity</th>
+                            <th>Order Quantity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for med in low_stock_medicines %}
+                        <tr>
+                            <td><input type="checkbox" name="medicines" value="{{ med.id }}"></td>
+                            <td>{{ med.name }}</td>
+                            <td>{{ med.quantity }}</td>
+                            <td><input type="number" name="quantity_{{ med.id }}" min="1" value="1" class="form-control" style="width: 100px;"></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>No low stock medicines.</p>
+            {% endif %}
+        </div>
+        <div class="alert alert-info">
+            <i class="fas fa-info-circle me-2"></i>
+            <strong>Note:</strong> After selecting medicines, you will be redirected to the checkout page to complete your advance order payment.
+        </div>
+
+        <div class="mb-3">
+            <h4>Out of Stock Medicines (Quantity = 0)</h4>
+            {% if out_of_stock_medicines %}
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Select</th>
+                            <th>Medicine Name</th>
+                            <th>Current Quantity</th>
+                            <th>Order Quantity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for med in out_of_stock_medicines %}
+                        <tr>
+                            <td><input type="checkbox" name="medicines" value="{{ med.id }}"></td>
+                            <td>{{ med.name }}</td>
+                            <td>{{ med.quantity }}</td>
+                            <td><input type="number" name="quantity_{{ med.id }}" min="1" value="1" class="form-control" style="width: 100px;"></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>No out of stock medicines.</p>
+            {% endif %}
+        </div>
+
+        <button type="submit" class="btn btn-primary">Place Advance Order</button>
+    </form>
+</div>
+{% endblock %}
+{% block footer %}{% endblock footer %}

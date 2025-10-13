@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Medicine Reminder</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 50%, #90caf9 100%);
+      color: #333;
+      margin: 0;
+      padding: 20px;
+      background-image:
+        radial-gradient(circle at 20% 80%, rgba(25, 118, 210, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(76, 175, 80, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(255, 193, 7, 0.1) 0%, transparent 50%);
+    }
+    .container {
+      max-width: 600px;
+      margin: 20px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+      border-left: 5px solid #1976d2;
+    }
+    h1 {
+      color: #1976d2;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .medicine-icon {
+      text-align: center;
+      font-size: 48px;
+      margin-bottom: 20px;
+      color: #4caf50;
+    }
+    .button {
+      display: inline-block;
+      padding: 12px 24px;
+      margin-top: 20px;
+      font-size: 16px;
+      color: #fff;
+      background: linear-gradient(135deg, #1976d2 0%, #42a5f5 100%);
+      border-radius: 8px;
+      text-decoration: none;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(25, 118, 210, 0.3);
+    }
+    .footer {
+      font-size: 12px;
+      color: #777;
+      margin-top: 30px;
+      text-align: center;
+      border-top: 1px solid #e0e0e0;
+      padding-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Medicine Reminder</h1>
+    <p>Hello {{ user.first_name }},</p>
+    <p>It's time to take your medicine!</p>
+    <ul>
+      <li><strong>Medicine:</strong> {{ reminder.medicine_name }}</li>
+      <li><strong>Time:</strong> {{ reminder.get_time_slot_display }}</li>
+      <li><strong>Notes:</strong> {{ reminder.notes|default:"No additional notes" }}</li>
+    </ul>
+    <p>Please take your medicine as prescribed.</p>
+    <p class="footer">Best regards,<br/>HealthKart 360 Team</p>
+  </div>
+</body>
+</html>

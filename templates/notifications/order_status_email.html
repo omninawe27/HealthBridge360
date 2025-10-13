@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Order Status Update</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #333; margin: 0; padding: 20px; }
+    .container { max-width: 600px; margin: 20px auto; background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 8px 32px rgba(0,0,0,0.1); }
+    h1 { color: #667eea; text-align: center; }
+    .status { font-size: 18px; font-weight: bold; color: #667eea; }
+    .code {
+      font-size: 24px;
+      font-weight: bold;
+      color: #28a745;
+      background: #d4edda;
+      padding: 10px;
+      border-radius: 5px;
+      display: inline-block;
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+    .button {
+      display: inline-block;
+      padding: 12px 24px;
+      margin-top: 20px;
+      font-size: 16px;
+      color: #fff;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 8px;
+      text-decoration: none;
+      text-align: center;
+    }
+    .footer { font-size: 12px; color: #777; margin-top: 30px; text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Order Status Update</h1>
+    <p>Hello {{ user.first_name }},</p>
+    <p>Your order #{{ order.id|stringformat:"s" }} status has been updated!</p>
+    <p><strong>Current Status:</strong> <span class="status">{{ order.get_status_display }}</span></p>
+    <p><strong>Pharmacy:</strong> {{ order.pharmacy.name }}</p>
+    <p><strong>Total Amount:</strong> ₹{{ order.total_amount }}</p>
+    <!-- <p><strong>Verification Code:</strong> <span class="code">{{ order.verification_code }}</span></p> -->
+    <!-- Removed Track Your Order button as per user request -->
+    <p class="footer">Best regards,<br/>HealthKart 360 Team</p>
+  </div>
+</body>
+</html>

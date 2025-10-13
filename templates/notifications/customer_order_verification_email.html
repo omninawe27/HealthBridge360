@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Your Order Verification Code</title>
+  <style>
+    body { font-family: Arial, sans-serif; background-color: #f9f9f9; color: #333; }
+    .container { max-width: 600px; margin: 20px auto; background: #fff; padding: 20px; border-radius: 8px; }
+    h1 { color: #007bff; }
+    .code { font-size: 24px; font-weight: bold; color: #28a745; background: #d4edda; padding: 10px; border-radius: 5px; display: inline-block; }
+    .button {
+      display: inline-block;
+      padding: 10px 20px;
+      margin-top: 20px;
+      font-size: 16px;
+      color: #fff;
+      background-color: #007bff;
+      border-radius: 5px;
+      text-decoration: none;
+    }
+    .footer { font-size: 12px; color: #777; margin-top: 30px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Your {{ order_type }} Verification Code</h1>
+    <p>Hello {{ customer.first_name }},</p>
+    <p>Thank you for placing your {{ order_type.lower }} with HealthBridge 360!</p>
+    <div style="background: #f8f9fa; padding: 15px; border-radius: 5px; margin: 20px 0;">
+      <p><strong>{{ order_type }} ID:</strong> #{{ order_id }}</p>
+      <p><strong>Pharmacy:</strong> {{ pharmacy.name }}</p>
+      <p><strong>Status:</strong> {{ order_obj.get_status_display }}</p>
+    </div>
+    <p><strong>Your Verification Code:</strong> <span class="code">{{ order_obj.verification_code }}</span></p>
+    <h3>Order Summary:</h3>
+    <ul>
+      {% for item in items %}
+        {% if item.medicine %}
+          <li>{{ item.medicine.name }} ({{ item.medicine.strength }}) x {{ item.quantity }} = ₹{% widthratio item.price item.quantity 1 %}</li>
+        {% else %}
+          <li>{{ item.medicine_name }} ({{ item.dosage }}) x {{ item.quantity_requested }}</li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+    {% if order_obj.total_amount %}
+    <p><strong>Total Amount:</strong> ₹{{ order_obj.total_amount }}</p>
+    {% endif %}
+    <!-- <a href="{{ order_tracking_url }}" class="button">Track Your Order</a> -->
+    <p class="footer">Best regards,<br/>HealthBridge 360 Team</p>
+  </div>
+</body>
+</html>
