@@ -175,6 +175,7 @@ SESSION_COOKIE_AGE = 86400  # 24 hours
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 
+# Email configuration
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # For Gmail, use smtp.gmail.com. For other providers, use their SMTP server.
 EMAIL_HOST = os.getenv('EMAIL_HOST', 'smtp.gmail.com')
