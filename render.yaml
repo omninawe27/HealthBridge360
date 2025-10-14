@@ -4,7 +4,7 @@ services:
     name: healthkart360-backend
     runtime: python3.11
     plan: free
-    buildCommand: "pip install setuptools==74.1.2 wheel && pip install --upgrade pip && pip install -r requirements.txt"
+    buildCommand: "pip install setuptools==74.1.2 wheel && pip install --upgrade pip && pip install --no-build-isolation -r requirements.txt"
     startCommand: "python manage.py migrate && python manage.py collectstatic --noinput --clear && gunicorn healthkart360.wsgi:application --bind 0.0.0.0:$PORT --workers 1 --threads 2"
     envVars:
       - key: DEBUG
