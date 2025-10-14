@@ -1,12 +1,16 @@
+import logging
 from django.shortcuts import render, redirect
 from django.contrib.auth import login
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 from .forms import PharmacyRegistrationForm
 from .models import Pharmacy
 from users.models import User
 from medicines.models import Medicine
 from orders.models import Order, AdvanceOrder
+
+logger = logging.getLogger(__name__)
 
 def pharmacy_register(request):
     if request.method == 'POST':
@@ -140,3 +144,10 @@ def pharmacy_profile(request):
         'pharmacy': pharmacy,
     }
     return render(request, 'pharmacy/profile.html', context)
+
+def welcome(request):
+    """
+    Returns a welcome message as JSON and logs the request.
+    """
+    logger.info(f"Request received: {request.method} {request.path}")
+    return JsonResponse({'message': 'Welcome to the Pharmacy App!'})
