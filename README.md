@@ -1,6 +1,6 @@
-# HealthKart 360 - Healthcare Web Application
+# HealthBridge 360 - Healthcare Web Application
 
-A comprehensive, mobile-first healthcare web application designed for rural Indian users. HealthKart 360 provides a simple, multilingual system that allows users to search for medicines locally, upload prescriptions, set medicine reminders, place orders, and access emergency help.
+A comprehensive, mobile-first healthcare web application designed for rural Indian users. HealthBridge 360 provides a simple, multilingual system that allows users to search for medicines locally, upload prescriptions, set medicine reminders, place orders, and access emergency help.
 
 ## 🌟 Features
 
@@ -35,7 +35,7 @@ A comprehensive, mobile-first healthcare web application designed for rural Indi
 ## 🛠️ Tech Stack
 
 - **Backend**: Django 5.2.7 (Python)
-- **Database**: MySQL
+- **Database**: PostgreSQL (via Render)
 - **Frontend**: Next.js 15.2.4 (React, TypeScript), HTML5, CSS3, JavaScript (Tailwind CSS)
 - **Package Manager**: pnpm
 - **Authentication**: Django's built-in authentication system
@@ -47,7 +47,6 @@ A comprehensive, mobile-first healthcare web application designed for rural Indi
 ## 📋 Prerequisites
 
 - Python 3.8+
-- MySQL 8.0+
 - pip (Python package manager)
 
 ## 🚀 Installation & Setup
@@ -55,7 +54,7 @@ A comprehensive, mobile-first healthcare web application designed for rural Indi
 ### 1. Clone the Repository
 ```bash
 git clone <repository-url>
-cd healthkart360
+cd healthbridge360
 ```
 
 ### 2. Create Virtual Environment
@@ -69,38 +68,23 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-### 4. Database Setup
-```bash
-# Create MySQL database
-mysql -u root -p
-CREATE DATABASE healthkart360 CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-EXIT;
-
-# Update database settings in healthkart360/settings.py if needed
-```
-
-### 5. Run Migrations
+### 4. Run Migrations
 ```bash
 python manage.py makemigrations
 python manage.py migrate
 ```
 
-### 6. Create Superuser (Optional)
+### 5. Create Superuser (Optional)
 ```bash
 python manage.py createsuperuser
 ```
 
-### 7. Initialize Sample Data
-```bash
-python scripts/init_database.py
-```
-
-### 8. Install Frontend Dependencies
+### 6. Install Frontend Dependencies
 ```bash
 pnpm install
 ```
 
-### 9. Run Development Servers
+### 7. Run Development Servers
 ```bash
 # Terminal 1: Django backend
 python manage.py runserver
@@ -113,23 +97,11 @@ The application will be available at:
 - **Backend API**: `http://localhost:8000`
 - **Frontend**: `http://localhost:3000`
 
-## 👥 Default Login Credentials
-
-### Regular Users
-- **Username**: `john_doe` | **Password**: `password123`
-- **Username**: `jane_smith` | **Password**: `password123`
-- **Username**: `raj_patel` | **Password**: `password123`
-
-### Pharmacy Owners
-- **Username**: `pharmacy1` | **Password**: `password123`
-- **Username**: `pharmacy2` | **Password**: `password123`
-- **Username**: `pharmacy3` | **Password**: `password123`
-
 ## 📱 Application Structure
 
 ```
-healthkart360/
-├── app/                      # Next.js components (if using)
+healthbridge360/
+├── app/                      # Next.js components
 ├── components/               # UI components
 ├── core/                     # Core application views
 ├── healthkart360/           # Main Django project
@@ -155,7 +127,7 @@ Create a `.env` file in the project root:
 ```env
 SECRET_KEY=your-secret-key-here
 DEBUG=True
-DATABASE_URL=mysql://username:password@localhost/healthkart360
+DATABASE_URL=postgresql://username:password@localhost/healthbridge360
 ```
 
 ### Database Configuration
@@ -164,138 +136,15 @@ Update `healthkart360/settings.py` with your database credentials:
 ```python
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'healthkart360',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'healthbridge360',
         'USER': 'your_username',
         'PASSWORD': 'your_password',
         'HOST': 'localhost',
-        'PORT': '3306',
+        'PORT': '5432',
     }
 }
 ```
-
-## 📊 Database Models
-
-### Core Models
-- **User**: Extended user model with phone number and language preferences
-- **Pharmacy**: Pharmacy information with location and operating hours
-- **Medicine**: Medicine details with stock and pricing information
-- **Order**: Order management with status tracking and advance order support
-- **OrderItem**: Individual items within orders with advance order flags
-- **AdvanceOrder**: Special orders for out-of-stock medicines
-- **Reminder**: Medicine reminder system with time slots and automated scheduling
-- **Notification**: Email and system notification management
-
-### Key Relationships
-- Users can place orders and set reminders
-- Pharmacies have medicines and receive orders
-- Medicines can have alternatives and belong to pharmacies
-- Orders contain multiple order items (medicines)
-- Advance orders are linked to regular orders after payment
-- Notifications are sent for orders, reminders, and system events
-
-## 🎨 UI/UX Features
-
-### Design Principles
-- **Mobile-First**: Optimized for mobile devices
-- **Touch-Friendly**: Large buttons and touch targets
-- **Icon-Based**: Extensive use of icons and emojis
-- **Color-Coded**: Status indicators with colors
-- **Responsive**: Works on all screen sizes
-
-### Color Scheme
-- **Primary**: #2c5aa0 (Blue)
-- **Secondary**: #28a745 (Green)
-- **Accent**: #ffc107 (Yellow)
-- **Danger**: #dc3545 (Red)
-- **Dark**: #343a40 (Dark Gray)
-
-## 🔍 Key Features Explained
-
-### Medicine Search
-- Search by medicine name, brand, or generic name
-- Filter by medicine type, price range, and availability
-- View nearby pharmacies with distance information
-- See alternative medicines if primary is unavailable
-
-### Emergency Mode
-- Quick access to 24x7 pharmacies
-- Essential medicines listing
-- Emergency contact numbers
-- Location sharing capabilities
-
-### Reminder System
-- Set reminders for different time slots (Morning, Afternoon, Evening, Night)
-- Customizable alert types (Tone, Vibrate, Visual)
-- Add notes for specific instructions
-- Track medicine adherence
-
-### Order Management
-- Shopping cart functionality
-- Prescription upload support
-- Order status tracking
-- Alternative medicine suggestions
-
-### Advance Orders
-- Order medicines that are currently out of stock
-- Pay upfront for advance orders
-- Automatic conversion to regular orders when stock becomes available
-- Pharmacist notifications for advance order processing
-- Separate tracking for advance vs regular orders
-
-### Automated Reminder System
-- Background scheduler for medication reminders
-- Configurable reminder intervals (every 5-10 minutes)
-- Email notifications for upcoming medication times
-- Support for multiple reminder time slots (Morning, Afternoon, Evening, Night)
-- Automated service management with Windows Task Scheduler and Linux Cron
-- Comprehensive logging and monitoring
-
-## 🚀 Deployment
-
-### Production Setup
-1. Set `DEBUG = False` in settings
-2. Configure production database
-3. Set up static file serving
-4. Configure web server (Nginx/Apache)
-5. Set up SSL certificate
-6. Configure environment variables
-
-### Docker Deployment (Optional)
-```bash
-# Build Docker image
-docker build -t healthkart360 .
-
-# Run container
-docker run -p 8000:8000 healthkart360
-```
-
-## 🧪 Testing
-
-### Run Tests
-```bash
-python manage.py test
-```
-
-### Test Coverage
-```bash
-pip install coverage
-coverage run --source='.' manage.py test
-coverage report
-```
-
-## 📈 Performance Optimization
-
-### Database Optimization
-- Use database indexes for frequently queried fields
-- Implement database connection pooling
-- Optimize queries with select_related and prefetch_related
-
-### Frontend Optimization
-- Minify CSS and JavaScript files
-- Use CDN for external libraries
-- Implement lazy loading for images
-- Enable browser caching
 
 ## 🔒 Security Features
 
@@ -321,6 +170,22 @@ The application supports multiple languages:
 
 Language preferences are stored per user and can be changed in the profile settings.
 
+## 🚀 Deployment
+
+### Render Deployment
+The application is configured for deployment on Render with the following services:
+- **Backend**: Django application deployed as a web service
+- **Frontend**: Next.js application deployed as a web service
+- **Database**: PostgreSQL database
+
+### Production Setup
+1. Set `DEBUG = False` in settings
+2. Configure production database (PostgreSQL on Render)
+3. Set up static file serving
+4. Configure environment variables in Render dashboard
+5. Deploy using `render.yaml` configuration file
+6. Set up SSL certificate (handled by Render)
+
 ## 📞 Support & Contact
 
 For support or questions:
@@ -340,56 +205,6 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 4. Add tests if applicable
 5. Submit a pull request
 
-## 📝 Changelog
-
-### Version 1.1.2
-- Security enhancements implemented
-- Added comprehensive security middleware (rate limiting, security logging)
-- Enhanced input validation for user registration and forms
-- Improved file upload security with content validation
-- Added security headers (HSTS, CSP, X-Frame-Options)
-- Implemented environment variable usage for sensitive settings
-- Strengthened password validation requirements
-- Added security event logging and monitoring
-- Updated documentation with detailed security features
-
-### Version 1.1.1
-- Performance optimizations implemented
-- Optimized reminder sending to filter by time window in database
-- Added database indexes on frequently queried fields (14 indexes added)
-- Implemented caching for expensive queries
-- Added pagination to inventory views to handle large datasets
-- Optimized database queries with select_related and prefetch_related
-- Removed unnecessary files and directories for cleaner codebase
-- Updated tech stack documentation to include Next.js frontend
-
-### Version 1.1.0
-- Added Advance Orders feature for out-of-stock medicines
-- Implemented Automated Reminder System with background scheduling
-- Added Notifications app for email and system notifications
-- Enhanced Order model with advance order support
-- Added comprehensive logging and monitoring for reminder system
-- Improved pharmacist dashboard with advance order management
-- Added Windows Task Scheduler and Linux Cron support for automation
-
-### Version 1.0.0
-- Initial release
-- Core functionality implemented
-- User and pharmacist dashboards
-- Medicine search and ordering
-- Reminder system
-- Emergency mode
-
-## 🔮 Future Enhancements
-
-- **OCR Integration**: Automatic prescription reading
-- **Payment Gateway**: Online payment integration
-- **Push Notifications**: Real-time notifications
-- **Telemedicine**: Video consultation features
-- **AI Recommendations**: Medicine recommendations
-- **Analytics Dashboard**: Advanced reporting
-- **Mobile App**: Native mobile applications
-
 ---
 
-**HealthKart 360** - Empowering rural healthcare through technology! 🏥💊 
+**HealthBridge 360** - Empowering rural healthcare through technology! 🏥💊
