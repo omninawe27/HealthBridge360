@@ -431,29 +431,41 @@ def checkout(request):
                 # Clear cart
                 CartService.clear_cart(request.user)
 
-                # Send order status notification emails to customer
-                if NotificationService.send_order_status_notification(order):
-                    logger.info(f"Order placement email sent for order {order.id}")
-                else:
-                    logger.error(f"Failed to send order placement email for order {order.id}")
+                # Send emails asynchronously to prevent timeouts
+                import threading
 
-                # Send order notification to pharmacist
-                if NotificationService.send_order_notification_to_pharmacist(order):
-                    logger.info(f"Order notification email sent to pharmacist for order {order.id}")
-                else:
-                    logger.error(f"Failed to send order notification email to pharmacist for order {order.id}")
+                def send_emails_async():
+                    try:
+                        # Send order status notification emails to customer
+                        if NotificationService.send_order_status_notification(order):
+                            logger.info(f"Order placement email sent for order {order.id}")
+                        else:
+                            logger.error(f"Failed to send order placement email for order {order.id}")
 
-                # Send verification code to pharmacist for normal order
-                if NotificationService.send_order_verification_code(order):
-                    logger.info(f"Verification code email sent to pharmacist for order {order.id}")
-                else:
-                    logger.error(f"Failed to send verification code email to pharmacist for order {order.id}")
+                        # Send order notification to pharmacist
+                        if NotificationService.send_order_notification_to_pharmacist(order):
+                            logger.info(f"Order notification email sent to pharmacist for order {order.id}")
+                        else:
+                            logger.error(f"Failed to send order notification email to pharmacist for order {order.id}")
 
-                # Send verification code to customer for normal order
-                if NotificationService.send_customer_order_verification_code(order):
-                    logger.info(f"Verification code email sent to customer for order {order.id}")
-                else:
-                    logger.error(f"Failed to send verification code email to customer for order {order.id}")
+                        # Send verification code to pharmacist for normal order
+                        if NotificationService.send_order_verification_code(order):
+                            logger.info(f"Verification code email sent to pharmacist for order {order.id}")
+                        else:
+                            logger.error(f"Failed to send verification code email to pharmacist for order {order.id}")
+
+                        # Send verification code to customer for normal order
+                        if NotificationService.send_customer_order_verification_code(order):
+                            logger.info(f"Verification code email sent to customer for order {order.id}")
+                        else:
+                            logger.error(f"Failed to send verification code email to customer for order {order.id}")
+                    except Exception as e:
+                        logger.error(f"Error sending emails asynchronously for order {order.id}: {str(e)}")
+
+                # Start email sending in a separate thread
+                email_thread = threading.Thread(target=send_emails_async)
+                email_thread.daemon = True
+                email_thread.start()
 
                 # Create reminders if prescription-based order
                 if hasattr(order, 'prescription'):
