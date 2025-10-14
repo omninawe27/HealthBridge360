@@ -793,11 +793,15 @@ def get_orders_data(request):
         return JsonResponse({'success': False, 'message': 'Access denied'})
     orders = Order.objects.filter(pharmacy=pharmacy).order_by('-created_at')
 
+    # Log recent orders information
+    logger.info(f"Pharmacy {pharmacy.name} (ID: {pharmacy.id}): Fetched {len(orders)} total orders for AJAX data")
+
     # Get recent orders for dashboard
     recent_orders = orders[:10]
 
     orders_data = []
     for order in recent_orders:
+        logger.info(f"AJAX order ID {order.id}: User {order.user.username}, Status {order.status}, Amount {order.total_amount}")
         orders_data.append({
             'id': order.id,
             'customer_name': f"{order.user.first_name} {order.user.last_name}",
@@ -809,14 +813,24 @@ def get_orders_data(request):
         })
 
     # Get statistics
+    pending_count = orders.filter(status='pending').count()
+    confirmed_count = orders.filter(status='confirmed').count()
+    ready_count = orders.filter(status='ready').count()
+    delivered_count = orders.filter(status='delivered').count()
+    completed_count = orders.filter(status='completed').count()
+    total_orders = orders.count()
+    total_revenue = orders.filter(status__in=['delivered', 'completed']).aggregate(Sum('total_amount'))['total_amount__sum'] or 0
+
+    logger.info(f"Pharmacy {pharmacy.name} (ID: {pharmacy.id}): Stats - Pending: {pending_count}, Confirmed: {confirmed_count}, Ready: {ready_count}, Delivered: {delivered_count}, Completed: {completed_count}, Total: {total_orders}, Revenue: {total_revenue}")
+
     stats = {
-        'pending_count': orders.filter(status='pending').count(),
-        'confirmed_count': orders.filter(status='confirmed').count(),
-        'ready_count': orders.filter(status='ready').count(),
-        'delivered_count': orders.filter(status='delivered').count(),
-        'completed_count': orders.filter(status='completed').count(),
-        'total_orders': orders.count(),
-        'total_revenue': str(orders.filter(status__in=['delivered', 'completed']).aggregate(Sum('total_amount'))['total_amount__sum'] or 0),
+        'pending_count': pending_count,
+        'confirmed_count': confirmed_count,
+        'ready_count': ready_count,
+        'delivered_count': delivered_count,
+        'completed_count': completed_count,
+        'total_orders': total_orders,
+        'total_revenue': str(total_revenue),
     }
 
     return JsonResponse({
@@ -836,7 +850,6 @@ def get_pharmacy_dashboard_data(request):
     medicines = Medicine.objects.filter(pharmacy=pharmacy)
 
     # Calculate dashboard statistics
-    # Calculate dashboard statistics
     total_medicines = medicines.count()
     total_quantity = medicines.aggregate(total=Sum('quantity'))['total'] or 0
     low_stock_count = medicines.filter(quantity__lt=10, quantity__gt=0).count()
@@ -844,10 +857,13 @@ def get_pharmacy_dashboard_data(request):
     pending_orders = Order.objects.filter(pharmacy=pharmacy, status='pending').count()
     pending_advance_orders = AdvanceOrder.objects.filter(pharmacy=pharmacy, status='pending').count()
 
+    logger.info(f"Pharmacy {pharmacy.name} (ID: {pharmacy.id}): Dashboard stats - Medicines: {total_medicines}, Total Qty: {total_quantity}, In Stock: {in_stock_count}, Low Stock: {low_stock_count}, Pending Orders: {pending_orders}, Pending Advance Orders: {pending_advance_orders}")
+
     # Get recent orders
     recent_orders = Order.objects.filter(pharmacy=pharmacy).order_by('-created_at')[:10]
     orders_data = []
     for order in recent_orders:
+        logger.info(f"Dashboard order ID {order.id}: User {order.user.username}, Status {order.status}, Amount {order.total_amount}")
         orders_data.append({
             'id': order.id,
             'customer_name': f"{order.user.first_name} {order.user.last_name}",

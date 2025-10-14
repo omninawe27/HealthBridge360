@@ -82,6 +82,7 @@ def create_razorpay_order(request):
 @require_POST
 def razorpay_callback(request):
     import json
+    import logging
     from django.urls import reverse
     from django.core.mail import send_mail
     from django.conf import settings as django_settings
@@ -89,10 +90,16 @@ def razorpay_callback(request):
     from orders.forms import CheckoutForm
     from notifications.services import NotificationService
     from django.contrib.auth import get_user_model
+
+    logger = logging.getLogger(__name__)
+
     data = json.loads(request.body)
     payment_id = data.get('razorpay_payment_id')
     order_id = data.get('razorpay_order_id')
     signature = data.get('razorpay_signature')
+
+    logger.info(f"Razorpay callback received: payment_id={payment_id}, order_id={order_id}")
+
     client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
     try:
         client.utility.verify_payment_signature({
@@ -100,6 +107,7 @@ def razorpay_callback(request):
             'razorpay_payment_id': payment_id,
             'razorpay_signature': signature
         })
+        logger.info(f"Payment signature verified for order {order_id}")
         # Get user and checkout data from Razorpay order notes
         order_details = client.order.fetch(order_id)
         notes = order_details.get('notes', {})
@@ -231,6 +239,8 @@ def razorpay_callback(request):
         if 'checkout_form_data' in request.session:
             del request.session['checkout_form_data']
 
+        logger.info(f"Order {order.id} created successfully for user {user.id}, redirecting to order detail")
         return JsonResponse({'success': True, 'redirect_url': reverse('orders:order_detail', args=[order.id])})
     except Exception as e:
+        logger.error(f"Error in Razorpay callback: {str(e)}", exc_info=True)
         return JsonResponse({'success': False, 'error': str(e)})

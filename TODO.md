@@ -8,6 +8,18 @@ Switched from SendGrid to SMTP backend for email delivery due to authentication 
 - [x] Updated `render.yaml` to use SMTP environment variables
 - [x] Added error handling in `orders/views.py` checkout function to prevent exceptions from failing orders
 - [x] Removed SendGrid dependencies from `requirements.txt`
+- [x] Added comprehensive logging to pharmacy dashboard and order views for better monitoring
+
+## Logging Enhancements
+- [x] Added logging to `pharmacy/views.py` pharmacy_dashboard function for recent orders and advance orders
+- [x] Added logging to `orders/views.py` get_orders_data function for AJAX order data
+- [x] Added logging to `orders/views.py` get_pharmacy_dashboard_data function for dashboard statistics
+
+## Razorpay Payment Issue Fix
+- [x] Added comprehensive logging to `orders/razorpay_views.py` for payment callback debugging
+- [x] Enhanced error handling and logging in Razorpay callback function
+- [x] Added console logging to `templates/orders/checkout.html` for frontend debugging
+- [x] Added proper error handling in JavaScript fetch calls for payment callback
 
 ## Next Steps
 1. **Configure Gmail SMTP credentials on Render:**

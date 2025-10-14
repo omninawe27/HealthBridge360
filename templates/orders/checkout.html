@@ -346,11 +346,18 @@ document.addEventListener('DOMContentLoaded', function() {
                                 .then(res => res.json())
                                 .then(resData => {
                                     if (resData.success) {
+                                        console.log('Payment successful, redirecting to:', resData.redirect_url);
                                         window.location.href = resData.redirect_url;
                                     } else {
+                                        console.error('Payment verification failed:', resData.error);
                                         alert('Payment verification failed. Please contact support.');
                                         window.location.reload();
                                     }
+                                })
+                                .catch(error => {
+                                    console.error('Error in payment callback:', error);
+                                    alert('An error occurred during payment processing. Please contact support.');
+                                    window.location.reload();
                                 });
                             },
                             prefill: {

@@ -68,6 +68,15 @@ def pharmacy_dashboard(request):
         recent_orders = Order.objects.filter(pharmacy=pharmacy).order_by('-created_at').select_related('user')[:10]
         recent_advance_orders = AdvanceOrder.objects.filter(pharmacy=pharmacy).order_by('-created_at').select_related('user')[:10]
 
+        # Log recent orders information
+        logger.info(f"Pharmacy {pharmacy.name} (ID: {pharmacy.id}): Fetched {len(recent_orders)} recent orders")
+        for order in recent_orders:
+            logger.info(f"Recent order ID {order.id}: User {order.user.username}, Status {order.status}, Amount {order.total_amount}")
+
+        logger.info(f"Pharmacy {pharmacy.name} (ID: {pharmacy.id}): Fetched {len(recent_advance_orders)} recent advance orders")
+        for advance_order in recent_advance_orders:
+            logger.info(f"Recent advance order ID {advance_order.id}: User {advance_order.user.username}, Status {advance_order.status}")
+
         context = {
             'pharmacy': pharmacy,
             'total_medicines': total_medicines,
