@@ -29,7 +29,7 @@ class Command(BaseCommand):
             username=username,
             email=email,
             password=password,
-            phone_number='+1234567890',  # Add required phone_number field
+            phone_number='+1234567891',  # Add required phone_number field (different from existing)
             first_name='Super',
             last_name='Admin'
         )
