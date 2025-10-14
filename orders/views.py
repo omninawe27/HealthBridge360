@@ -437,28 +437,44 @@ def checkout(request):
                 def send_emails_async():
                     try:
                         # Send order status notification emails to customer
-                        if NotificationService.send_order_status_notification(order):
-                            logger.info(f"Order placement email sent for order {order.id}")
-                        else:
-                            logger.error(f"Failed to send order placement email for order {order.id}")
+                        try:
+                            email_result = NotificationService.send_order_status_notification(order)
+                            if email_result:
+                                logger.info(f"Order placement email sent for order {order.id}")
+                            else:
+                                logger.error(f"Failed to send order placement email for order {order.id}")
+                        except Exception as e:
+                            logger.error(f"Exception sending order placement email for order {order.id}: {str(e)}")
 
                         # Send order notification to pharmacist
-                        if NotificationService.send_order_notification_to_pharmacist(order):
-                            logger.info(f"Order notification email sent to pharmacist for order {order.id}")
-                        else:
-                            logger.error(f"Failed to send order notification email to pharmacist for order {order.id}")
+                        try:
+                            email_result = NotificationService.send_order_notification_to_pharmacist(order)
+                            if email_result:
+                                logger.info(f"Order notification email sent to pharmacist for order {order.id}")
+                            else:
+                                logger.error(f"Failed to send order notification email to pharmacist for order {order.id}")
+                        except Exception as e:
+                            logger.error(f"Exception sending order notification email to pharmacist for order {order.id}: {str(e)}")
 
                         # Send verification code to pharmacist for normal order
-                        if NotificationService.send_order_verification_code(order):
-                            logger.info(f"Verification code email sent to pharmacist for order {order.id}")
-                        else:
-                            logger.error(f"Failed to send verification code email to pharmacist for order {order.id}")
+                        try:
+                            email_result = NotificationService.send_order_verification_code(order)
+                            if email_result:
+                                logger.info(f"Verification code email sent to pharmacist for order {order.id}")
+                            else:
+                                logger.error(f"Failed to send verification code email to pharmacist for order {order.id}")
+                        except Exception as e:
+                            logger.error(f"Exception sending verification code email to pharmacist for order {order.id}: {str(e)}")
 
                         # Send verification code to customer for normal order
-                        if NotificationService.send_customer_order_verification_code(order):
-                            logger.info(f"Verification code email sent to customer for order {order.id}")
-                        else:
-                            logger.error(f"Failed to send verification code email to customer for order {order.id}")
+                        try:
+                            email_result = NotificationService.send_customer_order_verification_code(order)
+                            if email_result:
+                                logger.info(f"Verification code email sent to customer for order {order.id}")
+                            else:
+                                logger.error(f"Failed to send verification code email to customer for order {order.id}")
+                        except Exception as e:
+                            logger.error(f"Exception sending verification code email to customer for order {order.id}: {str(e)}")
                     except Exception as e:
                         logger.error(f"Error sending emails asynchronously for order {order.id}: {str(e)}")
 

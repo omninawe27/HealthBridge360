@@ -24,8 +24,16 @@ services:
         value: placeholder_razorpay_key_id
       - key: RAZORPAY_KEY_SECRET
         value: placeholder_razorpay_key_secret
-      - key: SENDGRID_API_KEY
-        value: placeholder_sendgrid_api_key
+      - key: EMAIL_HOST
+        value: smtp.gmail.com
+      - key: EMAIL_PORT
+        value: 587
+      - key: EMAIL_HOST_USER
+        fromSecret: gmail-credentials
+      - key: EMAIL_HOST_PASSWORD
+        fromSecret: gmail-credentials
+      - key: EMAIL_USE_TLS
+        value: true
       - key: DEFAULT_FROM_EMAIL
         value: noreply@healthbridge360.com
       - key: SECURE_SSL_REDIRECT
