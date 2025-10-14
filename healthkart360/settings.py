@@ -24,8 +24,16 @@ RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 if RENDER_EXTERNAL_HOSTNAME:
     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
+# Add the service host from Render
+SERVICE_HOST = os.environ.get('RENDER_SERVICE_HOST')
+if SERVICE_HOST:
+    ALLOWED_HOSTS.append(SERVICE_HOST)
+
 if DEBUG:
     ALLOWED_HOSTS.extend(['localhost', '127.0.0.1'])
+else:
+    # In production, allow the backend service host
+    ALLOWED_HOSTS.extend(['healthbridge360-backend.onrender.com', 'healthkart360-backend.onrender.com'])
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
