@@ -329,9 +329,11 @@ def checkout(request):
                 if hasattr(request.user, 'pharmacy') and request.user.pharmacy:
                     # User is a pharmacist - associate order with their pharmacy
                     pharmacy = request.user.pharmacy
+                    logger.info(f"Order assigned to pharmacy {pharmacy.name} (pharmacist: {request.user.username})")
                 elif hasattr(request.user, 'owned_pharmacy') and request.user.owned_pharmacy:
                     # User is a pharmacy owner - associate order with their pharmacy
                     pharmacy = request.user.owned_pharmacy
+                    logger.info(f"Order assigned to pharmacy {pharmacy.name} (owner: {request.user.username})")
                 else:
                     # Regular customer - get pharmacy from first item
                     first_item = cart.items.first()
@@ -339,6 +341,7 @@ def checkout(request):
                         messages.error(request, 'Your cart is empty')
                         return redirect('orders:view_cart')
                     pharmacy = first_item.medicine.pharmacy
+                    logger.info(f"Order assigned to pharmacy {pharmacy.name} (customer order from medicine)")
 
                 # Create order manually
                 order = Order()
@@ -482,6 +485,8 @@ def checkout(request):
                 email_thread = threading.Thread(target=send_emails_async)
                 email_thread.daemon = True
                 email_thread.start()
+
+                logger.info(f"Order {order.id} created successfully with pharmacy {pharmacy.name}")
 
                 # Create reminders if prescription-based order
                 if hasattr(order, 'prescription'):

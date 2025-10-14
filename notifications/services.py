@@ -197,15 +197,24 @@ class NotificationService:
             # Add pharmacy owner email if exists
             if hasattr(order.pharmacy, 'owner') and order.pharmacy.owner.email:
                 pharmacist_emails.append(order.pharmacy.owner.email)
+                logger.info(f"Added pharmacy owner email: {order.pharmacy.owner.email}")
 
             # Add emails of pharmacists working at this pharmacy
             for pharmacist in order.pharmacy.pharmacists.all():
                 if pharmacist.email:
                     pharmacist_emails.append(pharmacist.email)
+                    logger.info(f"Added pharmacist email: {pharmacist.email}")
+
+            # Also add pharmacy email if it exists
+            if order.pharmacy.email:
+                pharmacist_emails.append(order.pharmacy.email)
+                logger.info(f"Added pharmacy email: {order.pharmacy.email}")
 
             if not pharmacist_emails:
                 logger.warning(f"No pharmacist emails found for pharmacy {order.pharmacy.id}")
                 return False
+
+            logger.info(f"Sending order notification to {len(pharmacist_emails)} email addresses: {pharmacist_emails}")
 
             user = order.user
             subject = f"New Order Received - HealthBridge 360"
@@ -308,15 +317,24 @@ class NotificationService:
             # Add pharmacy owner email if exists
             if hasattr(pharmacy, 'owner') and pharmacy.owner.email:
                 pharmacist_emails.append(pharmacy.owner.email)
+                logger.info(f"Added pharmacy owner email: {pharmacy.owner.email}")
 
             # Add emails of pharmacists working at this pharmacy
             for pharmacist in pharmacy.pharmacists.all():
                 if pharmacist.email:
                     pharmacist_emails.append(pharmacist.email)
+                    logger.info(f"Added pharmacist email: {pharmacist.email}")
+
+            # Also add pharmacy email if it exists
+            if pharmacy.email:
+                pharmacist_emails.append(pharmacy.email)
+                logger.info(f"Added pharmacy email: {pharmacy.email}")
 
             if not pharmacist_emails:
                 logger.warning(f"No pharmacist emails found for pharmacy {pharmacy.id}")
                 return False
+
+            logger.info(f"Sending verification code to {len(pharmacist_emails)} email addresses: {pharmacist_emails}")
 
             subject = f"{order_type} Verification Code - HealthBridge 360"
 
