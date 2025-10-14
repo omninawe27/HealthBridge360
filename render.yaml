@@ -21,9 +21,9 @@ services:
           name: healthbridge360-backend
           property: host
       - key: RAZORPAY_KEY_ID
-        value: rzp_test_1234567890abcdef
+        value: placeholder_razorpay_key_id
       - key: RAZORPAY_KEY_SECRET
-        value: test_secret_1234567890abcdef
+        value: placeholder_razorpay_key_secret
       - key: EMAIL_HOST
         value: smtp.gmail.com
       - key: EMAIL_PORT
