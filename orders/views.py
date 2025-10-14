@@ -888,42 +888,6 @@ def get_pharmacy_dashboard_data(request):
     })
     medicines = Medicine.objects.filter(pharmacy=pharmacy)
 
-    # Calculate dashboard statistics
-    total_medicines = medicines.count()
-    total_quantity = medicines.aggregate(total=Sum('quantity'))['total'] or 0
-    low_stock_count = medicines.filter(quantity__lt=10, quantity__gt=0).count()
-    in_stock_count = medicines.filter(quantity__gte=10).count()
-    pending_orders = Order.objects.filter(pharmacy=pharmacy, status='pending').count()
-    pending_advance_orders = AdvanceOrder.objects.filter(pharmacy=pharmacy, status='pending').count()
-
-    # Get recent orders
-    recent_orders = Order.objects.filter(pharmacy=pharmacy).order_by('-created_at')[:10]
-    orders_data = []
-    for order in recent_orders:
-        orders_data.append({
-            'id': order.id,
-            'customer_name': f"{order.user.first_name} {order.user.last_name}",
-            'status': order.status,
-            'status_display': order.get_status_display(),
-            'total_amount': str(order.total_amount),
-            'created_at': order.created_at.strftime('%b %d, %Y'),
-            'items_count': order.items.count(),
-        })
-
-    return JsonResponse({
-        'success': True,
-        'stats': {
-            'total_medicines': total_medicines,
-            'total_quantity': total_quantity,
-            'in_stock_count': in_stock_count,
-            'low_stock_count': low_stock_count,
-            'pending_orders': pending_orders,
-            'pending_advance_orders': pending_advance_orders,
-        },
-        'recent_orders': orders_data
-    })
-    medicines = Medicine.objects.filter(pharmacy=pharmacy)
-
 # Legacy functions for backward compatibility
 @login_required
 def create_order(request):

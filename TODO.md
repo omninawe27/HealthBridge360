@@ -21,6 +21,14 @@ Switched from SendGrid to SMTP backend for email delivery due to authentication 
 - [x] Added console logging to `templates/orders/checkout.html` for frontend debugging
 - [x] Added proper error handling in JavaScript fetch calls for payment callback
 
+## Code Cleanup
+- [x] Removed duplicate code block in `orders/views.py` `get_pharmacy_dashboard_data` function
+
+## Email Configuration Fix
+- [x] Added fallback to console email backend when SMTP credentials are missing
+- [x] Tested email functionality - emails now work in development with console output
+- [x] For production deployment on Render, ensure proper SMTP credentials are set
+
 ## Next Steps
 1. **Configure Gmail SMTP credentials on Render:**
    - Go to Render dashboard
