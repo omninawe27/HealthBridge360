@@ -42,16 +42,18 @@ class NotificationService:
     @staticmethod
     def _send_email_with_retry(email_message, max_retries=3, delay=1):
         """Send email with retry logic and better error handling"""
+        logger.info(f"Attempting to send email to: {email_message.to}")
         for attempt in range(max_retries):
             try:
                 result = email_message.send()
                 if result > 0:
-                    logger.info(f"Email sent successfully on attempt {attempt + 1}")
+                    logger.info(f"Email sent successfully on attempt {attempt + 1} to {email_message.to}")
                     return True
                 else:
-                    logger.warning(f"Email send returned 0 on attempt {attempt + 1}")
+                    logger.warning(f"Email send returned 0 on attempt {attempt + 1} to {email_message.to}")
             except Exception as e:
                 error_msg = str(e).lower()
+                logger.warning(f"Email send failed on attempt {attempt + 1}: {e}")
                 if 'network is unreachable' in error_msg or 'connection refused' in error_msg:
                     logger.warning(f"Network error on attempt {attempt + 1}: {e}. Error type: {type(e).__name__}")
                     if attempt < max_retries - 1:
@@ -70,8 +72,7 @@ class NotificationService:
                     if attempt < max_retries - 1:
                         time.sleep(delay * (2 ** attempt))
                         continue
-                logger.error(f"Failed to send email after {max_retries} attempts: {e}")
-                return False
+        logger.error(f"Failed to send email after {max_retries} attempts to {email_message.to}")
         return False
     @staticmethod
     def send_email_notification(reminder):

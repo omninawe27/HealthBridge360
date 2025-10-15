@@ -106,9 +106,29 @@ WSGI_APPLICATION = 'healthkart360.wsgi.application'
 # For production, you'll get this URL from your provider (e.g., Supabase, Neon).
 DATABASE_URL = os.getenv('DATABASE_URL')
 if DATABASE_URL:
-    DATABASES = {'default': dj_database_url.config(default=DATABASE_URL, conn_max_age=600)}
+    try:
+        DATABASES = {'default': dj_database_url.config(default=DATABASE_URL, conn_max_age=600)}
+    except ValueError as e:
+        if 'port' in str(e):
+            # Fallback to SQLite for development if DATABASE_URL is malformed
+            DATABASES = {
+                'default': {
+                    'ENGINE': 'django.db.backends.sqlite3',
+                    'NAME': BASE_DIR / 'db.sqlite3',
+                }
+            }
+            print("WARNING: DATABASE_URL is malformed, falling back to SQLite for development.")
+        else:
+            raise
 else:
-    raise ValueError("DATABASE_URL environment variable is not set.")
+    # Fallback to SQLite for development
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
+    print("WARNING: DATABASE_URL not set, using SQLite for development.")
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [

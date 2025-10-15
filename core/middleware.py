@@ -34,10 +34,9 @@ class RateLimitMiddleware:
         requests = [req_time for req_time in requests if req_time > window_start]
 
         # Check if rate limit exceeded
-        # Temporarily disabled for load testing
-        # if len(requests) >= settings.RATE_LIMIT_REQUESTS:
-        #     logger.warning(f'Rate limit exceeded for IP: {ip}')
-        #     return HttpResponse('Rate limit exceeded. Please try again later.', status=429)
+        if len(requests) >= settings.RATE_LIMIT_REQUESTS:
+            logger.warning(f'Rate limit exceeded for IP: {ip}')
+            return HttpResponse('Rate limit exceeded. Please try again later.', status=429)
 
         # Add current request
         requests.append(current_time)
