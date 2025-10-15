@@ -26,8 +26,6 @@ import re
 
 logger = logging.getLogger(__name__)
 
-logger = logging.getLogger(__name__)
-
 class NotificationService:
     @staticmethod
     def _sanitize_cache_key(key):
@@ -106,22 +104,26 @@ class NotificationService:
 
             recipient_email = user.email
 
-            # Send HTML email
+            # Send HTML email with retry
             email = EmailMultiAlternatives(subject, message, settings.DEFAULT_FROM_EMAIL, [recipient_email])
             email.attach_alternative(html_message, "text/html")
-            email.send()
+            success = NotificationService._send_email_with_retry(email)
 
-            # Create notification record
-            notification = Notification.objects.create(
-                user=user,
-                reminder=reminder,
-                notification_type='email',
-                message=message,
-                status='sent',
-                sent_at=timezone.now()
-            )
-            logger.info(f"Email notification sent for reminder {reminder.id}")
-            return True
+            if success:
+                # Create notification record
+                notification = Notification.objects.create(
+                    user=user,
+                    reminder=reminder,
+                    notification_type='email',
+                    message=message,
+                    status='sent',
+                    sent_at=timezone.now()
+                )
+                logger.info(f"Email notification sent for reminder {reminder.id}")
+                return True
+            else:
+                logger.error(f"Failed to send email notification for reminder {reminder.id}")
+                return False
         except Exception as e:
             logger.error(f"Error sending email notification: {e}")
             return False
@@ -222,13 +224,17 @@ class NotificationService:
 
             recipient_email = user.email
 
-            # Send HTML email
+            # Send HTML email with retry
             email = EmailMultiAlternatives(subject, message, settings.DEFAULT_FROM_EMAIL, [recipient_email])
             email.attach_alternative(html_message, "text/html")
-            email.send()
+            success = NotificationService._send_email_with_retry(email)
 
-            logger.info(f"Order status email sent for order {order.id}")
-            return True
+            if success:
+                logger.info(f"Order status email sent for order {order.id}")
+                return True
+            else:
+                logger.error(f"Failed to send order status email for order {order.id}")
+                return False
         except Exception as e:
             logger.error(f"Error sending order status email: {e}")
             return False
@@ -313,14 +319,22 @@ class NotificationService:
                 'update_status_url': f"{settings.SITE_URL}/orders/pharmacy/{order.id}/update-status/"
             })
 
-            # Send HTML email to all pharmacists
+            # Send HTML email to all pharmacists with retry
+            success_count = 0
             for email_addr in pharmacist_emails:
                 email = EmailMultiAlternatives(subject, message, settings.DEFAULT_FROM_EMAIL, [email_addr])
                 email.attach_alternative(html_message, "text/html")
-                email.send()
+                if NotificationService._send_email_with_retry(email):
+                    success_count += 1
+                else:
+                    logger.error(f"Failed to send order notification to pharmacist {email_addr} for order {order.id}")
 
-            logger.info(f"Order notification HTML email sent to {len(pharmacist_emails)} pharmacists for order {order.id}")
-            return True
+            if success_count > 0:
+                logger.info(f"Order notification HTML email sent to {success_count}/{len(pharmacist_emails)} pharmacists for order {order.id}")
+                return True
+            else:
+                logger.error(f"Failed to send order notification to any pharmacists for order {order.id}")
+                return False
         except Exception as e:
             logger.error(f"Error sending order notification email to pharmacist: {e}")
             return False
@@ -416,14 +430,22 @@ class NotificationService:
                 'order_detail_url': f"{settings.SITE_URL}/orders/pharmacy/{order_id}/"
             })
 
-            # Send HTML email to all pharmacists
+            # Send HTML email to all pharmacists with retry
+            success_count = 0
             for email_addr in pharmacist_emails:
                 email = EmailMultiAlternatives(subject, message, settings.DEFAULT_FROM_EMAIL, [email_addr])
                 email.attach_alternative(html_message, "text/html")
-                email.send()
+                if NotificationService._send_email_with_retry(email):
+                    success_count += 1
+                else:
+                    logger.error(f"Failed to send verification code to pharmacist {email_addr} for {order_type.lower()} {order_id}")
 
-            logger.info(f"Verification code HTML email sent to {len(pharmacist_emails)} pharmacists for {order_type.lower()} {order_id}")
-            return True
+            if success_count > 0:
+                logger.info(f"Verification code HTML email sent to {success_count}/{len(pharmacist_emails)} pharmacists for {order_type.lower()} {order_id}")
+                return True
+            else:
+                logger.error(f"Failed to send verification code to any pharmacists for {order_type.lower()} {order_id}")
+                return False
         except Exception as e:
             logger.error(f"Error sending verification code email to pharmacist: {e}")
             return False
@@ -518,13 +540,17 @@ class NotificationService:
                 'order_tracking_url': f"{settings.SITE_URL}/orders/{order_id}/"
             })
 
-            # Send HTML email
+            # Send HTML email with retry
             email = EmailMultiAlternatives(subject, message, settings.DEFAULT_FROM_EMAIL, [customer.email])
             email.attach_alternative(html_message, "text/html")
-            email.send()
+            success = NotificationService._send_email_with_retry(email)
 
-            logger.info(f"Verification code email sent to customer for {order_type.lower()} {order_id}")
-            return True
+            if success:
+                logger.info(f"Verification code email sent to customer for {order_type.lower()} {order_id}")
+                return True
+            else:
+                logger.error(f"Failed to send verification code email to customer for {order_type.lower()} {order_id}")
+                return False
         except Exception as e:
             logger.error(f"Error sending verification code email to customer: {e}")
             return False
@@ -585,13 +611,17 @@ class NotificationService:
                 'update_status_url': f"{settings.SITE_URL}/orders/advance/{advance_order.id}/update-status/"
             })
 
-            # Send HTML email
+            # Send HTML email with retry
             email = EmailMultiAlternatives(subject, message, settings.DEFAULT_FROM_EMAIL, [pharmacist_email])
             email.attach_alternative(html_message, "text/html")
-            email.send()
+            success = NotificationService._send_email_with_retry(email)
 
-            logger.info(f"Advance order notification HTML email sent for advance order {advance_order.id}")
-            return True
+            if success:
+                logger.info(f"Advance order notification HTML email sent for advance order {advance_order.id}")
+                return True
+            else:
+                logger.error(f"Failed to send advance order notification email for advance order {advance_order.id}")
+                return False
         except Exception as e:
             logger.error(f"Error sending advance order notification email: {e}")
             return False
@@ -669,14 +699,22 @@ class NotificationService:
                 'update_status_url': f"{settings.SITE_URL}/orders/pharmacy/{order.id}/update-status/"
             })
 
-            # Send HTML email to all pharmacists
+            # Send HTML email to all pharmacists with retry
+            success_count = 0
             for email_addr in pharmacist_emails:
                 email = EmailMultiAlternatives(subject, message, settings.DEFAULT_FROM_EMAIL, [email_addr])
                 email.attach_alternative(html_message, "text/html")
-                email.send()
+                if NotificationService._send_email_with_retry(email):
+                    success_count += 1
+                else:
+                    logger.error(f"Failed to send order status update to pharmacist {email_addr} for order {order.id}")
 
-            logger.info(f"Order status update HTML email sent to {len(pharmacist_emails)} pharmacists for order {order.id}")
-            return True
+            if success_count > 0:
+                logger.info(f"Order status update HTML email sent to {success_count}/{len(pharmacist_emails)} pharmacists for order {order.id}")
+                return True
+            else:
+                logger.error(f"Failed to send order status update to any pharmacists for order {order.id}")
+                return False
         except Exception as e:
             logger.error(f"Error sending order status notification email to pharmacist: {e}")
             return False
@@ -720,13 +758,17 @@ class NotificationService:
 
             recipient_email = user.email
 
-            # Send HTML email
+            # Send HTML email with retry
             email = EmailMultiAlternatives(subject, message, settings.DEFAULT_FROM_EMAIL, [recipient_email])
             email.attach_alternative(html_message, "text/html")
-            email.send()
+            success = NotificationService._send_email_with_retry(email)
 
-            logger.info(f"Advance order status email sent for advance order {advance_order.id}")
-            return True
+            if success:
+                logger.info(f"Advance order status email sent for advance order {advance_order.id}")
+                return True
+            else:
+                logger.error(f"Failed to send advance order status email for advance order {advance_order.id}")
+                return False
         except Exception as e:
             logger.error(f"Error sending advance order status email: {e}")
             return False
