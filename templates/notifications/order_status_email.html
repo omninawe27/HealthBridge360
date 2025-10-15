@@ -37,7 +37,7 @@
   <div class="container">
     <h1>Order Status Update</h1>
     <p>Hello {{ user.first_name }},</p>
-    <p>Your order #{{ order.id|stringformat:"s" }} status has been updated!</p>
+    <p>Your order #{{ order.id }} status has been updated!</p>
     <p><strong>Current Status:</strong> <span class="status">{{ order.get_status_display }}</span></p>
     <p><strong>Pharmacy:</strong> {{ order.pharmacy.name }}</p>
     <p><strong>Total Amount:</strong> ₹{{ order.total_amount }}</p>

@@ -10,8 +10,10 @@ if PROJECT_ROOT not in sys.path:
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'healthkart360.settings')
 
 # Set environment variables for production database
+# WARNING: Do not hardcode credentials. This should be loaded from your environment.
+# For local testing against a production-like DB, set DATABASE_URL in your .env file or shell.
 os.environ['SECRET_KEY'] = 'test-key-for-debug'
-os.environ['DATABASE_URL'] = 'postgresql://healthkart360_user:UgRZhXcuQ8uGfYvGTe1zyR2UJXkBTpBQ@dpg-d3minpe3jp1c7380f10g-a/healthkart360'
+# os.environ['DATABASE_URL'] = 'postgresql://user:password@host/dbname'
 
 django.setup()
 

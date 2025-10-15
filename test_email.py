@@ -26,13 +26,21 @@ def test_email():
     try:
         print("Testing email functionality...")
 
-        # Get first user
-        user = User.objects.first()
-        if not user:
-            print("No users found in database")
-            return
+        # Create or get test user with specific email
+        test_email = 'omninawe27@gmail.com'
+        user, created = User.objects.get_or_create(
+            email=test_email,
+            defaults={
+                'username': 'test_user_omninawe27',
+                'first_name': 'Test',
+                'last_name': 'User'
+            }
+        )
 
-        print(f"Found user: {user.email}")
+        if created:
+            print(f"Created new test user: {user.email}")
+        else:
+            print(f"Using existing user: {user.email}")
 
         # Create a test prescription
         prescription = Prescription.objects.create(
@@ -43,7 +51,7 @@ def test_email():
         print(f"Created test prescription: {prescription.id}")
 
         # Test email sending
-        print("Sending verification code email...")
+        print(f"Sending verification code email to {test_email}...")
         result = NotificationService.send_prescription_verification_code(prescription)
 
         print(f"Email send result: {result}")

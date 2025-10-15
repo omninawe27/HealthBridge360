@@ -12,6 +12,9 @@ from reminders.models import Reminder
 from django.utils import timezone
 from django.conf import settings
 from .utils import sanitize_cache_key
+import logging
+
+logger = logging.getLogger(__name__)
 
 def home(request):
     """Home page view"""
@@ -129,4 +132,14 @@ def search_medicines(request):
         'pharmacies': pharmacies,
     }
     return render(request, 'core/search.html', context)
+
+def welcome_api(request):
+    """API endpoint that logs requests and returns a welcome message"""
+    # Log request metadata
+    logger.info(f"API request received: {request.method} {request.path}")
+
+    # Return JSON response with welcome message
+    return JsonResponse({
+        'message': 'Welcome to HealthKart 360 API!'
+    })
 

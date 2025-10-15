@@ -125,9 +125,15 @@ healthbridge360/
 Create a `.env` file in the project root:
 
 ```env
-SECRET_KEY=your-secret-key-here
+SECRET_KEY='your-strong-secret-key'
 DEBUG=True
-DATABASE_URL=postgresql://username:password@localhost/healthbridge360
+DATABASE_URL='sqlite:///db.sqlite3' # For local development
+# Or for PostgreSQL:
+# DATABASE_URL='postgres://user:password@localhost:5432/healthbridge360'
+
+EMAIL_HOST_USER='your-email@gmail.com'
+EMAIL_HOST_PASSWORD='your-app-password'
+DEFAULT_FROM_EMAIL='your-email@gmail.com'
 ```
 
 ### Database Configuration

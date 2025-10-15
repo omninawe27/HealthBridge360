@@ -18,8 +18,8 @@ max_requests_jitter = 50
 
 # Logging
 loglevel = 'info'
-accesslog = 'logs/gunicorn_access.log'
-errorlog = 'logs/gunicorn_error.log'
+accesslog = '-'  # Log to stdout
+errorlog = '-'   # Log to stderr
 access_log_format = '%(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s" %(D)s'
 
 # Process naming

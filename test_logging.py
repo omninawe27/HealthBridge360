@@ -35,7 +35,7 @@ def test_cache_key_sanitization():
         print(f"Original: '{key}' -> Sanitized: '{sanitized}'")
 
         # Verify sanitized key meets requirements
-        assert sanitized.replace('_', '').replace('a', '').replace('z', '').isalnum() == False, f"Invalid characters in sanitized key: {sanitized}"
+        assert sanitized.replace('_', '').isalnum(), f"Invalid characters in sanitized key: {sanitized}"
         assert not sanitized.startswith('_'), f"Sanitized key starts with underscore: {sanitized}"
         assert '__' not in sanitized, f"Double underscores in sanitized key: {sanitized}"
 

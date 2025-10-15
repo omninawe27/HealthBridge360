@@ -1,14 +1,3 @@
-import os
-import sys
-import django
-
-# Setup Django environment
-PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-if PROJECT_ROOT not in sys.path:
-    sys.path.insert(0, PROJECT_ROOT)
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'healthkart360.settings')
-django.setup()
-
 from django.core.mail import send_mail, EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.conf import settings
@@ -243,6 +232,8 @@ class NotificationService:
     def send_order_notification_to_pharmacist(order):
         """Send new order notification email to pharmacist"""
         try:
+            from users.models import User
+
             # Send to pharmacist - check both owner and pharmacists
             pharmacist_emails = []
 
@@ -250,12 +241,13 @@ class NotificationService:
             if hasattr(order.pharmacy, 'owner') and order.pharmacy.owner.email:
                 pharmacist_emails.append(order.pharmacy.owner.email)
                 logger.info(f"Added pharmacy owner email: {order.pharmacy.owner.email}")
-
-            # Add emails of pharmacists working at this pharmacy
-            for pharmacist in order.pharmacy.pharmacists.all():
-                if pharmacist.email:
+            
+            # Add emails of all users (pharmacists) associated with this pharmacy
+            pharmacists = User.objects.filter(pharmacy=order.pharmacy, is_pharmacist=True)
+            for pharmacist in pharmacists:
+                if pharmacist.email and pharmacist.email not in pharmacist_emails:
                     pharmacist_emails.append(pharmacist.email)
-                    logger.info(f"Added pharmacist email: {pharmacist.email}")
+                    logger.info(f"Added pharmacist user email: {pharmacist.email}")
 
             # Also add pharmacy email if it exists
             if order.pharmacy.email:
@@ -343,6 +335,8 @@ class NotificationService:
     def send_order_verification_code(order_or_advance_order):
         """Send verification code email to pharmacist for order verification"""
         try:
+            from users.models import User
+
             import random
             import string
 
@@ -378,13 +372,14 @@ class NotificationService:
             if hasattr(pharmacy, 'owner') and pharmacy.owner.email:
                 pharmacist_emails.append(pharmacy.owner.email)
                 logger.info(f"Added pharmacy owner email: {pharmacy.owner.email}")
-
-            # Add emails of pharmacists working at this pharmacy
-            for pharmacist in pharmacy.pharmacists.all():
-                if pharmacist.email:
+            
+            # Add emails of all users (pharmacists) associated with this pharmacy
+            pharmacists = User.objects.filter(pharmacy=pharmacy, is_pharmacist=True)
+            for pharmacist in pharmacists:
+                if pharmacist.email and pharmacist.email not in pharmacist_emails:
                     pharmacist_emails.append(pharmacist.email)
-                    logger.info(f"Added pharmacist email: {pharmacist.email}")
-
+                    logger.info(f"Added pharmacist user email: {pharmacist.email}")
+            
             # Also add pharmacy email if it exists
             if pharmacy.email:
                 pharmacist_emails.append(pharmacy.email)
@@ -559,10 +554,24 @@ class NotificationService:
     def send_advance_order_notification(advance_order):
         """Send advance order notification email to pharmacist"""
         try:
-            # Send to pharmacist
-            pharmacist_email = advance_order.pharmacy.owner.email if hasattr(advance_order.pharmacy, 'owner') else None
-            if not pharmacist_email:
-                logger.warning(f"No pharmacist email found for pharmacy {advance_order.pharmacy.id}")
+            from users.models import User
+            pharmacy = advance_order.pharmacy
+            pharmacist_emails = []
+
+            # Add pharmacy owner email if exists
+            if hasattr(pharmacy, 'owner') and pharmacy.owner.email:
+                pharmacist_emails.append(pharmacy.owner.email)
+                logger.info(f"Added pharmacy owner email for advance order: {pharmacy.owner.email}")
+
+            # Add emails of all users (pharmacists) associated with this pharmacy
+            pharmacists = User.objects.filter(pharmacy=pharmacy, is_pharmacist=True)
+            for pharmacist in pharmacists:
+                if pharmacist.email and pharmacist.email not in pharmacist_emails:
+                    pharmacist_emails.append(pharmacist.email)
+                    logger.info(f"Added pharmacist user email for advance order: {pharmacist.email}")
+
+            if not pharmacist_emails:
+                logger.warning(f"No pharmacist emails found for pharmacy {pharmacy.id} for advance order.")
                 return False
 
             user = advance_order.user
@@ -605,23 +614,27 @@ class NotificationService:
             html_message = render_to_string('notifications/advance_order_notification.html', {
                 'advance_order': advance_order,
                 'user': user,
-                'collect_date': collect_date_str,
-                'collect_time': collect_time_str,
+                'collect_date_str': collect_date_str,
+                'collect_time_str': collect_time_str,
                 'order_detail_url': f"{settings.SITE_URL}/orders/advance/{advance_order.id}/",
                 'update_status_url': f"{settings.SITE_URL}/orders/advance/{advance_order.id}/update-status/"
             })
 
             # Send HTML email with retry
-            email = EmailMultiAlternatives(subject, message, settings.DEFAULT_FROM_EMAIL, [pharmacist_email])
-            email.attach_alternative(html_message, "text/html")
-            success = NotificationService._send_email_with_retry(email)
+            success_count = 0
+            for email_addr in pharmacist_emails:
+                email = EmailMultiAlternatives(subject, message, settings.DEFAULT_FROM_EMAIL, [email_addr])
+                email.attach_alternative(html_message, "text/html")
+                if NotificationService._send_email_with_retry(email):
+                    success_count += 1
 
-            if success:
-                logger.info(f"Advance order notification HTML email sent for advance order {advance_order.id}")
+            if success_count > 0:
+                logger.info(f"Advance order notification sent to {success_count}/{len(pharmacist_emails)} pharmacists for advance order {advance_order.id}")
                 return True
             else:
                 logger.error(f"Failed to send advance order notification email for advance order {advance_order.id}")
                 return False
+
         except Exception as e:
             logger.error(f"Error sending advance order notification email: {e}")
             return False
@@ -630,16 +643,19 @@ class NotificationService:
     def send_order_status_notification_to_pharmacist(order):
         """Send order status update email to pharmacist"""
         try:
+            from users.models import User
+
             # Send to pharmacist - check both owner and pharmacists
             pharmacist_emails = []
 
             # Add pharmacy owner email if exists
             if hasattr(order.pharmacy, 'owner') and order.pharmacy.owner.email:
                 pharmacist_emails.append(order.pharmacy.owner.email)
-
-            # Add emails of pharmacists working at this pharmacy
-            for pharmacist in order.pharmacy.pharmacists.all():
-                if pharmacist.email:
+            
+            # Add emails of all users (pharmacists) associated with this pharmacy
+            pharmacists = User.objects.filter(pharmacy=order.pharmacy, is_pharmacist=True)
+            for pharmacist in pharmacists:
+                if pharmacist.email and pharmacist.email not in pharmacist_emails:
                     pharmacist_emails.append(pharmacist.email)
 
             if not pharmacist_emails:

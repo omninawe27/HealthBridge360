@@ -39,7 +39,7 @@
     <h3>Items Ordered:</h3>
     <ul>
       {% for item in order.items.all %}
-      <li>{{ item.medicine.name }} ({{ item.medicine.strength }}) x {{ item.quantity }} = ₹{% widthratio item.price item.quantity 1 %}</li>
+      <li>{{ item.medicine.name }} ({{ item.medicine.strength }}) x {{ item.quantity }} = ₹{{ item.total_price }}</li>
       {% endfor %}
     </ul>
     <p><strong>Order Total:</strong> ₹{{ order.total_amount }}</p>

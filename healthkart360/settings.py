@@ -205,9 +205,9 @@ EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', 'True') == 'True'
 DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', EMAIL_HOST_USER or 'noreply@healthbridge360.com')
 
 # For local development or when SMTP fails, use console backend
-if not EMAIL_HOST_USER or not EMAIL_HOST_PASSWORD:
+if not EMAIL_HOST_USER or not EMAIL_HOST_PASSWORD or EMAIL_HOST_USER == 'your-email@gmail.com' or EMAIL_HOST_PASSWORD == 'your-app-password':
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-    print("WARNING: No SMTP credentials found. Using console email backend for development.")
+    print("WARNING: No SMTP credentials found or placeholders used. Using console email backend for development.")
 else:
     # In production, if SMTP fails, we can add retry logic in the email service
     print(f"Email configured with SMTP: {EMAIL_HOST}:{EMAIL_PORT}, User: {EMAIL_HOST_USER}")

@@ -11,8 +11,8 @@ class RateLimitMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
-        # Skip rate limiting for static files and admin
-        if request.path.startswith('/static/') or request.path.startswith('/admin/'):
+        # Skip rate limiting for static files, admin, and API endpoints
+        if request.path.startswith('/static/') or request.path.startswith('/admin/') or request.path.startswith('/api/'):
             return self.get_response(request)
 
         # Get client IP

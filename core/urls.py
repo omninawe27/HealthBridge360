@@ -9,4 +9,5 @@ urlpatterns = [
     path('emergency/', views.emergency_mode, name='emergency'),
     path('search/', views.search_medicines, name='search'),
     path('change-language/', views.change_language, name='change_language'),
+    path('api/welcome/', views.welcome_api, name='welcome_api'),
 ]

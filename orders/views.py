@@ -436,6 +436,7 @@ def checkout(request):
 
                 # Send emails asynchronously to prevent timeouts
                 import threading
+                from django.db import connections
 
                 def send_emails_async():
                     try:
@@ -480,6 +481,9 @@ def checkout(request):
                             logger.error(f"Exception sending verification code email to customer for order {order.id}: {str(e)}")
                     except Exception as e:
                         logger.error(f"Error sending emails asynchronously for order {order.id}: {str(e)}")
+                    finally:
+                        # Close all database connections in this thread
+                        connections.close_all()
 
                 # Start email sending in a separate thread
                 email_thread = threading.Thread(target=send_emails_async)

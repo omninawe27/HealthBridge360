@@ -36,7 +36,7 @@
     <ul>
       {% for item in items %}
         {% if item.medicine %}
-          <li>{{ item.medicine.name }} ({{ item.medicine.strength }}) x {{ item.quantity }} = ₹{% widthratio item.price item.quantity 1 %}</li>
+          <li>{{ item.medicine.name }} ({{ item.medicine.strength }}) x {{ item.quantity }} = ₹{{ item.total_price }}</li>
         {% else %}
           <li>{{ item.medicine_name }} ({{ item.dosage }}) x {{ item.quantity_requested }}</li>
         {% endif %}

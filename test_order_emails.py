@@ -50,10 +50,8 @@ def test_order_emails():
             name='Test Pharmacy',
             defaults={
                 'address': 'Test Address',
-                'phone_number': '1234567890',
-                'email': 'pharmacy@test.com',
-                'license_number': 'TEST123456',
-                'owner': user  # Need to assign an owner
+                'phone': '1234567890',
+                'email': 'pharmacy@test.com'
             }
         )
 
@@ -119,9 +117,10 @@ def test_order_emails():
         result4 = NotificationService.send_customer_order_verification_code(order)
         print(f"Verification code to customer result: {result4}")
 
-        print("\nOrder verification codes:")
+        print("
+Order verification codes:")
         print(f"Pharmacist verification code: {order.verification_code}")
-        print(f"Customer verification code: {order.verification_code}")
+        print(f"Customer verification code: {order.customer_verification_code}")
 
         # Summary
         all_success = all([result1, result2, result3, result4])
