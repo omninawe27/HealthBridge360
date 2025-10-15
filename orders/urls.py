@@ -47,4 +47,7 @@ urlpatterns = [
     # Razorpay integration endpoints
     path('create-razorpay-order/', razorpay_views.create_razorpay_order, name='create_razorpay_order'),
     path('razorpay-callback/', razorpay_views.razorpay_callback, name='razorpay_callback'),
+
+    # API endpoints
+    path('api/orders/', views.orders_api, name='orders_api'),
 ]
