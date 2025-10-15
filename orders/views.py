@@ -434,61 +434,10 @@ def checkout(request):
                 # Clear cart
                 CartService.clear_cart(request.user)
 
-                # Send emails asynchronously to prevent timeouts
-                import threading
-                from django.db import connections
-
-                def send_emails_async():
-                    try:
-                        # Send order status notification emails to customer
-                        try:
-                            email_result = NotificationService.send_order_status_notification(order)
-                            if email_result:
-                                logger.info(f"Order placement email sent for order {order.id}")
-                            else:
-                                logger.error(f"Failed to send order placement email for order {order.id}")
-                        except Exception as e:
-                            logger.error(f"Exception sending order placement email for order {order.id}: {str(e)}")
-
-                        # Send order notification to pharmacist
-                        try:
-                            email_result = NotificationService.send_order_notification_to_pharmacist(order)
-                            if email_result:
-                                logger.info(f"Order notification email sent to pharmacist for order {order.id}")
-                            else:
-                                logger.error(f"Failed to send order notification email to pharmacist for order {order.id}")
-                        except Exception as e:
-                            logger.error(f"Exception sending order notification email to pharmacist for order {order.id}: {str(e)}")
-
-                        # Send verification code to pharmacist for normal order
-                        try:
-                            email_result = NotificationService.send_order_verification_code(order)
-                            if email_result:
-                                logger.info(f"Verification code email sent to pharmacist for order {order.id}")
-                            else:
-                                logger.error(f"Failed to send verification code email to pharmacist for order {order.id}")
-                        except Exception as e:
-                            logger.error(f"Exception sending verification code email to pharmacist for order {order.id}: {str(e)}")
-
-                        # Send verification code to customer for normal order
-                        try:
-                            email_result = NotificationService.send_customer_order_verification_code(order)
-                            if email_result:
-                                logger.info(f"Verification code email sent to customer for order {order.id}")
-                            else:
-                                logger.error(f"Failed to send verification code email to customer for order {order.id}")
-                        except Exception as e:
-                            logger.error(f"Exception sending verification code email to customer for order {order.id}: {str(e)}")
-                    except Exception as e:
-                        logger.error(f"Error sending emails asynchronously for order {order.id}: {str(e)}")
-                    finally:
-                        # Close all database connections in this thread
-                        connections.close_all()
-
-                # Start email sending in a separate thread
-                email_thread = threading.Thread(target=send_emails_async)
-                email_thread.daemon = True
-                email_thread.start()
+                # Send emails asynchronously using Celery
+                from .tasks import send_order_confirmation_emails
+                send_order_confirmation_emails.delay(order.id)
+                logger.info(f"Celery task dispatched to send confirmation emails for order {order.id}")
 
                 logger.info(f"Order {order.id} created successfully with pharmacy {pharmacy.name}")
 
