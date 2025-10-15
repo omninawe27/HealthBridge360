@@ -11,6 +11,7 @@ from orders.models import Order
 from reminders.models import Reminder
 from django.utils import timezone
 from django.conf import settings
+from .utils import sanitize_cache_key
 
 def home(request):
     """Home page view"""
@@ -103,7 +104,7 @@ def search_medicines(request):
 
     if query:
         # Cache search results for 5 minutes
-        cache_key = f'search_query_{query.lower().strip()}'
+        cache_key = f'search_query_{sanitize_cache_key(query.lower().strip())}'
         cached_results = cache.get(cache_key)
 
         if cached_results:

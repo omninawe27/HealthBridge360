@@ -15,6 +15,7 @@ from django.conf import settings
 from django.utils import timezone
 from notifications.models import Notification
 from reminders.models import Reminder
+from core.utils import sanitize_cache_key
 import logging
 import random
 import string
@@ -52,9 +53,22 @@ class NotificationService:
             except Exception as e:
                 error_msg = str(e).lower()
                 if 'network is unreachable' in error_msg or 'connection refused' in error_msg:
-                    logger.warning(f"Network error on attempt {attempt + 1}: {e}")
+                    logger.warning(f"Network error on attempt {attempt + 1}: {e}. Error type: {type(e).__name__}")
                     if attempt < max_retries - 1:
                         time.sleep(delay * (2 ** attempt))  # Exponential backoff
+                        continue
+                elif 'authentication failed' in error_msg or '535' in error_msg:
+                    logger.error(f"SMTP authentication failed: {e}")
+                    return False  # Don't retry auth failures
+                elif 'timeout' in error_msg:
+                    logger.warning(f"SMTP timeout on attempt {attempt + 1}: {e}")
+                    if attempt < max_retries - 1:
+                        time.sleep(delay * (2 ** attempt))
+                        continue
+                else:
+                    logger.error(f"Unexpected email error on attempt {attempt + 1}: {e}")
+                    if attempt < max_retries - 1:
+                        time.sleep(delay * (2 ** attempt))
                         continue
                 logger.error(f"Failed to send email after {max_retries} attempts: {e}")
                 return False
