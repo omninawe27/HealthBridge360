@@ -1018,3 +1018,13 @@ def prescription_detail(request, prescription_id):
         'user': prescription.user,
     }
     return render(request, 'orders/prescription_detail.html', context)
+
+def orders_api(request):
+    """API endpoint that logs requests and returns a welcome message for orders"""
+    # Log request metadata
+    logger.info(f"Orders API request received: {request.method} {request.path}")
+
+    # Return JSON response with welcome message
+    return JsonResponse({
+        'message': 'Welcome to HealthKart 360 Orders API!'
+    })
