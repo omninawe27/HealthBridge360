@@ -29,9 +29,9 @@ services:
       - key: EMAIL_PORT
         value: 587
       - key: EMAIL_HOST_USER
-        fromSecret: gmail-credentials
+        value: placeholder_email_user
       - key: EMAIL_HOST_PASSWORD
-        fromSecret: gmail-credentials
+        value: placeholder_email_password
       - key: EMAIL_USE_TLS
         value: true
       - key: DEFAULT_FROM_EMAIL
