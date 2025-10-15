@@ -18,6 +18,8 @@ from reminders.models import Reminder
 import logging
 import random
 import string
+import time
+import re
 
 # Twilio for SMS removed
 
@@ -26,6 +28,37 @@ logger = logging.getLogger(__name__)
 logger = logging.getLogger(__name__)
 
 class NotificationService:
+    @staticmethod
+    def _sanitize_cache_key(key):
+        """Sanitize cache key to remove invalid characters for memcached"""
+        # Replace spaces and special characters with underscores
+        sanitized = re.sub(r'[^a-zA-Z0-9_]', '_', key)
+        # Ensure it doesn't start with a number or contain consecutive underscores
+        sanitized = re.sub(r'^[^a-zA-Z_]+', '', sanitized)
+        sanitized = re.sub(r'_+', '_', sanitized)
+        return sanitized
+
+    @staticmethod
+    def _send_email_with_retry(email_message, max_retries=3, delay=1):
+        """Send email with retry logic and better error handling"""
+        for attempt in range(max_retries):
+            try:
+                result = email_message.send()
+                if result > 0:
+                    logger.info(f"Email sent successfully on attempt {attempt + 1}")
+                    return True
+                else:
+                    logger.warning(f"Email send returned 0 on attempt {attempt + 1}")
+            except Exception as e:
+                error_msg = str(e).lower()
+                if 'network is unreachable' in error_msg or 'connection refused' in error_msg:
+                    logger.warning(f"Network error on attempt {attempt + 1}: {e}")
+                    if attempt < max_retries - 1:
+                        time.sleep(delay * (2 ** attempt))  # Exponential backoff
+                        continue
+                logger.error(f"Failed to send email after {max_retries} attempts: {e}")
+                return False
+        return False
     @staticmethod
     def send_email_notification(reminder):
         """Send email notification for a reminder"""
@@ -123,19 +156,17 @@ class NotificationService:
                 'support_url': f"{settings.SITE_URL}/support/"
             })
 
-            # Send HTML email
+            # Send HTML email with retry
             email = EmailMultiAlternatives(subject, message, settings.DEFAULT_FROM_EMAIL, [recipient_email])
             email.attach_alternative(html_message, "text/html")
-            result = email.send()
+            success = NotificationService._send_email_with_retry(email)
 
-            logger.info(f"Email send result: {result} (should be 1 for success)")
-            logger.info(f"Verification code email sent successfully to {recipient_email} for prescription {prescription.id}")
-
-            if result == 0:
-                logger.warning(f"Email send returned 0 - email may not have been sent successfully")
+            if success:
+                logger.info(f"Verification code email sent successfully to {recipient_email} for prescription {prescription.id}")
+                return True
+            else:
+                logger.warning(f"Failed to send verification code email to {recipient_email} for prescription {prescription.id}")
                 return False
-
-            return True
         except Exception as e:
             logger.error(f"Error sending verification code email: {e}")
             logger.error(f"Exception type: {type(e).__name__}")
