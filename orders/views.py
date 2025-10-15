@@ -839,7 +839,6 @@ def get_pharmacy_dashboard_data(request):
         },
         'recent_orders': orders_data
     })
-    medicines = Medicine.objects.filter(pharmacy=pharmacy)
 
 # Legacy functions for backward compatibility
 @login_required
