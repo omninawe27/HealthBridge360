@@ -98,7 +98,7 @@
             <div class="order-item">
                 <strong>{{ item.medicine.name }} ({{ item.medicine.strength }})</strong><br>
                 Quantity: {{ item.quantity }} | Price: ₹{{ item.price }} each<br>
-                Subtotal: ₹{{ item.price|mul:item.quantity }}
+                Subtotal: ₹{{ item.subtotal }}
             </div>
             {% endfor %}
 
