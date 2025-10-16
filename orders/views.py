@@ -434,8 +434,20 @@ def checkout(request):
                 # Clear cart
                 CartService.clear_cart(request.user)
 
-                # Email sending removed to prevent checkout errors
-                logger.info(f"Order {order.id} created successfully - email notifications disabled")
+                # Send order confirmation email to customer
+                if not has_advance_order_items:
+                    email_result_customer = NotificationService.send_order_confirmation_email(order)
+                    if email_result_customer:
+                        logger.info(f"Order confirmation email sent to customer for order {order.id}")
+                    else:
+                        logger.error(f"Failed to send order confirmation email to customer for order {order.id}")
+
+                    # Send order notification email to pharmacist
+                    email_result_pharmacist = NotificationService.send_order_notification_to_pharmacist(order)
+                    if email_result_pharmacist:
+                        logger.info(f"Order notification email sent to pharmacist for order {order.id}")
+                    else:
+                        logger.error(f"Failed to send order notification email to pharmacist for order {order.id}")
 
                 logger.info(f"Order {order.id} created successfully with pharmacy {pharmacy.name}")
 
