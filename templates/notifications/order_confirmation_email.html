@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation - HealthKart 360</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            color: #007bff;
+            margin: 0;
+            font-size: 24px;
+        }
+        .order-details {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .order-item {
+            border-bottom: 1px solid #dee2e6;
+            padding: 10px 0;
+        }
+        .order-item:last-child {
+            border-bottom: none;
+        }
+        .total {
+            font-weight: bold;
+            font-size: 18px;
+            color: #28a745;
+            text-align: right;
+            margin-top: 20px;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #dee2e6;
+            color: #6c757d;
+        }
+        .button {
+            display: inline-block;
+            background-color: #007bff;
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Order Confirmation</h1>
+            <p>Thank you for your order!</p>
+        </div>
+
+        <p>Dear {{ user.first_name }},</p>
+
+        <p>Your order has been successfully placed and confirmed. Here are the details:</p>
+
+        <div class="order-details">
+            <h3>Order Information</h3>
+            <p><strong>Order ID:</strong> #{{ order.id }}</p>
+            <p><strong>Pharmacy:</strong> {{ order.pharmacy.name }}</p>
+            <p><strong>Payment Method:</strong> {{ order.get_payment_method_display }}</p>
+            <p><strong>Delivery Method:</strong> {{ order.get_delivery_method_display }}</p>
+            {% if order.delivery_address %}
+            <p><strong>Delivery Address:</strong> {{ order.delivery_address }}</p>
+            {% endif %}
+
+            <h4>Items Ordered:</h4>
+            {% for item in order.items.all %}
+            <div class="order-item">
+                <strong>{{ item.medicine.name }} ({{ item.medicine.strength }})</strong><br>
+                Quantity: {{ item.quantity }} | Price: ₹{{ item.price }} each<br>
+                Subtotal: ₹{{ item.price|mul:item.quantity }}
+            </div>
+            {% endfor %}
+
+            <div class="total">
+                <p><strong>Delivery Charges:</strong> ₹{{ order.delivery_charges }}</p>
+                <p><strong>Total Amount:</strong> ₹{{ order.total_amount }}</p>
+            </div>
+        </div>
+
+        <p>You will receive updates on your order status. You can track your order using the button below:</p>
+
+        <div style="text-align: center;">
+            <a href="{{ order_tracking_url }}" class="button">Track Your Order</a>
+        </div>
+
+        <p>If you have any questions about your order, please don't hesitate to contact our support team.</p>
+
+        <div class="footer">
+            <p>Best regards,<br>HealthKart 360 Team</p>
+            <p>This is an automated message. Please do not reply to this email.</p>
+        </div>
+    </div>
+</body>
+</html>
