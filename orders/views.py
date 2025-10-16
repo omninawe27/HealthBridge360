@@ -434,17 +434,8 @@ def checkout(request):
                 # Clear cart
                 CartService.clear_cart(request.user)
 
-                # Send emails synchronously (fallback when Celery is not available)
-                try:
-                    from .tasks import send_order_confirmation_emails
-                    send_order_confirmation_emails.delay(order.id)
-                    logger.info(f"Celery task dispatched to send confirmation emails for order {order.id}")
-                except ImportError as e:
-                    logger.warning(f"Celery not available, sending emails synchronously: {str(e)}")
-                    # Fallback to synchronous email sending
-                    from notifications.services import NotificationService
-                    NotificationService.send_order_confirmation_email(order)
-                    logger.info(f"Order confirmation email sent synchronously for order {order.id}")
+                # Email sending removed to prevent checkout errors
+                logger.info(f"Order {order.id} created successfully - email notifications disabled")
 
                 logger.info(f"Order {order.id} created successfully with pharmacy {pharmacy.name}")
 

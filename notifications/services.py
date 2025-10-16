@@ -181,6 +181,71 @@ class NotificationService:
             return False
 
     @staticmethod
+    def send_order_confirmation_email(order):
+        """Send order confirmation email to customer"""
+        try:
+            user = order.user
+            subject = f"Order Confirmation - HealthKart 360"
+
+            # Plain text message for fallback
+            message = f"""
+            Hello {user.first_name},
+
+            Thank you for your order! Your order has been successfully placed.
+
+            Order Details:
+            Order ID: #{order.id}
+            Pharmacy: {order.pharmacy.name}
+            Payment Method: {order.get_payment_method_display()}
+            Delivery Method: {order.get_delivery_method_display()}
+            Total Amount: ₹{order.total_amount}
+
+            Items Ordered:
+            """
+            for item in order.items.all():
+                message += f"- {item.medicine.name} ({item.medicine.strength}) x {item.quantity} = ₹{item.price * item.quantity}\n"
+
+            message += f"""
+
+            Delivery Charges: ₹{order.delivery_charges}
+            """
+
+            if order.delivery_address:
+                message += f"Delivery Address: {order.delivery_address}\n"
+
+            message += f"""
+
+            You will receive updates on your order status. You can track your order on our website.
+
+            Best regards,
+            HealthKart 360 Team
+            """
+
+            # HTML message
+            html_message = render_to_string('notifications/order_confirmation_email.html', {
+                'user': user,
+                'order': order,
+                'order_tracking_url': f"{settings.SITE_URL}/orders/{order.id}/"
+            })
+
+            recipient_email = user.email
+
+            # Send HTML email with retry
+            email = EmailMultiAlternatives(subject, message, settings.DEFAULT_FROM_EMAIL, [recipient_email])
+            email.attach_alternative(html_message, "text/html")
+            success = NotificationService._send_email_with_retry(email)
+
+            if success:
+                logger.info(f"Order confirmation email sent for order {order.id}")
+                return True
+            else:
+                logger.error(f"Failed to send order confirmation email for order {order.id}")
+                return False
+        except Exception as e:
+            logger.error(f"Error sending order confirmation email: {e}")
+            return False
+
+    @staticmethod
     def send_order_status_notification(order):
         """Send order status update email"""
         try:
