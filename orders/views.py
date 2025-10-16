@@ -1028,7 +1028,9 @@ def prescription_detail(request, prescription_id):
 def orders_api(request):
     """API endpoint that logs requests and returns a welcome message for orders"""
     # Log request metadata
-    logger.info(f"Orders API request received: {request.method} {request.path}")
+    user_agent = request.META.get('HTTP_USER_AGENT', 'Unknown')
+    remote_addr = request.META.get('REMOTE_ADDR', 'Unknown')
+    logger.info(f"Orders API request received: {request.method} {request.path} from {remote_addr} using {user_agent}")
 
     # Return JSON response with welcome message
     return JsonResponse({
