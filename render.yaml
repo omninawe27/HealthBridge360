@@ -6,6 +6,38 @@ services:
     plan: free
     buildCommand: "pip install setuptools==74.1.2 wheel && pip install --upgrade pip setuptools==74.1.2 && pip install -r requirements.txt"
     startCommand: "python manage.py migrate && python manage.py create_superuser && python manage.py collectstatic --noinput --clear && gunicorn healthkart360.wsgi:application --bind 0.0.0.0:$PORT --workers 1 --threads 2"
+    envVars:
+      - key: DEBUG
+        value: false
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:          name: healthkart360-db
+          property: connectionString
+      - key: ALLOWED_HOSTS
+        fromService:
+          type: web
+          name: healthbridge360-backend
+          property: host
+      - key: RAZORPAY_KEY_ID
+        value: placeholder_razorpay_key_id
+      - key: RAZORPAY_KEY_SECRET
+        value: placeholder_razorpay_key_secret
+      - key: SENDGRID_API_KEY
+        value: placeholder_sendgrid_api_key
+      - key: DEFAULT_FROM_EMAIL
+        value: noreply@healthbridge360.com
+      - key: SECURE_SSL_REDIRECT
+        value: true
+      - key: SITE_URL
+        fromService:
+          type: web
+          name: healthbridge360-backend
+          property: host
+      - key: RATE_LIMIT_REQUESTS
+        value: 100
+      - key: RATE_LIMIT_WINDOW
+        value: 3600
 
   # Celery Worker Service
   - type: worker
@@ -20,8 +52,7 @@ services:
       - key: SECRET_KEY
         generateValue: true
       - key: DATABASE_URL
-        fromDatabase:
-          name: healthkart360-db
+        fromDatabase:          name: healthkart360-db
           property: connectionString
       - key: ALLOWED_HOSTS
         fromService:
@@ -32,20 +63,8 @@ services:
         value: placeholder_razorpay_key_id
       - key: RAZORPAY_KEY_SECRET
         value: placeholder_razorpay_key_secret
-      - key: EMAIL_HOST
-        value: smtp.gmail.com
-      - key: EMAIL_PORT
-        value: 587
-      - key: EMAIL_HOST_USER
-        value: placeholder_email_user
-      - key: EMAIL_HOST_PASSWORD
-        value: placeholder_email_password
-      # Note: For Gmail, use an App Password instead of your regular password
-      # Generate App Password at: https://myaccount.google.com/apppasswords
-      # Set EMAIL_HOST_USER to your Gmail address
-      # Set EMAIL_HOST_PASSWORD to the 16-character App Password (not your regular password)
-      - key: EMAIL_USE_TLS
-        value: true
+      - key: SENDGRID_API_KEY
+        value: placeholder_sendgrid_api_key
       - key: DEFAULT_FROM_EMAIL
         value: noreply@healthbridge360.com
       - key: SECURE_SSL_REDIRECT
@@ -65,6 +84,11 @@ services:
         generateValue: true
       - key: DJANGO_SUPERUSER_PASSWORD
         generateValue: true
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: healthkart360-redis
+          property: connectionString
 
   # Next.js Frontend Service
   - type: web
@@ -79,6 +103,13 @@ services:
           type: web
           name: healthbridge360-backend
           property: host
+
+# Redis for Celery
+services:
+  - type: redis
+    name: healthkart360-redis
+    plan: free
+    ipAllowList: []  # Only accessible by other services in this project
 
 # PostgreSQL Database
 databases:
