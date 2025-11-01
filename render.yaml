@@ -85,10 +85,7 @@ services:
       - key: DJANGO_SUPERUSER_PASSWORD
         generateValue: true
       - key: REDIS_URL
-        fromService:
-          type: redis
-          name: healthkart360-redis
-          property: connectionString
+        value: redis://localhost:6379/0
 
   # Next.js Frontend Service
   - type: web
@@ -103,13 +100,6 @@ services:
           type: web
           name: healthbridge360-backend
           property: host
-
-# Redis for Celery
-services:
-  - type: redis
-    name: healthkart360-redis
-    plan: free
-    ipAllowList: []  # Only accessible by other services in this project
 
 # PostgreSQL Database
 databases:
