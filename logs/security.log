@@ -4839,3 +4839,12 @@ Traceback (most recent call last):
     raise DisallowedHost(msg)
 django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '127.0.0.1:8000'. You may need to add '127.0.0.1' to ALLOWED_HOSTS.
 WARNING 2025-10-15 23:15:35,064 log 1440 23188 Bad Request: /orders/api/orders/
+ERROR 2025-10-17 20:27:25,649 services 28920 25052 Error sending order confirmation email: 'MockOrder' object has no attribute 'user'
+ERROR 2025-10-17 20:27:25,652 services 28920 25052 Error sending order notification email to pharmacist: 'MockOrder' object has no attribute 'pharmacy'
+ERROR 2025-10-17 20:28:08,285 services 2972 26000 Error sending order confirmation email: 'MockOrder' object has no attribute 'get_payment_method_display'
+ERROR 2025-10-17 20:28:08,287 services 2972 26000 Error sending order notification email to pharmacist: Field 'id' expected a number but got <__main__.test_order_email_simulation.<locals>.MockPharmacy object at 0x000002180AC52530>.
+ERROR 2025-10-17 20:29:25,642 services 21056 23308 Error sending order confirmation email: incomplete input
+ERROR 2025-10-17 20:29:25,643 services 21056 23308 Error sending order notification email to pharmacist: Field 'id' expected a number but got <__main__.test_order_email_simulation.<locals>.MockPharmacy object at 0x000001E77510EC50>.
+ERROR 2025-10-31 22:12:52,060 services 2608 22728 Error sending order confirmation email: incomplete input
+ERROR 2025-10-31 22:12:52,063 services 2608 22728 Error sending order notification email to pharmacist: Field 'id' expected a number but got <__main__.test_order_email_simulation.<locals>.MockPharmacy object at 0x0000014FB4C8A470>.
+ERROR 2025-10-31 22:17:28,791 mail 2668 9492 Failed to send email, error: HTTP Error 401: Unauthorized, response body: b'{"errors":[{"message":"The provided authorization grant is invalid, expired, or revoked","field":null,"help":null}]}'

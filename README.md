@@ -30,7 +30,7 @@ A comprehensive, mobile-first healthcare web application designed for rural Indi
 - **AJAX Integration**: Smooth user experience with asynchronous requests
 - **Session Management**: Shopping cart and user session handling
 - **Database Management**: Comprehensive data models and relationships
-- **Email Integration**: SMTP-based email notifications for orders and reminders
+**Email Integration**: Brevo-based email notifications for orders and reminders
 
 ## 🛠️ Tech Stack
 
@@ -131,9 +131,8 @@ DATABASE_URL='sqlite:///db.sqlite3' # For local development
 # Or for PostgreSQL:
 # DATABASE_URL='postgres://user:password@localhost:5432/healthbridge360'
 
-EMAIL_HOST_USER='your-email@gmail.com'
-EMAIL_HOST_PASSWORD='your-app-password'
-DEFAULT_FROM_EMAIL='your-email@gmail.com'
+BREVO_API_KEY='your-brevo-api-key'
+DEFAULT_FROM_EMAIL='noreply@healthbridge360.com'
 ```
 
 ### Database Configuration

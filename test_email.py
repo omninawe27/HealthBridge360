@@ -13,6 +13,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'healthkart360.settings')
 os.environ['SECRET_KEY'] = 'test-key-for-debug'
 os.environ['DATABASE_URL'] = 'sqlite:///db.sqlite3'
 os.environ['DEBUG'] = 'True'
+os.environ['SENDGRID_API_KEY'] = 'your-sendgrid-api-key'  # Placeholder for testing
 
 django.setup()
 

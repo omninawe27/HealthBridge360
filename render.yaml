@@ -25,7 +25,7 @@ services:
       - key: RAZORPAY_KEY_SECRET
         value: placeholder_razorpay_key_secret
       - key: SENDGRID_API_KEY
-        value: placeholder_sendgrid_api_key
+        sync: false
       - key: DEFAULT_FROM_EMAIL
         value: noreply@healthbridge360.com
       - key: SECURE_SSL_REDIRECT

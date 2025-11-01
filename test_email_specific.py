@@ -17,14 +17,13 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'healthkart360.settings')
 os.environ['SECRET_KEY'] = 'test-key-for-debug'
 os.environ['DEBUG'] = 'True'
 
-# If email credentials are not set or are placeholders, use console backend for testing
-email_user = os.getenv('EMAIL_HOST_USER')
-email_pass = os.getenv('EMAIL_HOST_PASSWORD')
-if not email_user or not email_pass or email_user == 'your-email@gmail.com' or email_pass == 'your-app-password':
+# If SendGrid API key is not set, use console backend for testing
+sendgrid_api_key = os.getenv('SENDGRID_API_KEY')
+if not sendgrid_api_key or sendgrid_api_key == 'your-sendgrid-api-key':
     os.environ['EMAIL_BACKEND'] = 'django.core.mail.backends.console.EmailBackend'
-    print("WARNING: Email credentials not set or are placeholders. Using console email backend for testing.")
+    print("WARNING: SendGrid API key not set. Using console email backend for testing.")
 else:
-    print(f"Using SMTP email backend with user: {email_user}")
+    print("Using SendGrid backend.")
 
 django.setup()
 
@@ -60,7 +59,7 @@ def test_email_to_specific_address():
 
         print(f"Sending test email to: {recipient_email}")
         print(f"Email backend: {settings.EMAIL_BACKEND}")
-        print(f"SMTP host: {settings.EMAIL_HOST}:{settings.EMAIL_PORT}")
+        print(f"SendGrid API Key configured: {'Yes' if hasattr(settings, 'SENDGRID_API_KEY') and settings.SENDGRID_API_KEY else 'No'}")
         print(f"From email: {settings.DEFAULT_FROM_EMAIL}")
 
         # Send HTML email with retry

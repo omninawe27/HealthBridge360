@@ -434,15 +434,18 @@ def checkout(request):
                 # Clear cart
                 CartService.clear_cart(request.user)
 
-                # Send order confirmation emails asynchronously using Celery
+                # Send order confirmation emails synchronously (fallback)
                 try:
-                    from .tasks import send_order_confirmation_emails
-                    # Queue the email task - don't wait for completion
-                    send_order_confirmation_emails.delay(order.id)
-                    logger.info(f"Queued email confirmation task for order {order.id}")
+                    from notifications.services import NotificationService
+                    # Send emails synchronously instead of using Celery
+                    NotificationService.send_order_status_notification(order)
+                    NotificationService.send_order_notification_to_pharmacist(order)
+                    NotificationService.send_order_verification_code(order)
+                    NotificationService.send_customer_order_verification_code(order)
+                    logger.info(f"Order confirmation emails sent synchronously for order {order.id}")
                 except Exception as e:
-                    logger.error(f"Failed to queue email task for order {order.id}: {str(e)}")
-                    # Don't fail the checkout if email queuing fails
+                    logger.error(f"Failed to send order confirmation emails for order {order.id}: {str(e)}")
+                    # Don't fail the checkout if email sending fails
 
                 logger.info(f"Order {order.id} created successfully with pharmacy {pharmacy.name}")
 

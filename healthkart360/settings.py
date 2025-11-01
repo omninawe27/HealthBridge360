@@ -105,21 +105,18 @@ WSGI_APPLICATION = 'healthkart360.wsgi.application'
 # DATABASE_URL=postgres://user:password@localhost:5432/healthkart360
 # For production, you'll get this URL from your provider (e.g., Supabase, Neon).
 DATABASE_URL = os.getenv('DATABASE_URL')
-if DATABASE_URL:
+if DATABASE_URL and DATABASE_URL != 'postgresql://user:password@host:port/database':
     try:
         DATABASES = {'default': dj_database_url.config(default=DATABASE_URL, conn_max_age=600)}
-    except ValueError as e:
-        if 'port' in str(e):
-            # Fallback to SQLite for development if DATABASE_URL is malformed
-            DATABASES = {
-                'default': {
-                    'ENGINE': 'django.db.backends.sqlite3',
-                    'NAME': BASE_DIR / 'db.sqlite3',
-                }
+    except Exception as e:
+        # Fallback to SQLite for development if DATABASE_URL is malformed or any error occurs
+        DATABASES = {
+            'default': {
+                'ENGINE': 'django.db.backends.sqlite3',
+                'NAME': BASE_DIR / 'db.sqlite3',
             }
-            print("WARNING: DATABASE_URL is malformed, falling back to SQLite for development.")
-        else:
-            raise
+        }
+        print("WARNING: DATABASE_URL is malformed or invalid, falling back to SQLite for development.")
 else:
     # Fallback to SQLite for development
     DATABASES = {
@@ -128,7 +125,10 @@ else:
             'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
-    print("WARNING: DATABASE_URL not set, using SQLite for development.")
+    if DATABASE_URL == 'postgresql://user:password@host:port/database':
+        print("INFO: DATABASE_URL contains placeholder values, using SQLite for development.")
+    else:
+        print("INFO: DATABASE_URL not set, using SQLite for development.")
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
@@ -195,22 +195,18 @@ SESSION_COOKIE_AGE = 86400  # 24 hours
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 
-# Email configuration - Use SMTP backend with fallback
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = os.getenv('EMAIL_HOST', 'smtp.gmail.com')
-EMAIL_PORT = int(os.getenv('EMAIL_PORT', 587))
-EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
-EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', 'True') == 'True'
-DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', EMAIL_HOST_USER or 'noreply@healthbridge360.com')
+# Email configuration - Use SendGrid backend
+SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
+EMAIL_BACKEND = 'sendgrid_backend.SendgridBackend'
+SENDGRID_SANDBOX_MODE_IN_DEBUG = False
+DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'healthbridge360team@gmail.com')
 
-# For local development or when SMTP fails, use console backend
-if not EMAIL_HOST_USER or not EMAIL_HOST_PASSWORD or EMAIL_HOST_USER == 'your-email@gmail.com' or EMAIL_HOST_PASSWORD == 'your-app-password':
+# For local development or when SendGrid API key is not set, use console backend
+if not SENDGRID_API_KEY or SENDGRID_API_KEY == 'your-sendgrid-api-key' or SENDGRID_API_KEY == 'placeholder_sendgrid_api_key':
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
     print("WARNING: No SMTP credentials found or placeholders used. Using console email backend for development.")
 else:
-    # In production, if SMTP fails, we can add retry logic in the email service
-    print(f"Email configured with SMTP: {EMAIL_HOST}:{EMAIL_PORT}, User: {EMAIL_HOST_USER}")
+    print("Email configured with SendGrid backend.")
 
 
 # Pharmacist email for receiving prescription verification codes
