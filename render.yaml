@@ -12,7 +12,8 @@ services:
       - key: SECRET_KEY
         generateValue: true
       - key: DATABASE_URL
-        fromDatabase:          name: healthkart360-db
+        fromDatabase:
+          name: healthkart360-db
           property: connectionString
       - key: ALLOWED_HOSTS
         fromService:
@@ -52,7 +53,8 @@ services:
       - key: SECRET_KEY
         generateValue: true
       - key: DATABASE_URL
-        fromDatabase:          name: healthkart360-db
+        fromDatabase:
+          name: healthkart360-db
           property: connectionString
       - key: ALLOWED_HOSTS
         fromService:
