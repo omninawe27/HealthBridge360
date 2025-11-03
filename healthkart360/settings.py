@@ -199,7 +199,7 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
 EMAIL_BACKEND = 'sendgrid_backend.SendgridBackend'
 SENDGRID_SANDBOX_MODE_IN_DEBUG = False
-DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'healthbridge360team@gmail.com')
+DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'noreply@healthbridge360.com')
 
 # Debug logging for email configuration
 # print(f"DEBUG: SENDGRID_API_KEY is set: {bool(SENDGRID_API_KEY)}")
