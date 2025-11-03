@@ -195,10 +195,11 @@ SESSION_COOKIE_AGE = 86400  # 24 hours
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 
-# Email configuration - Use SendGrid backend
-SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
-EMAIL_BACKEND = 'sendgrid_backend.SendgridBackend'
-SENDGRID_SANDBOX_MODE_IN_DEBUG = False
+# Email configuration - Use console backend for development/testing
+# SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
+# EMAIL_BACKEND = 'sendgrid_backend.SendgridBackend'
+# SENDGRID_SANDBOX_MODE_IN_DEBUG = False
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'omninawe27@gmail.com')
 
 # Debug logging for email configuration
