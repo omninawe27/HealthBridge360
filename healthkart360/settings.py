@@ -203,17 +203,17 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'omninawe27@gmail.com')
 
 # Debug logging for email configuration
-print(f"DEBUG: SENDGRID_API_KEY is set: {bool(SENDGRID_API_KEY)}")
-print(f"DEBUG: SENDGRID_API_KEY starts with SG: {SENDGRID_API_KEY and SENDGRID_API_KEY.startswith('SG.')}")
+# print(f"DEBUG: SENDGRID_API_KEY is set: {bool(SENDGRID_API_KEY)}")
+# print(f"DEBUG: SENDGRID_API_KEY starts with SG: {SENDGRID_API_KEY and SENDGRID_API_KEY.startswith('SG.')}")
 print(f"DEBUG: Current EMAIL_BACKEND: {EMAIL_BACKEND}")
 
 # For local development or when SendGrid API key is not set, use console backend
-if not SENDGRID_API_KEY or not SENDGRID_API_KEY.startswith('SG.') or SENDGRID_API_KEY in ['your-sendgrid-api-key', 'placeholder_sendgrid_api_key']:
-    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-    print("WARNING: No valid SendGrid API key found. Using console email backend.")
-    print(f"DEBUG: SENDGRID_API_KEY value: '{SENDGRID_API_KEY}'")
-else:
-    print("Email configured with SendGrid backend.")
+# if not SENDGRID_API_KEY or not SENDGRID_API_KEY.startswith('SG.') or SENDGRID_API_KEY in ['your-sendgrid-api-key', 'placeholder_sendgrid_api_key']:
+#     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+#     print("WARNING: No valid SendGrid API key found. Using console email backend.")
+#     print(f"DEBUG: SENDGRID_API_KEY value: '{SENDGRID_API_KEY}'")
+# else:
+#     print("Email configured with SendGrid backend.")
 
 
 # Pharmacist email for receiving prescription verification codes
