@@ -204,7 +204,7 @@ DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'noreply@healthbridge360.se
 # Debug logging for email configuration
 # print(f"DEBUG: SENDGRID_API_KEY is set: {bool(SENDGRID_API_KEY)}")
 # print(f"DEBUG: SENDGRID_API_KEY starts with SG: {SENDGRID_API_KEY and SENDGRID_API_KEY.startswith('SG.')}")
-print(f"DEBUG: Current EMAIL_BACKEND: {EMAIL_BACKEND}")
+
 
 # For local development or when SendGrid API key is not set, use console backend
 # if not SENDGRID_API_KEY or not SENDGRID_API_KEY.startswith('SG.') or SENDGRID_API_KEY in ['your-sendgrid-api-key', 'placeholder_sendgrid_api_key']:

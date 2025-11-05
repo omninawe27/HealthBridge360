@@ -30,7 +30,7 @@ A comprehensive, mobile-first healthcare web application designed for rural Indi
 - **AJAX Integration**: Smooth user experience with asynchronous requests
 - **Session Management**: Shopping cart and user session handling
 - **Database Management**: Comprehensive data models and relationships
-**Email Integration**: Brevo-based email notifications for orders and reminders
+**Email Integration**: SendGrid-based email notifications for orders and reminders
 
 ## 🛠️ Tech Stack
 
@@ -156,15 +156,19 @@ DATABASES = {
 - **CSRF Protection**: All forms protected against Cross-Site Request Forgery attacks
 - **SQL Injection Prevention**: Django ORM prevents SQL injection attacks
 - **XSS Protection**: Automatic HTML escaping and Content Security Policy (CSP) headers
-- **Secure File Upload**: File type, size, and content validation for prescription uploads
-- **Rate Limiting**: Prevents brute force attacks with configurable request limits
+- **Secure File Upload**: File type, size, and content validation for prescription uploads (max 5MB, 10 files)
+- **Rate Limiting**: Prevents brute force attacks with configurable request limits (1000 requests/hour)
 - **Security Headers**: HSTS, X-Frame-Options, X-Content-Type-Options, and CSP headers
-- **Session Security**: HttpOnly and Secure cookie flags, session expiration
+- **Session Security**: HttpOnly and Secure cookie flags, session expiration (24 hours)
 - **Input Validation**: Comprehensive validation for user inputs, phone numbers, and usernames
 - **Password Security**: Strong password requirements with minimum length and complexity
 - **Logging**: Security event logging for suspicious activities and authentication failures
 - **Environment Variables**: Sensitive settings stored securely via environment variables
 - **HTTPS Enforcement**: SSL redirect and secure cookie settings for production
+- **Credential Security**: All API keys, secrets, and passwords stored in environment variables
+- **Git Security**: Sensitive files (.env, API keys) properly excluded from version control
+- **Middleware Security**: Custom security middleware for request monitoring and XSS detection
+- **File Upload Security**: Restricted file types and size limits for prescription uploads
 
 ## 🌐 Internationalization
 
