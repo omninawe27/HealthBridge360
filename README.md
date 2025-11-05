@@ -39,6 +39,7 @@ A comprehensive, mobile-first healthcare web application designed for rural Indi
 - **Frontend**: Next.js 15.2.4 (React, TypeScript), HTML5, CSS3, JavaScript (Tailwind CSS)
 - **Package Manager**: pnpm
 - **Authentication**: Django's built-in authentication system
+- **Email Service**: SendGrid for email notifications and alerts
 - **File Upload**: Image upload for prescriptions
 - **Geolocation**: Pharmacy location services
 - **Caching**: Django's cache framework
