@@ -131,7 +131,7 @@ DATABASE_URL='sqlite:///db.sqlite3' # For local development
 # Or for PostgreSQL:
 # DATABASE_URL='postgres://user:password@localhost:5432/healthbridge360'
 
-BREVO_API_KEY='your-brevo-api-key'
+SENDGRID_API_KEY='your-sendgrid-api-key'
 DEFAULT_FROM_EMAIL='noreply@healthbridge360.com'
 ```
 
