@@ -43,7 +43,16 @@
     <p><strong>Total Amount:</strong> ₹{{ order.total_amount }}</p>
     <!-- <p><strong>Verification Code:</strong> <span class="code">{{ order.verification_code }}</span></p> -->
     <!-- Removed Track Your Order button as per user request -->
-    <p class="footer">Best regards,<br/>HealthKart 360 Team</p>
+    <p class="footer">
+      Best regards,<br/>HealthKart 360 Team<br/><br/>
+      HealthKart 360<br/>
+      123 Medical Street, Healthcare City<br/>
+      Mumbai, Maharashtra 400001<br/>
+      India<br/><br/>
+      <a href="{{ unsubscribe_url }}">Unsubscribe</a> |
+      <a href="{{ privacy_url }}">Privacy Policy</a> |
+      <a href="{{ terms_url }}">Terms of Service</a>
+    </p>
   </div>
 </body>
 </html>
