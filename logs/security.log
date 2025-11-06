@@ -4848,3 +4848,114 @@ ERROR 2025-10-17 20:29:25,643 services 21056 23308 Error sending order notificat
 ERROR 2025-10-31 22:12:52,060 services 2608 22728 Error sending order confirmation email: incomplete input
 ERROR 2025-10-31 22:12:52,063 services 2608 22728 Error sending order notification email to pharmacist: Field 'id' expected a number but got <__main__.test_order_email_simulation.<locals>.MockPharmacy object at 0x0000014FB4C8A470>.
 ERROR 2025-10-31 22:17:28,791 mail 2668 9492 Failed to send email, error: HTTP Error 401: Unauthorized, response body: b'{"errors":[{"message":"The provided authorization grant is invalid, expired, or revoked","field":null,"help":null}]}'
+ERROR 2025-11-06 22:15:32,133 mail 24120 18188 Failed to send email, error: HTTP Error 401: Unauthorized, response body: b'{"errors":[{"message":"The provided authorization grant is invalid, expired, or revoked","field":null,"help":null}]}'
+WARNING 2025-11-06 22:15:32,134 services 24120 18188 Email send failed on attempt 1: HTTP Error 401: Unauthorized
+ERROR 2025-11-06 22:15:32,135 services 24120 18188 Unexpected email error on attempt 1: HTTP Error 401: Unauthorized
+ERROR 2025-11-06 22:15:34,304 mail 24120 18188 Failed to send email, error: HTTP Error 401: Unauthorized, response body: b'{"errors":[{"message":"The provided authorization grant is invalid, expired, or revoked","field":null,"help":null}]}'
+WARNING 2025-11-06 22:15:34,308 services 24120 18188 Email send failed on attempt 2: HTTP Error 401: Unauthorized
+ERROR 2025-11-06 22:15:34,309 services 24120 18188 Unexpected email error on attempt 2: HTTP Error 401: Unauthorized
+ERROR 2025-11-06 22:15:37,264 mail 24120 18188 Failed to send email, error: HTTP Error 401: Unauthorized, response body: b'{"errors":[{"message":"The provided authorization grant is invalid, expired, or revoked","field":null,"help":null}]}'
+WARNING 2025-11-06 22:15:37,264 services 24120 18188 Email send failed on attempt 3: HTTP Error 401: Unauthorized
+ERROR 2025-11-06 22:15:37,265 services 24120 18188 Unexpected email error on attempt 3: HTTP Error 401: Unauthorized
+ERROR 2025-11-06 22:15:37,265 services 24120 18188 Failed to send email after 3 attempts to ['superadmin@example.com']
+ERROR 2025-11-06 22:15:37,265 services 24120 18188 Failed to send email notification for reminder 9
+ERROR 2025-11-06 22:19:24,013 mail 9116 18076 Failed to send email, error: HTTP Error 401: Unauthorized, response body: b'{"errors":[{"message":"The provided authorization grant is invalid, expired, or revoked","field":null,"help":null}]}'
+ERROR 2025-11-06 22:22:52,836 mail 19856 24180 Failed to send email, error: HTTP Error 401: Unauthorized, response body: b'{"errors":[{"message":"The provided authorization grant is invalid, expired, or revoked","field":null,"help":null}]}'
+WARNING 2025-11-06 22:22:52,837 services 19856 24180 Email send failed on attempt 1: HTTP Error 401: Unauthorized
+ERROR 2025-11-06 22:22:52,837 services 19856 24180 Unexpected email error on attempt 1: HTTP Error 401: Unauthorized
+ERROR 2025-11-06 22:22:54,870 mail 19856 24180 Failed to send email, error: HTTP Error 401: Unauthorized, response body: b'{"errors":[{"message":"The provided authorization grant is invalid, expired, or revoked","field":null,"help":null}]}'
+WARNING 2025-11-06 22:22:54,871 services 19856 24180 Email send failed on attempt 2: HTTP Error 401: Unauthorized
+ERROR 2025-11-06 22:22:54,871 services 19856 24180 Unexpected email error on attempt 2: HTTP Error 401: Unauthorized
+ERROR 2025-11-06 22:22:57,867 mail 19856 24180 Failed to send email, error: HTTP Error 401: Unauthorized, response body: b'{"errors":[{"message":"The provided authorization grant is invalid, expired, or revoked","field":null,"help":null}]}'
+WARNING 2025-11-06 22:22:57,868 services 19856 24180 Email send failed on attempt 3: HTTP Error 401: Unauthorized
+ERROR 2025-11-06 22:22:57,869 services 19856 24180 Unexpected email error on attempt 3: HTTP Error 401: Unauthorized
+ERROR 2025-11-06 22:22:57,869 services 19856 24180 Failed to send email after 3 attempts to ['superadmin@example.com']
+ERROR 2025-11-06 22:22:57,870 services 19856 24180 Failed to send email notification for reminder 9
+ERROR 2025-11-06 22:22:58,771 mail 19856 24180 Failed to send email, error: HTTP Error 401: Unauthorized, response body: b'{"errors":[{"message":"The provided authorization grant is invalid, expired, or revoked","field":null,"help":null}]}'
+WARNING 2025-11-06 22:22:58,772 services 19856 24180 Email send failed on attempt 1: HTTP Error 401: Unauthorized
+ERROR 2025-11-06 22:22:58,772 services 19856 24180 Unexpected email error on attempt 1: HTTP Error 401: Unauthorized
+ERROR 2025-11-06 22:23:00,850 mail 19856 24180 Failed to send email, error: HTTP Error 401: Unauthorized, response body: b'{"errors":[{"message":"The provided authorization grant is invalid, expired, or revoked","field":null,"help":null}]}'
+WARNING 2025-11-06 22:23:00,851 services 19856 24180 Email send failed on attempt 2: HTTP Error 401: Unauthorized
+ERROR 2025-11-06 22:23:00,851 services 19856 24180 Unexpected email error on attempt 2: HTTP Error 401: Unauthorized
+ERROR 2025-11-06 22:23:03,715 mail 19856 24180 Failed to send email, error: HTTP Error 401: Unauthorized, response body: b'{"errors":[{"message":"The provided authorization grant is invalid, expired, or revoked","field":null,"help":null}]}'
+WARNING 2025-11-06 22:23:03,716 services 19856 24180 Email send failed on attempt 3: HTTP Error 401: Unauthorized
+ERROR 2025-11-06 22:23:03,717 services 19856 24180 Unexpected email error on attempt 3: HTTP Error 401: Unauthorized
+ERROR 2025-11-06 22:23:03,717 services 19856 24180 Failed to send email after 3 attempts to ['superadmin@example.com']
+ERROR 2025-11-06 22:23:03,717 services 19856 24180 Failed to send email notification for reminder 2
+ERROR 2025-11-06 22:23:04,783 mail 19856 24180 Failed to send email, error: HTTP Error 401: Unauthorized, response body: b'{"errors":[{"message":"The provided authorization grant is invalid, expired, or revoked","field":null,"help":null}]}'
+WARNING 2025-11-06 22:23:04,784 services 19856 24180 Email send failed on attempt 1: HTTP Error 401: Unauthorized
+ERROR 2025-11-06 22:23:04,786 services 19856 24180 Unexpected email error on attempt 1: HTTP Error 401: Unauthorized
+ERROR 2025-11-06 22:23:06,788 mail 19856 24180 Failed to send email, error: HTTP Error 401: Unauthorized, response body: b'{"errors":[{"message":"The provided authorization grant is invalid, expired, or revoked","field":null,"help":null}]}'
+WARNING 2025-11-06 22:23:06,789 services 19856 24180 Email send failed on attempt 2: HTTP Error 401: Unauthorized
+ERROR 2025-11-06 22:23:06,790 services 19856 24180 Unexpected email error on attempt 2: HTTP Error 401: Unauthorized
+ERROR 2025-11-06 22:23:09,752 mail 19856 24180 Failed to send email, error: HTTP Error 401: Unauthorized, response body: b'{"errors":[{"message":"The provided authorization grant is invalid, expired, or revoked","field":null,"help":null}]}'
+WARNING 2025-11-06 22:23:09,755 services 19856 24180 Email send failed on attempt 3: HTTP Error 401: Unauthorized
+ERROR 2025-11-06 22:23:09,756 services 19856 24180 Unexpected email error on attempt 3: HTTP Error 401: Unauthorized
+ERROR 2025-11-06 22:23:09,757 services 19856 24180 Failed to send email after 3 attempts to ['superadmin@example.com']
+ERROR 2025-11-06 22:23:09,757 services 19856 24180 Failed to send email notification for reminder 6
+ERROR 2025-11-06 22:23:10,689 mail 19856 24180 Failed to send email, error: HTTP Error 401: Unauthorized, response body: b'{"errors":[{"message":"The provided authorization grant is invalid, expired, or revoked","field":null,"help":null}]}'
+WARNING 2025-11-06 22:23:10,690 services 19856 24180 Email send failed on attempt 1: HTTP Error 401: Unauthorized
+ERROR 2025-11-06 22:23:10,691 services 19856 24180 Unexpected email error on attempt 1: HTTP Error 401: Unauthorized
+ERROR 2025-11-06 22:23:12,646 mail 19856 24180 Failed to send email, error: HTTP Error 401: Unauthorized, response body: b'{"errors":[{"message":"The provided authorization grant is invalid, expired, or revoked","field":null,"help":null}]}'
+WARNING 2025-11-06 22:23:12,649 services 19856 24180 Email send failed on attempt 2: HTTP Error 401: Unauthorized
+ERROR 2025-11-06 22:23:12,650 services 19856 24180 Unexpected email error on attempt 2: HTTP Error 401: Unauthorized
+ERROR 2025-11-06 22:23:15,718 mail 19856 24180 Failed to send email, error: HTTP Error 401: Unauthorized, response body: b'{"errors":[{"message":"The provided authorization grant is invalid, expired, or revoked","field":null,"help":null}]}'
+WARNING 2025-11-06 22:23:15,718 services 19856 24180 Email send failed on attempt 3: HTTP Error 401: Unauthorized
+ERROR 2025-11-06 22:23:15,719 services 19856 24180 Unexpected email error on attempt 3: HTTP Error 401: Unauthorized
+ERROR 2025-11-06 22:23:15,719 services 19856 24180 Failed to send email after 3 attempts to ['superadmin@example.com']
+ERROR 2025-11-06 22:23:15,719 services 19856 24180 Failed to send email notification for reminder 3
+ERROR 2025-11-06 22:23:17,992 mail 19856 24180 Failed to send email, error: HTTP Error 401: Unauthorized, response body: b'{"errors":[{"message":"The provided authorization grant is invalid, expired, or revoked","field":null,"help":null}]}'
+WARNING 2025-11-06 22:23:17,992 services 19856 24180 Email send failed on attempt 1: HTTP Error 401: Unauthorized
+ERROR 2025-11-06 22:23:17,993 services 19856 24180 Unexpected email error on attempt 1: HTTP Error 401: Unauthorized
+ERROR 2025-11-06 22:23:19,915 mail 19856 24180 Failed to send email, error: HTTP Error 401: Unauthorized, response body: b'{"errors":[{"message":"The provided authorization grant is invalid, expired, or revoked","field":null,"help":null}]}'
+WARNING 2025-11-06 22:23:19,915 services 19856 24180 Email send failed on attempt 2: HTTP Error 401: Unauthorized
+ERROR 2025-11-06 22:23:19,916 services 19856 24180 Unexpected email error on attempt 2: HTTP Error 401: Unauthorized
+ERROR 2025-11-06 22:23:22,836 mail 19856 24180 Failed to send email, error: HTTP Error 401: Unauthorized, response body: b'{"errors":[{"message":"The provided authorization grant is invalid, expired, or revoked","field":null,"help":null}]}'
+WARNING 2025-11-06 22:23:22,837 services 19856 24180 Email send failed on attempt 3: HTTP Error 401: Unauthorized
+ERROR 2025-11-06 22:23:22,838 services 19856 24180 Unexpected email error on attempt 3: HTTP Error 401: Unauthorized
+ERROR 2025-11-06 22:23:22,838 services 19856 24180 Failed to send email after 3 attempts to ['superadmin@example.com']
+ERROR 2025-11-06 22:23:22,839 services 19856 24180 Failed to send email notification for reminder 7
+ERROR 2025-11-06 22:23:23,799 mail 19856 24180 Failed to send email, error: HTTP Error 401: Unauthorized, response body: b'{"errors":[{"message":"The provided authorization grant is invalid, expired, or revoked","field":null,"help":null}]}'
+WARNING 2025-11-06 22:23:23,799 services 19856 24180 Email send failed on attempt 1: HTTP Error 401: Unauthorized
+ERROR 2025-11-06 22:23:23,802 services 19856 24180 Unexpected email error on attempt 1: HTTP Error 401: Unauthorized
+ERROR 2025-11-06 22:23:25,755 mail 19856 24180 Failed to send email, error: HTTP Error 401: Unauthorized, response body: b'{"errors":[{"message":"The provided authorization grant is invalid, expired, or revoked","field":null,"help":null}]}'
+WARNING 2025-11-06 22:23:25,756 services 19856 24180 Email send failed on attempt 2: HTTP Error 401: Unauthorized
+ERROR 2025-11-06 22:23:25,756 services 19856 24180 Unexpected email error on attempt 2: HTTP Error 401: Unauthorized
+ERROR 2025-11-06 22:23:28,755 mail 19856 24180 Failed to send email, error: HTTP Error 401: Unauthorized, response body: b'{"errors":[{"message":"The provided authorization grant is invalid, expired, or revoked","field":null,"help":null}]}'
+WARNING 2025-11-06 22:23:28,756 services 19856 24180 Email send failed on attempt 3: HTTP Error 401: Unauthorized
+ERROR 2025-11-06 22:23:28,756 services 19856 24180 Unexpected email error on attempt 3: HTTP Error 401: Unauthorized
+ERROR 2025-11-06 22:23:28,757 services 19856 24180 Failed to send email after 3 attempts to ['superadmin@example.com']
+ERROR 2025-11-06 22:23:28,757 services 19856 24180 Failed to send email notification for reminder 1
+ERROR 2025-11-06 22:23:29,756 mail 19856 24180 Failed to send email, error: HTTP Error 401: Unauthorized, response body: b'{"errors":[{"message":"The provided authorization grant is invalid, expired, or revoked","field":null,"help":null}]}'
+WARNING 2025-11-06 22:23:29,757 services 19856 24180 Email send failed on attempt 1: HTTP Error 401: Unauthorized
+ERROR 2025-11-06 22:23:29,759 services 19856 24180 Unexpected email error on attempt 1: HTTP Error 401: Unauthorized
+ERROR 2025-11-06 22:23:31,800 mail 19856 24180 Failed to send email, error: HTTP Error 401: Unauthorized, response body: b'{"errors":[{"message":"The provided authorization grant is invalid, expired, or revoked","field":null,"help":null}]}'
+WARNING 2025-11-06 22:23:31,802 services 19856 24180 Email send failed on attempt 2: HTTP Error 401: Unauthorized
+ERROR 2025-11-06 22:23:31,803 services 19856 24180 Unexpected email error on attempt 2: HTTP Error 401: Unauthorized
+ERROR 2025-11-06 22:23:34,793 mail 19856 24180 Failed to send email, error: HTTP Error 401: Unauthorized, response body: b'{"errors":[{"message":"The provided authorization grant is invalid, expired, or revoked","field":null,"help":null}]}'
+WARNING 2025-11-06 22:23:34,794 services 19856 24180 Email send failed on attempt 3: HTTP Error 401: Unauthorized
+ERROR 2025-11-06 22:23:34,794 services 19856 24180 Unexpected email error on attempt 3: HTTP Error 401: Unauthorized
+ERROR 2025-11-06 22:23:34,795 services 19856 24180 Failed to send email after 3 attempts to ['superadmin@example.com']
+ERROR 2025-11-06 22:23:34,795 services 19856 24180 Failed to send email notification for reminder 5
+ERROR 2025-11-06 22:23:35,792 mail 19856 24180 Failed to send email, error: HTTP Error 401: Unauthorized, response body: b'{"errors":[{"message":"The provided authorization grant is invalid, expired, or revoked","field":null,"help":null}]}'
+WARNING 2025-11-06 22:23:35,795 services 19856 24180 Email send failed on attempt 1: HTTP Error 401: Unauthorized
+ERROR 2025-11-06 22:23:35,796 services 19856 24180 Unexpected email error on attempt 1: HTTP Error 401: Unauthorized
+ERROR 2025-11-06 22:23:37,919 mail 19856 24180 Failed to send email, error: HTTP Error 401: Unauthorized, response body: b'{"errors":[{"message":"The provided authorization grant is invalid, expired, or revoked","field":null,"help":null}]}'
+WARNING 2025-11-06 22:23:37,919 services 19856 24180 Email send failed on attempt 2: HTTP Error 401: Unauthorized
+ERROR 2025-11-06 22:23:37,920 services 19856 24180 Unexpected email error on attempt 2: HTTP Error 401: Unauthorized
+ERROR 2025-11-06 22:23:40,932 mail 19856 24180 Failed to send email, error: HTTP Error 401: Unauthorized, response body: b'{"errors":[{"message":"The provided authorization grant is invalid, expired, or revoked","field":null,"help":null}]}'
+WARNING 2025-11-06 22:23:40,935 services 19856 24180 Email send failed on attempt 3: HTTP Error 401: Unauthorized
+ERROR 2025-11-06 22:23:40,935 services 19856 24180 Unexpected email error on attempt 3: HTTP Error 401: Unauthorized
+ERROR 2025-11-06 22:23:40,936 services 19856 24180 Failed to send email after 3 attempts to ['superadmin@example.com']
+ERROR 2025-11-06 22:23:40,936 services 19856 24180 Failed to send email notification for reminder 4
+ERROR 2025-11-06 22:23:41,860 mail 19856 24180 Failed to send email, error: HTTP Error 401: Unauthorized, response body: b'{"errors":[{"message":"The provided authorization grant is invalid, expired, or revoked","field":null,"help":null}]}'
+WARNING 2025-11-06 22:23:41,861 services 19856 24180 Email send failed on attempt 1: HTTP Error 401: Unauthorized
+ERROR 2025-11-06 22:23:41,862 services 19856 24180 Unexpected email error on attempt 1: HTTP Error 401: Unauthorized
+ERROR 2025-11-06 22:23:43,701 mail 19856 24180 Failed to send email, error: HTTP Error 401: Unauthorized, response body: b'{"errors":[{"message":"The provided authorization grant is invalid, expired, or revoked","field":null,"help":null}]}'
+WARNING 2025-11-06 22:23:43,702 services 19856 24180 Email send failed on attempt 2: HTTP Error 401: Unauthorized
+ERROR 2025-11-06 22:23:43,702 services 19856 24180 Unexpected email error on attempt 2: HTTP Error 401: Unauthorized
+ERROR 2025-11-06 22:23:47,176 mail 19856 24180 Failed to send email, error: HTTP Error 401: Unauthorized, response body: b'{"errors":[{"message":"The provided authorization grant is invalid, expired, or revoked","field":null,"help":null}]}'
+WARNING 2025-11-06 22:23:47,177 services 19856 24180 Email send failed on attempt 3: HTTP Error 401: Unauthorized
+ERROR 2025-11-06 22:23:47,178 services 19856 24180 Unexpected email error on attempt 3: HTTP Error 401: Unauthorized
+ERROR 2025-11-06 22:23:47,178 services 19856 24180 Failed to send email after 3 attempts to ['superadmin@example.com']
+ERROR 2025-11-06 22:23:47,178 services 19856 24180 Failed to send email notification for reminder 8

@@ -197,7 +197,10 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 # Email configuration - Use SendGrid backend in production
 SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
-EMAIL_BACKEND = 'sendgrid_backend.SendgridBackend'
+if DEBUG and not SENDGRID_API_KEY:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+else:
+    EMAIL_BACKEND = 'sendgrid_backend.SendgridBackend'
 SENDGRID_SANDBOX_MODE_IN_DEBUG = False
 DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'noreply@healthbridge360.sendgrid.net')
 
