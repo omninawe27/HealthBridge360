@@ -5712,3 +5712,12 @@ ERROR 2025-11-07 21:31:58,166 services 11800 24368 Failed to send email after 3 
 ERROR 2025-11-07 21:31:58,166 services 11800 24368 Failed to send email notification for reminder 10
 ERROR 2025-11-07 21:32:14,009 mail 18008 10644 Failed to send email, error: HTTP Error 401: Unauthorized, response body: b'{"errors":[{"message":"The provided authorization grant is invalid, expired, or revoked","field":null,"help":null}]}'
 ERROR 2025-11-07 21:32:21,345 mail 13128 12204 Failed to send email, error: HTTP Error 401: Unauthorized, response body: b'{"errors":[{"message":"The provided authorization grant is invalid, expired, or revoked","field":null,"help":null}]}'
+WARNING 2025-11-07 21:35:54,126 services 14232 17188 Email send failed on attempt 1: [Errno 22] Invalid argument
+ERROR 2025-11-07 21:35:54,126 services 14232 17188 Unexpected email error on attempt 1: [Errno 22] Invalid argument
+WARNING 2025-11-07 21:35:55,137 services 14232 17188 Email send failed on attempt 2: [Errno 22] Invalid argument
+ERROR 2025-11-07 21:35:55,137 services 14232 17188 Unexpected email error on attempt 2: [Errno 22] Invalid argument
+WARNING 2025-11-07 21:35:57,144 services 14232 17188 Email send failed on attempt 3: [Errno 22] Invalid argument
+ERROR 2025-11-07 21:35:57,144 services 14232 17188 Unexpected email error on attempt 3: [Errno 22] Invalid argument
+ERROR 2025-11-07 21:35:57,144 services 14232 17188 Failed to send email after 3 attempts to ['superadmin@example.com']
+ERROR 2025-11-07 21:35:57,144 services 14232 17188 Failed to send email notification for reminder 10
+ERROR 2025-11-07 21:35:57,144 reminder_scheduler 14232 17188 Error during reminder check: 'charmap' codec can't encode character '\u2717' in position 0: character maps to <undefined>

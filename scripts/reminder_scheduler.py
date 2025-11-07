@@ -56,14 +56,15 @@ def main():
         while True:
             # Get current time
             now = timezone.localtime()
-            current_minute = now.minute
+            current_second = now.second
 
-            # Run reminder check every minute
-            logger.info(f"Running reminder check at {now.strftime('%Y-%m-%d %H:%M:%S')}")
-            run_reminder_check()
+            # Run reminder check every minute at :00 seconds
+            if current_second == 0:
+                logger.info(f"Running reminder check at {now.strftime('%Y-%m-%d %H:%M:%S')}")
+                run_reminder_check()
 
-            # Wait for the next minute
-            time.sleep(60)  # Sleep for 60 seconds
+            # Sleep for 1 second to check again
+            time.sleep(1)
 
     except KeyboardInterrupt:
         logger.info("Reminder Scheduler stopped by user")

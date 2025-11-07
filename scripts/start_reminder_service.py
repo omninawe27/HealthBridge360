@@ -22,6 +22,18 @@ def start_reminder_service():
     try:
         print("🚀 Starting Reminder Service...")
 
+        # Check if already running
+        if os.path.exists('reminder_service.pid'):
+            try:
+                with open('reminder_service.pid', 'r') as f:
+                    old_pid = int(f.read().strip())
+                os.kill(old_pid, 0)  # Check if process exists
+                print(f"⚠️  Reminder service already running with PID: {old_pid}")
+                return None
+            except (OSError, ValueError):
+                # Process not running, remove stale PID file
+                os.remove('reminder_service.pid')
+
         # Start the scheduler as a background process
         process = subprocess.Popen([
             sys.executable,
