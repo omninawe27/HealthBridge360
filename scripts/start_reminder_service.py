@@ -65,17 +65,18 @@ def check_service_status():
                 pid = int(f.read().strip())
 
             # Check if process is still running
-            os.kill(pid, 0)  # Signal 0 doesn't kill, just checks if process exists
-            print(f"✅ Reminder service is running (PID: {pid})")
-            return True
+            try:
+                os.kill(pid, 0)  # Signal 0 doesn't kill, just checks if process exists
+                print(f"✅ Reminder service is running (PID: {pid})")
+                return True
+            except OSError:
+                # Process is not running, remove stale PID file
+                print("❌ Reminder service process not found (stale PID file)")
+                os.remove('reminder_service.pid')
+                return False
         else:
             print("❌ Reminder service is not running")
             return False
-    except OSError:
-        print("❌ Reminder service process not found (stale PID file)")
-        if os.path.exists('reminder_service.pid'):
-            os.remove('reminder_service.pid')
-        return False
     except Exception as e:
         print(f"❌ Error checking service status: {str(e)}")
         return False

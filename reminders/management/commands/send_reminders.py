@@ -52,12 +52,25 @@ class Command(BaseCommand):
                     due_time_slots.append(slot)
 
         # Filter reminders in database query
-        reminders = Reminder.objects.filter(
-            is_active=True
-        ).filter(
-            Q(specific_time__isnull=True, time_slot__in=due_time_slots) |
-            Q(specific_time__isnull=False)  # Include all specific time reminders for now
-        ).select_related('user')
+        # For specific time reminders, check if they fall within the current time window
+        start_time = (now - window_delta).time()
+        end_time = (now + window_delta).time()
+
+        # Use Django ORM filtering with proper time field lookups
+        specific_time_reminders = Reminder.objects.filter(
+            is_active=True,
+            specific_time__isnull=False,
+            specific_time__gte=start_time,
+            specific_time__lte=end_time
+        )
+
+        time_slot_reminders = Reminder.objects.filter(
+            is_active=True,
+            specific_time__isnull=True,
+            time_slot__in=due_time_slots
+        )
+
+        reminders = (time_slot_reminders | specific_time_reminders).select_related('user').distinct()
 
         total = reminders.count()
         sent = 0
@@ -68,14 +81,22 @@ class Command(BaseCommand):
         for reminder in reminders:
             # Send email notification
             try:
-                NotificationService.send_email_notification(reminder)
-                self.stdout.write(
-                    self.style.SUCCESS(
-                        f"✓ Email sent for reminder: {reminder.medicine_name} "
-                        f"({reminder.user.email}) at {reminder.specific_time}"
+                success = NotificationService.send_email_notification(reminder)
+                if success:
+                    self.stdout.write(
+                        self.style.SUCCESS(
+                            f"✓ Email sent for reminder: {reminder.medicine_name} "
+                            f"({reminder.user.email}) at {reminder.specific_time}"
+                        )
                     )
-                )
-                sent += 1
+                    sent += 1
+                else:
+                    self.stdout.write(
+                        self.style.ERROR(
+                            f"✗ Failed to send email for reminder: {reminder.medicine_name} "
+                            f"({reminder.user.email}) - Email service returned failure"
+                        )
+                    )
             except Exception as e:
                 self.stdout.write(
                     self.style.ERROR(
