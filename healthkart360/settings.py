@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_celery_beat',
     'core',
     'users',
     'pharmacy',
@@ -308,6 +309,15 @@ CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = TIME_ZONE
+
+# Celery Beat Schedule for reminder emails
+from celery.schedules import crontab
+CELERY_BEAT_SCHEDULE = {
+    'send-reminder-emails': {
+        'task': 'reminders.tasks.send_reminder_emails',
+        'schedule': crontab(minute='*'),  # Every minute
+    },
+}
 
 # IMPORTANT:
 # - For Gmail, you must enable 2-Step Verification and create an App Password.
