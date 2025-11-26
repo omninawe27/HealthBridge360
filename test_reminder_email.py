@@ -31,7 +31,7 @@ def send_test_reminder_email():
     HealthKart 360 Team
     """
 
-    recipient_email = 'omninawe27@gmail.com'
+    recipient_email = 'test@example.com'
 
     try:
         result = send_mail(

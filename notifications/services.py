@@ -63,12 +63,12 @@ class NotificationService:
         return False
     @staticmethod
     def send_email_notification(reminder):
-        """Send email notification for a reminder"""
+        """Send email notification for a reminder - using exact same pattern as order emails"""
         try:
             user = reminder.user
-            subject = f"Medicine Reminder: {reminder.medicine_name}"
+            subject = f"Medicine Reminder - HealthKart 360"
 
-            # Plain text message for fallback
+            # Plain text message for fallback - exact same format as order emails
             message = f"""
             Hello {user.first_name},
 
@@ -84,37 +84,64 @@ class NotificationService:
             HealthKart 360 Team
             """
 
-            # HTML message
-            html_message = render_to_string('notifications/reminder_email.html', {
-                'user': user,
-                'reminder': reminder,
-                'medication_tracking_url': f"{settings.SITE_URL}/reminders/{reminder.id}/mark-taken/"
-            })
+            # HTML message - using exact same structure as order confirmation email
+            html_message = f"""
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <meta charset="UTF-8">
+                <title>Medicine Reminder - HealthKart 360</title>
+                <style>
+                    body {{ font-family: Arial, sans-serif; line-height: 1.6; color: #333; background-color: #f4f4f4; margin: 0; padding: 20px; }}
+                    .container {{ max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 30px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }}
+                    .header {{ text-align: center; padding-bottom: 20px; border-bottom: 2px solid #007bff; }}
+                    .header h1 {{ color: #007bff; margin: 0; font-size: 24px; }}
+                    .content {{ padding: 20px 0; }}
+                    .reminder-details {{ background-color: #f8f9fa; padding: 20px; border-radius: 5px; margin: 20px 0; }}
+                    .reminder-details p {{ margin: 10px 0; }}
+                    .footer {{ text-align: center; padding-top: 20px; border-top: 1px solid #eee; font-size: 12px; color: #777; }}
+                </style>
+            </head>
+            <body>
+                <div class="container">
+                    <div class="header">
+                        <h1>Medicine Reminder</h1>
+                    </div>
+                    <div class="content">
+                        <p>Hello {user.first_name},</p>
+                        <p>It's time to take your medicine!</p>
+
+                        <div class="reminder-details">
+                            <p><strong>Medicine:</strong> {reminder.medicine_name}</p>
+                            <p><strong>Time:</strong> {reminder.get_time_slot_display()}</p>
+                            <p><strong>Notes:</strong> {reminder.notes or 'No additional notes'}</p>
+                        </div>
+
+                        <p>Please take your medicine as prescribed.</p>
+                    </div>
+                    <div class="footer">
+                        <p>Best regards,<br>HealthKart 360 Team</p>
+                    </div>
+                </div>
+            </body>
+            </html>
+            """
 
             recipient_email = user.email
 
-            # Send HTML email with retry
+            # Send HTML email with retry - exact same pattern as order confirmation email
             email = EmailMultiAlternatives(subject, message, settings.DEFAULT_FROM_EMAIL, [recipient_email])
             email.attach_alternative(html_message, "text/html")
             success = NotificationService._send_email_with_retry(email)
 
             if success:
-                # Create notification record
-                notification = Notification.objects.create(
-                    user=user,
-                    reminder=reminder,
-                    notification_type='email',
-                    message=message,
-                    status='sent',
-                    sent_at=timezone.now()
-                )
-                logger.info(f"Email notification sent for reminder {reminder.id}")
+                logger.info(f"Medicine reminder email sent for reminder {reminder.id}")
                 return True
             else:
-                logger.error(f"Failed to send email notification for reminder {reminder.id}")
+                logger.error(f"Failed to send medicine reminder email for reminder {reminder.id}")
                 return False
         except Exception as e:
-            logger.error(f"Error sending email notification: {e}")
+            logger.error(f"Error sending medicine reminder email: {e}")
             return False
 
     @staticmethod

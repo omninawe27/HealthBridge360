@@ -101,35 +101,13 @@ TEMPLATES = [
 WSGI_APPLICATION = 'healthkart360.wsgi.application'
 
 # Database
-# Database configuration using dj-database-url
-# For local development, your .env file can look like:
-# DATABASE_URL=postgres://user:password@localhost:5432/healthkart360
-# For production, you'll get this URL from your provider (e.g., Supabase, Neon).
-DATABASE_URL = os.getenv('DATABASE_URL')
-if DATABASE_URL and DATABASE_URL != 'postgresql://user:password@host:port/database':
-    try:
-        DATABASES = {'default': dj_database_url.config(default=DATABASE_URL, conn_max_age=600)}
-    except Exception as e:
-        # Fallback to SQLite for development if DATABASE_URL is malformed or any error occurs
-        DATABASES = {
-            'default': {
-                'ENGINE': 'django.db.backends.sqlite3',
-                'NAME': BASE_DIR / 'db.sqlite3',
-            }
-        }
-        print("WARNING: DATABASE_URL is malformed or invalid, falling back to SQLite for development.")
-else:
-    # Fallback to SQLite for development
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
+# Using SQLite for development and production to avoid connection issues
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
-    if DATABASE_URL == 'postgresql://user:password@host:port/database':
-        print("INFO: DATABASE_URL contains placeholder values, using SQLite for development.")
-    else:
-        print("INFO: DATABASE_URL not set, using SQLite for development.")
+}
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [

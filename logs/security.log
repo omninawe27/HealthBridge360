@@ -5730,3 +5730,143 @@ ERROR 2025-11-07 22:19:03,742 services 11580 18276 Unexpected email error on att
 ERROR 2025-11-07 22:19:03,742 services 11580 18276 Failed to send email after 3 attempts to ['superadmin@example.com']
 ERROR 2025-11-07 22:19:03,742 services 11580 18276 Failed to send email notification for reminder 9
 ERROR 2025-11-07 22:19:03,743 reminder_scheduler 11580 18276 Error during reminder check: 'charmap' codec can't encode character '\u2717' in position 0: character maps to <undefined>
+ERROR 2025-11-08 22:34:16,000 mail 9844 6724 Failed to send email, error: HTTP Error 403: Forbidden, response body: b'{"errors":[{"message":"The from address does not match a verified Sender Identity. Mail cannot be sent until this error is resolved. Visit https://sendgrid.com/docs/for-developers/sending-email/sender-identity/ to see the Sender Identity requirements","field":"from","help":null}]}'
+WARNING 2025-11-08 22:34:16,001 services 9844 6724 Email send failed on attempt 1: HTTP Error 403: Forbidden
+ERROR 2025-11-08 22:34:16,002 services 9844 6724 Unexpected email error on attempt 1: HTTP Error 403: Forbidden
+ERROR 2025-11-08 22:34:20,465 mail 9844 6724 Failed to send email, error: HTTP Error 403: Forbidden, response body: b'{"errors":[{"message":"The from address does not match a verified Sender Identity. Mail cannot be sent until this error is resolved. Visit https://sendgrid.com/docs/for-developers/sending-email/sender-identity/ to see the Sender Identity requirements","field":"from","help":null}]}'
+WARNING 2025-11-08 22:34:20,466 services 9844 6724 Email send failed on attempt 2: HTTP Error 403: Forbidden
+ERROR 2025-11-08 22:34:20,466 services 9844 6724 Unexpected email error on attempt 2: HTTP Error 403: Forbidden
+ERROR 2025-11-08 22:34:26,025 mail 9844 6724 Failed to send email, error: HTTP Error 403: Forbidden, response body: b'{"errors":[{"message":"The from address does not match a verified Sender Identity. Mail cannot be sent until this error is resolved. Visit https://sendgrid.com/docs/for-developers/sending-email/sender-identity/ to see the Sender Identity requirements","field":"from","help":null}]}'
+WARNING 2025-11-08 22:34:26,025 services 9844 6724 Email send failed on attempt 3: HTTP Error 403: Forbidden
+ERROR 2025-11-08 22:34:26,025 services 9844 6724 Unexpected email error on attempt 3: HTTP Error 403: Forbidden
+ERROR 2025-11-08 22:34:26,026 services 9844 6724 Failed to send email after 3 attempts to ['omninawe27@gmail.com']
+ERROR 2025-11-08 22:34:26,026 services 9844 6724 Failed to send email notification for reminder 12
+ERROR 2025-11-08 22:34:42,840 mail 13916 13948 Failed to send email, error: HTTP Error 403: Forbidden, response body: b'{"errors":[{"message":"The from address does not match a verified Sender Identity. Mail cannot be sent until this error is resolved. Visit https://sendgrid.com/docs/for-developers/sending-email/sender-identity/ to see the Sender Identity requirements","field":"from","help":null}]}'
+WARNING 2025-11-08 22:34:42,844 services 13916 13948 Email send failed on attempt 1: HTTP Error 403: Forbidden
+ERROR 2025-11-08 22:34:42,854 services 13916 13948 Unexpected email error on attempt 1: HTTP Error 403: Forbidden
+ERROR 2025-11-08 22:34:44,627 mail 13916 13948 Failed to send email, error: HTTP Error 403: Forbidden, response body: b'{"errors":[{"message":"The from address does not match a verified Sender Identity. Mail cannot be sent until this error is resolved. Visit https://sendgrid.com/docs/for-developers/sending-email/sender-identity/ to see the Sender Identity requirements","field":"from","help":null}]}'
+WARNING 2025-11-08 22:34:44,630 services 13916 13948 Email send failed on attempt 2: HTTP Error 403: Forbidden
+ERROR 2025-11-08 22:34:44,642 services 13916 13948 Unexpected email error on attempt 2: HTTP Error 403: Forbidden
+ERROR 2025-11-08 22:34:47,314 mail 13916 13948 Failed to send email, error: HTTP Error 403: Forbidden, response body: b'{"errors":[{"message":"The from address does not match a verified Sender Identity. Mail cannot be sent until this error is resolved. Visit https://sendgrid.com/docs/for-developers/sending-email/sender-identity/ to see the Sender Identity requirements","field":"from","help":null}]}'
+WARNING 2025-11-08 22:34:47,316 services 13916 13948 Email send failed on attempt 3: HTTP Error 403: Forbidden
+ERROR 2025-11-08 22:34:47,322 services 13916 13948 Unexpected email error on attempt 3: HTTP Error 403: Forbidden
+ERROR 2025-11-08 22:34:47,323 services 13916 13948 Failed to send email after 3 attempts to ['omninawe27@gmail.com']
+ERROR 2025-11-08 22:34:47,324 services 13916 13948 Failed to send email notification for reminder 12
+ERROR 2025-11-08 22:36:31,049 mail 1968 2720 Failed to send email, error: HTTP Error 403: Forbidden, response body: b'{"errors":[{"message":"The from address does not match a verified Sender Identity. Mail cannot be sent until this error is resolved. Visit https://sendgrid.com/docs/for-developers/sending-email/sender-identity/ to see the Sender Identity requirements","field":"from","help":null}]}'
+WARNING 2025-11-08 22:36:31,050 services 1968 2720 Email send failed on attempt 1: HTTP Error 403: Forbidden
+ERROR 2025-11-08 22:36:31,050 services 1968 2720 Unexpected email error on attempt 1: HTTP Error 403: Forbidden
+ERROR 2025-11-08 22:36:33,391 mail 1968 2720 Failed to send email, error: HTTP Error 403: Forbidden, response body: b'{"errors":[{"message":"The from address does not match a verified Sender Identity. Mail cannot be sent until this error is resolved. Visit https://sendgrid.com/docs/for-developers/sending-email/sender-identity/ to see the Sender Identity requirements","field":"from","help":null}]}'
+WARNING 2025-11-08 22:36:33,392 services 1968 2720 Email send failed on attempt 2: HTTP Error 403: Forbidden
+ERROR 2025-11-08 22:36:33,392 services 1968 2720 Unexpected email error on attempt 2: HTTP Error 403: Forbidden
+ERROR 2025-11-08 22:36:36,228 mail 1968 2720 Failed to send email, error: HTTP Error 403: Forbidden, response body: b'{"errors":[{"message":"The from address does not match a verified Sender Identity. Mail cannot be sent until this error is resolved. Visit https://sendgrid.com/docs/for-developers/sending-email/sender-identity/ to see the Sender Identity requirements","field":"from","help":null}]}'
+WARNING 2025-11-08 22:36:36,228 services 1968 2720 Email send failed on attempt 3: HTTP Error 403: Forbidden
+ERROR 2025-11-08 22:36:36,229 services 1968 2720 Unexpected email error on attempt 3: HTTP Error 403: Forbidden
+ERROR 2025-11-08 22:36:36,229 services 1968 2720 Failed to send email after 3 attempts to ['omninawe27@gmail.com']
+ERROR 2025-11-08 22:36:36,229 services 1968 2720 Failed to send email notification for reminder 12
+ERROR 2025-11-08 22:36:41,058 mail 11940 3748 Failed to send email, error: HTTP Error 403: Forbidden, response body: b'{"errors":[{"message":"The from address does not match a verified Sender Identity. Mail cannot be sent until this error is resolved. Visit https://sendgrid.com/docs/for-developers/sending-email/sender-identity/ to see the Sender Identity requirements","field":"from","help":null}]}'
+WARNING 2025-11-08 22:36:41,058 services 11940 3748 Email send failed on attempt 1: HTTP Error 403: Forbidden
+ERROR 2025-11-08 22:36:41,058 services 11940 3748 Unexpected email error on attempt 1: HTTP Error 403: Forbidden
+ERROR 2025-11-08 22:36:43,025 mail 11940 3748 Failed to send email, error: HTTP Error 403: Forbidden, response body: b'{"errors":[{"message":"The from address does not match a verified Sender Identity. Mail cannot be sent until this error is resolved. Visit https://sendgrid.com/docs/for-developers/sending-email/sender-identity/ to see the Sender Identity requirements","field":"from","help":null}]}'
+WARNING 2025-11-08 22:36:43,026 services 11940 3748 Email send failed on attempt 2: HTTP Error 403: Forbidden
+ERROR 2025-11-08 22:36:43,027 services 11940 3748 Unexpected email error on attempt 2: HTTP Error 403: Forbidden
+ERROR 2025-11-08 22:36:45,852 mail 11940 3748 Failed to send email, error: HTTP Error 403: Forbidden, response body: b'{"errors":[{"message":"The from address does not match a verified Sender Identity. Mail cannot be sent until this error is resolved. Visit https://sendgrid.com/docs/for-developers/sending-email/sender-identity/ to see the Sender Identity requirements","field":"from","help":null}]}'
+WARNING 2025-11-08 22:36:45,854 services 11940 3748 Email send failed on attempt 3: HTTP Error 403: Forbidden
+ERROR 2025-11-08 22:36:45,856 services 11940 3748 Unexpected email error on attempt 3: HTTP Error 403: Forbidden
+ERROR 2025-11-08 22:36:45,856 services 11940 3748 Failed to send email after 3 attempts to ['omninawe27@gmail.com']
+ERROR 2025-11-08 22:36:45,856 services 11940 3748 Failed to send email notification for reminder 12
+ERROR 2025-11-08 22:39:35,743 mail 10372 11004 Failed to send email, error: HTTP Error 403: Forbidden, response body: b'{"errors":[{"message":"The from address does not match a verified Sender Identity. Mail cannot be sent until this error is resolved. Visit https://sendgrid.com/docs/for-developers/sending-email/sender-identity/ to see the Sender Identity requirements","field":"from","help":null}]}'
+WARNING 2025-11-08 22:39:35,746 services 10372 11004 Email send failed on attempt 1: HTTP Error 403: Forbidden
+ERROR 2025-11-08 22:39:35,748 services 10372 11004 Unexpected email error on attempt 1: HTTP Error 403: Forbidden
+ERROR 2025-11-08 22:39:37,821 mail 10372 11004 Failed to send email, error: HTTP Error 403: Forbidden, response body: b'{"errors":[{"message":"The from address does not match a verified Sender Identity. Mail cannot be sent until this error is resolved. Visit https://sendgrid.com/docs/for-developers/sending-email/sender-identity/ to see the Sender Identity requirements","field":"from","help":null}]}'
+WARNING 2025-11-08 22:39:37,821 services 10372 11004 Email send failed on attempt 2: HTTP Error 403: Forbidden
+ERROR 2025-11-08 22:39:37,821 services 10372 11004 Unexpected email error on attempt 2: HTTP Error 403: Forbidden
+ERROR 2025-11-08 22:39:40,986 mail 10372 11004 Failed to send email, error: HTTP Error 403: Forbidden, response body: b'{"errors":[{"message":"The from address does not match a verified Sender Identity. Mail cannot be sent until this error is resolved. Visit https://sendgrid.com/docs/for-developers/sending-email/sender-identity/ to see the Sender Identity requirements","field":"from","help":null}]}'
+WARNING 2025-11-08 22:39:40,986 services 10372 11004 Email send failed on attempt 3: HTTP Error 403: Forbidden
+ERROR 2025-11-08 22:39:40,987 services 10372 11004 Unexpected email error on attempt 3: HTTP Error 403: Forbidden
+ERROR 2025-11-08 22:39:40,987 services 10372 11004 Failed to send email after 3 attempts to ['omninawe27@gmail.com']
+ERROR 2025-11-08 22:39:40,987 services 10372 11004 Failed to send email notification for reminder 12
+ERROR 2025-11-08 22:40:37,207 mail 12712 16812 Failed to send email, error: HTTP Error 403: Forbidden, response body: b'{"errors":[{"message":"The from address does not match a verified Sender Identity. Mail cannot be sent until this error is resolved. Visit https://sendgrid.com/docs/for-developers/sending-email/sender-identity/ to see the Sender Identity requirements","field":"from","help":null}]}'
+WARNING 2025-11-08 22:40:37,209 services 12712 16812 Email send failed on attempt 1: HTTP Error 403: Forbidden
+ERROR 2025-11-08 22:40:37,209 services 12712 16812 Unexpected email error on attempt 1: HTTP Error 403: Forbidden
+ERROR 2025-11-08 22:40:39,093 mail 12712 16812 Failed to send email, error: HTTP Error 403: Forbidden, response body: b'{"errors":[{"message":"The from address does not match a verified Sender Identity. Mail cannot be sent until this error is resolved. Visit https://sendgrid.com/docs/for-developers/sending-email/sender-identity/ to see the Sender Identity requirements","field":"from","help":null}]}'
+WARNING 2025-11-08 22:40:39,094 services 12712 16812 Email send failed on attempt 2: HTTP Error 403: Forbidden
+ERROR 2025-11-08 22:40:39,094 services 12712 16812 Unexpected email error on attempt 2: HTTP Error 403: Forbidden
+ERROR 2025-11-08 22:40:41,978 mail 12712 16812 Failed to send email, error: HTTP Error 403: Forbidden, response body: b'{"errors":[{"message":"The from address does not match a verified Sender Identity. Mail cannot be sent until this error is resolved. Visit https://sendgrid.com/docs/for-developers/sending-email/sender-identity/ to see the Sender Identity requirements","field":"from","help":null}]}'
+WARNING 2025-11-08 22:40:41,979 services 12712 16812 Email send failed on attempt 3: HTTP Error 403: Forbidden
+ERROR 2025-11-08 22:40:41,980 services 12712 16812 Unexpected email error on attempt 3: HTTP Error 403: Forbidden
+ERROR 2025-11-08 22:40:41,980 services 12712 16812 Failed to send email after 3 attempts to ['omninawe27@gmail.com']
+ERROR 2025-11-08 22:43:42,813 mail 2604 19204 Failed to send email, error: HTTP Error 403: Forbidden, response body: b'{"errors":[{"message":"The from address does not match a verified Sender Identity. Mail cannot be sent until this error is resolved. Visit https://sendgrid.com/docs/for-developers/sending-email/sender-identity/ to see the Sender Identity requirements","field":"from","help":null}]}'
+WARNING 2025-11-08 22:43:42,815 services 2604 19204 Email send failed on attempt 1: HTTP Error 403: Forbidden
+ERROR 2025-11-08 22:43:42,815 services 2604 19204 Unexpected email error on attempt 1: HTTP Error 403: Forbidden
+ERROR 2025-11-08 22:43:44,466 mail 2604 19204 Failed to send email, error: HTTP Error 403: Forbidden, response body: b'{"errors":[{"message":"The from address does not match a verified Sender Identity. Mail cannot be sent until this error is resolved. Visit https://sendgrid.com/docs/for-developers/sending-email/sender-identity/ to see the Sender Identity requirements","field":"from","help":null}]}'
+WARNING 2025-11-08 22:43:44,466 services 2604 19204 Email send failed on attempt 2: HTTP Error 403: Forbidden
+ERROR 2025-11-08 22:43:44,467 services 2604 19204 Unexpected email error on attempt 2: HTTP Error 403: Forbidden
+ERROR 2025-11-08 22:43:47,147 mail 2604 19204 Failed to send email, error: HTTP Error 403: Forbidden, response body: b'{"errors":[{"message":"The from address does not match a verified Sender Identity. Mail cannot be sent until this error is resolved. Visit https://sendgrid.com/docs/for-developers/sending-email/sender-identity/ to see the Sender Identity requirements","field":"from","help":null}]}'
+WARNING 2025-11-08 22:43:47,148 services 2604 19204 Email send failed on attempt 3: HTTP Error 403: Forbidden
+ERROR 2025-11-08 22:43:47,149 services 2604 19204 Unexpected email error on attempt 3: HTTP Error 403: Forbidden
+ERROR 2025-11-08 22:43:47,149 services 2604 19204 Failed to send email after 3 attempts to ['omninawe27@gmail.com']
+ERROR 2025-11-08 22:43:47,149 services 2604 19204 Failed to send medicine reminder email for reminder 12
+ERROR 2025-11-08 22:46:18,236 mail 1820 16352 Failed to send email, error: HTTP Error 403: Forbidden, response body: b'{"errors":[{"message":"The from address does not match a verified Sender Identity. Mail cannot be sent until this error is resolved. Visit https://sendgrid.com/docs/for-developers/sending-email/sender-identity/ to see the Sender Identity requirements","field":"from","help":null}]}'
+WARNING 2025-11-08 22:46:18,256 services 1820 16352 Email send failed on attempt 1: HTTP Error 403: Forbidden
+ERROR 2025-11-08 22:46:18,294 services 1820 16352 Unexpected email error on attempt 1: HTTP Error 403: Forbidden
+ERROR 2025-11-08 22:46:20,197 mail 1820 16352 Failed to send email, error: HTTP Error 403: Forbidden, response body: b'{"errors":[{"message":"The from address does not match a verified Sender Identity. Mail cannot be sent until this error is resolved. Visit https://sendgrid.com/docs/for-developers/sending-email/sender-identity/ to see the Sender Identity requirements","field":"from","help":null}]}'
+WARNING 2025-11-08 22:46:20,197 services 1820 16352 Email send failed on attempt 2: HTTP Error 403: Forbidden
+ERROR 2025-11-08 22:46:20,198 services 1820 16352 Unexpected email error on attempt 2: HTTP Error 403: Forbidden
+ERROR 2025-11-08 22:46:22,920 mail 1820 16352 Failed to send email, error: HTTP Error 403: Forbidden, response body: b'{"errors":[{"message":"The from address does not match a verified Sender Identity. Mail cannot be sent until this error is resolved. Visit https://sendgrid.com/docs/for-developers/sending-email/sender-identity/ to see the Sender Identity requirements","field":"from","help":null}]}'
+WARNING 2025-11-08 22:46:22,921 services 1820 16352 Email send failed on attempt 3: HTTP Error 403: Forbidden
+ERROR 2025-11-08 22:46:22,921 services 1820 16352 Unexpected email error on attempt 3: HTTP Error 403: Forbidden
+ERROR 2025-11-08 22:46:22,922 services 1820 16352 Failed to send email after 3 attempts to ['omninawe27@gmail.com']
+ERROR 2025-11-08 22:46:22,922 services 1820 16352 Failed to send medicine reminder email for reminder 12
+ERROR 2025-11-08 22:51:54,673 mail 18492 6140 Failed to send email, error: HTTP Error 403: Forbidden, response body: b'{"errors":[{"message":"The from address does not match a verified Sender Identity. Mail cannot be sent until this error is resolved. Visit https://sendgrid.com/docs/for-developers/sending-email/sender-identity/ to see the Sender Identity requirements","field":"from","help":null}]}'
+WARNING 2025-11-08 22:51:54,673 services 18492 6140 Email send failed on attempt 1: HTTP Error 403: Forbidden
+ERROR 2025-11-08 22:51:54,674 services 18492 6140 Unexpected email error on attempt 1: HTTP Error 403: Forbidden
+ERROR 2025-11-08 22:51:56,756 mail 18492 6140 Failed to send email, error: HTTP Error 403: Forbidden, response body: b'{"errors":[{"message":"The from address does not match a verified Sender Identity. Mail cannot be sent until this error is resolved. Visit https://sendgrid.com/docs/for-developers/sending-email/sender-identity/ to see the Sender Identity requirements","field":"from","help":null}]}'
+WARNING 2025-11-08 22:51:56,757 services 18492 6140 Email send failed on attempt 2: HTTP Error 403: Forbidden
+ERROR 2025-11-08 22:51:56,757 services 18492 6140 Unexpected email error on attempt 2: HTTP Error 403: Forbidden
+ERROR 2025-11-08 22:52:00,237 mail 18492 6140 Failed to send email, error: HTTP Error 403: Forbidden, response body: b'{"errors":[{"message":"The from address does not match a verified Sender Identity. Mail cannot be sent until this error is resolved. Visit https://sendgrid.com/docs/for-developers/sending-email/sender-identity/ to see the Sender Identity requirements","field":"from","help":null}]}'
+WARNING 2025-11-08 22:52:00,238 services 18492 6140 Email send failed on attempt 3: HTTP Error 403: Forbidden
+ERROR 2025-11-08 22:52:00,238 services 18492 6140 Unexpected email error on attempt 3: HTTP Error 403: Forbidden
+ERROR 2025-11-08 22:52:00,239 services 18492 6140 Failed to send email after 3 attempts to ['omninawe27@gmail.com']
+ERROR 2025-11-08 22:52:00,240 services 18492 6140 Failed to send medicine reminder email for reminder 12
+ERROR 2025-11-08 22:52:25,286 mail 20304 1748 Failed to send email, error: HTTP Error 403: Forbidden, response body: b'{"errors":[{"message":"The from address does not match a verified Sender Identity. Mail cannot be sent until this error is resolved. Visit https://sendgrid.com/docs/for-developers/sending-email/sender-identity/ to see the Sender Identity requirements","field":"from","help":null}]}'
+WARNING 2025-11-08 22:52:25,287 services 20304 1748 Email send failed on attempt 1: HTTP Error 403: Forbidden
+ERROR 2025-11-08 22:52:25,288 services 20304 1748 Unexpected email error on attempt 1: HTTP Error 403: Forbidden
+ERROR 2025-11-08 22:52:27,253 mail 20304 1748 Failed to send email, error: HTTP Error 403: Forbidden, response body: b'{"errors":[{"message":"The from address does not match a verified Sender Identity. Mail cannot be sent until this error is resolved. Visit https://sendgrid.com/docs/for-developers/sending-email/sender-identity/ to see the Sender Identity requirements","field":"from","help":null}]}'
+WARNING 2025-11-08 22:52:27,254 services 20304 1748 Email send failed on attempt 2: HTTP Error 403: Forbidden
+ERROR 2025-11-08 22:52:27,255 services 20304 1748 Unexpected email error on attempt 2: HTTP Error 403: Forbidden
+ERROR 2025-11-08 22:52:30,553 mail 20304 1748 Failed to send email, error: HTTP Error 403: Forbidden, response body: b'{"errors":[{"message":"The from address does not match a verified Sender Identity. Mail cannot be sent until this error is resolved. Visit https://sendgrid.com/docs/for-developers/sending-email/sender-identity/ to see the Sender Identity requirements","field":"from","help":null}]}'
+WARNING 2025-11-08 22:52:30,554 services 20304 1748 Email send failed on attempt 3: HTTP Error 403: Forbidden
+ERROR 2025-11-08 22:52:30,555 services 20304 1748 Unexpected email error on attempt 3: HTTP Error 403: Forbidden
+ERROR 2025-11-08 22:52:30,556 services 20304 1748 Failed to send email after 3 attempts to ['omninawe27@gmail.com']
+ERROR 2025-11-08 22:52:30,556 services 20304 1748 Failed to send medicine reminder email for reminder 13
+ERROR 2025-11-08 22:52:39,335 mail 7084 15844 Failed to send email, error: HTTP Error 403: Forbidden, response body: b'{"errors":[{"message":"The from address does not match a verified Sender Identity. Mail cannot be sent until this error is resolved. Visit https://sendgrid.com/docs/for-developers/sending-email/sender-identity/ to see the Sender Identity requirements","field":"from","help":null}]}'
+WARNING 2025-11-08 22:52:39,336 services 7084 15844 Email send failed on attempt 1: HTTP Error 403: Forbidden
+ERROR 2025-11-08 22:52:39,337 services 7084 15844 Unexpected email error on attempt 1: HTTP Error 403: Forbidden
+ERROR 2025-11-08 22:52:41,248 mail 7084 15844 Failed to send email, error: HTTP Error 403: Forbidden, response body: b'{"errors":[{"message":"The from address does not match a verified Sender Identity. Mail cannot be sent until this error is resolved. Visit https://sendgrid.com/docs/for-developers/sending-email/sender-identity/ to see the Sender Identity requirements","field":"from","help":null}]}'
+WARNING 2025-11-08 22:52:41,249 services 7084 15844 Email send failed on attempt 2: HTTP Error 403: Forbidden
+ERROR 2025-11-08 22:52:41,249 services 7084 15844 Unexpected email error on attempt 2: HTTP Error 403: Forbidden
+ERROR 2025-11-08 22:52:44,149 mail 7084 15844 Failed to send email, error: HTTP Error 403: Forbidden, response body: b'{"errors":[{"message":"The from address does not match a verified Sender Identity. Mail cannot be sent until this error is resolved. Visit https://sendgrid.com/docs/for-developers/sending-email/sender-identity/ to see the Sender Identity requirements","field":"from","help":null}]}'
+WARNING 2025-11-08 22:52:44,150 services 7084 15844 Email send failed on attempt 3: HTTP Error 403: Forbidden
+ERROR 2025-11-08 22:52:44,151 services 7084 15844 Unexpected email error on attempt 3: HTTP Error 403: Forbidden
+ERROR 2025-11-08 22:52:44,152 services 7084 15844 Failed to send email after 3 attempts to ['omninawe27@gmail.com']
+ERROR 2025-11-08 22:52:44,152 services 7084 15844 Failed to send medicine reminder email for reminder 13
+ERROR 2025-11-08 22:54:40,411 mail 14656 13360 Failed to send email, error: HTTP Error 403: Forbidden, response body: b'{"errors":[{"message":"The from address does not match a verified Sender Identity. Mail cannot be sent until this error is resolved. Visit https://sendgrid.com/docs/for-developers/sending-email/sender-identity/ to see the Sender Identity requirements","field":"from","help":null}]}'
+WARNING 2025-11-08 22:54:40,417 services 14656 13360 Email send failed on attempt 1: HTTP Error 403: Forbidden
+ERROR 2025-11-08 22:54:40,418 services 14656 13360 Unexpected email error on attempt 1: HTTP Error 403: Forbidden
+ERROR 2025-11-08 22:54:43,052 mail 14656 13360 Failed to send email, error: HTTP Error 403: Forbidden, response body: b'{"errors":[{"message":"The from address does not match a verified Sender Identity. Mail cannot be sent until this error is resolved. Visit https://sendgrid.com/docs/for-developers/sending-email/sender-identity/ to see the Sender Identity requirements","field":"from","help":null}]}'
+WARNING 2025-11-08 22:54:43,053 services 14656 13360 Email send failed on attempt 2: HTTP Error 403: Forbidden
+ERROR 2025-11-08 22:54:43,054 services 14656 13360 Unexpected email error on attempt 2: HTTP Error 403: Forbidden
+ERROR 2025-11-08 22:54:45,768 mail 14656 13360 Failed to send email, error: HTTP Error 403: Forbidden, response body: b'{"errors":[{"message":"The from address does not match a verified Sender Identity. Mail cannot be sent until this error is resolved. Visit https://sendgrid.com/docs/for-developers/sending-email/sender-identity/ to see the Sender Identity requirements","field":"from","help":null}]}'
+WARNING 2025-11-08 22:54:45,768 services 14656 13360 Email send failed on attempt 3: HTTP Error 403: Forbidden
+ERROR 2025-11-08 22:54:45,769 services 14656 13360 Unexpected email error on attempt 3: HTTP Error 403: Forbidden
+ERROR 2025-11-08 22:54:45,770 services 14656 13360 Failed to send email after 3 attempts to ['omninawe27@gmail.com']
+ERROR 2025-11-08 22:54:45,770 services 14656 13360 Failed to send medicine reminder email for reminder 14
+ERROR 2025-11-08 23:06:53,210 mail 3944 6484 Failed to send email, error: HTTP Error 401: Unauthorized, response body: b'{"errors":[{"message":"The provided authorization grant is invalid, expired, or revoked","field":null,"help":null}]}'
+ERROR 2025-11-08 23:09:13,677 mail 1124 10752 Failed to send email, error: HTTP Error 401: Unauthorized, response body: b'{"errors":[{"message":"The provided authorization grant is invalid, expired, or revoked","field":null,"help":null}]}'
+WARNING 2025-11-15 22:27:05,595 log 13160 13008 Not Found: /student/dashboard/
+WARNING 2025-11-15 22:27:07,633 log 13160 13008 Not Found: /favicon.ico
+WARNING 2025-11-15 22:28:28,621 log 13160 5004 Not Found: /en/users/login/admin
+WARNING 2025-11-15 22:33:31,265 log 13160 16232 Method Not Allowed (GET): /en/users/logout/
+WARNING 2025-11-26 11:45:39,398 log 5304 9508 Method Not Allowed (GET): /en/users/logout/
+WARNING 2025-11-26 11:45:43,372 log 5304 11048 Method Not Allowed (GET): /en/users/logout/
+WARNING 2025-11-26 11:45:45,230 log 5304 11048 Method Not Allowed (GET): /en/users/logout/
